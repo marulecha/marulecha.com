@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cyber Security research, Penetration Testing and more...">
+    <meta name="keywords" content="marulecha, Cyber Security, Pentesting, Penetration Tester">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+    <title>Reddit API - Posts</title>
+    <link rel="icon" href="./../static/img/spacelettuceIcon.png" type="image/x-icon">
+</head>
+
+<body>
+    <div id="inlineDiv">
+        <a class="marulecha" style="text-decoration: none;" href="/"><img class="roundImg"
+                src="./../static/img/spacelettuce.png" alt="Space Logo" width="135" height="135">marulecha</a>
+        <ul class="nav">
+            <li style="display:inline"><a href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/"
+                    target="_blank"><img class="roundImg" width="45px" height="45px"
+                        src="./../static/img/linkedInV2-fill-custom.svg"></img></a></li>
+            <li style="display:inline"><a href="https://github.com/marulecha" target="_blank"><img class="roundImg"
+                        width="45px" height="45px" src="./../static/img/github-custom1.svg"></img></a></li>
+            <li style="display:inline"><a href="https://app.hackthebox.com/profile/1440" target="_blank"><img
+                        class="roundImg" width="45px" height="45px" src="./../static/img/hackthebox.svg"></img></a></li>
+        </ul>
+    </div>
+    <canvas id="matrix" width="514" height="916"></canvas>
+
+    <div class="mainText">
+        <p class="mainText" style="text-align: center">CyberSecurity/Hacking  - Reddit API</p>
+        <div class="subreddits" id="subreddits">
+            <ul class="subredditsUL">
+                <li class="subredditsLI" style="display:inline"><button class="button-66"
+                        id="r/cybersecurity">r/cybersecurity</button></li>
+                <li class="subredditsLI" style="display:inline"><button class="button-66"
+                        id="r/hacking">r/hacking</button></li>
+                <li class="subredditsLI" style="display:inline"><button class="button-66"
+                        id="r/Hacking_Tutorials">r/Hacking_Tutorials</button></li>
+                <li class="subredditsLI" style="display:inline"><button class="button-66"
+                        id="r/hackernews">r/hackernews</button></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="options">
+        <select class="post-type">:
+            <option value="hot">Hot</option>
+            <option value="top">Top</option>
+            <option value="new">New</option>
+        </select>
+    </div>
+
+    <div class="post-container">
+        <h3>Cyber Security News.</h3>
+    </div>
+
+    <script>
+
+        const dropdown = document.querySelector(".post-type");
+        const container = document.querySelector(".post-container");
+
+        const renderPosts = (postType, subreddit) => {
+            // only demo access. 
+            // Our proxy that makes cross origin fetching possible
+            //   const proxy = "https://cors-anywhere.herokuapp.com/";
+       
+            //   fetch(`${proxy}https://www.reddit.com/r/javascript/${postType}.json`)
+            fetch(`https://www.reddit.com/${subreddit}/${postType}.json`)
+                .then(function (res) {
+                    // Return the response in JSON format
+                    return res.json();
+                })
+                .then(function (res) {
+                    // We render our posts to the UI in this block
+                    let currPost, markup = ``;
+
+                    // The array that contains our posts
+                    const postsArr = res.data.children;
+
+                    // Add a title based on post type
+                    postType = localStorage.getItem('currrentDropdown').capitalize()
+                    
+                    markup = `<h3>${postType} Posts from ${subreddit}</h3>`;
+
+                    // Iterate through our posts array and chain
+                    // the markup based on our HTML structure
+
+                    // display n Posts
+                    for (let i = 0; i < 8; i++) {
+
+                        currPost = postsArr[i].data; // a single post 
+                        console.log(currPost)
+                        markup += `
+                        <div class="post">
+          
+            <div class="title"> ${currPost.title} </div>
+            <a class="post" href="https://www.reddit.com/${currPost.permalink}" target="_blank">
+            <div class="content"> 
+              ${currPost.selftext.slice(0, 550)}  
+              </br></br>
+              <span>${currPost.url.slice(0, 90)}</span>
+            </div>
+        
+            <div class="votes"> Upvotes: ${currPost.ups} </div>
+            <div class="votes"> Downvotes: ${currPost.downs} </div>
+            <div class="votes"> Upvote ratio: ${currPost.upvote_ratio} </div>
+            <div class="author"> Posted by ${currPost.author} </div>
+        </a>
+
+            
+          </div>`;
+
+                    }
+
+                    // Insert the markup HTML to our container
+                    // container.insertAdjacentHTML('afterbegin', markup);
+                    container.innerHTML = markup
+                })
+                .catch(function (err) {
+                    console.log(err); // Log error if any
+                });
+        };
+
+        // Get the button-66 element, add a click listener for changing state and progress %
+        document.getElementById("subreddits").onclick = function (e) {
+            if (e.target && e.target.className == "button-66") {
+                localStorage.setItem('currentSubreddit', e.target.id)
+                container.innerHTML = ''
+                renderPosts("hot", e.target.id);
+            }
+        }
+
+        dropdown.addEventListener("change", () => {
+            // Gets the currently selected option index
+            let index = dropdown.selectedIndex;
+            // Gets the currently selected option value
+            let value = dropdown.options[index].value;
+            currentId = localStorage.getItem('currentSubreddit')
+            localStorage.setItem('currrentDropdown', value)
+            container.innerHTML = ''
+            renderPosts(value, currentId);
+        });
+
+
+        // Capitalize first string from dropdown list
+        Object.defineProperty(String.prototype, 'capitalize', {
+            value: function () {
+                return this.charAt(0).toUpperCase() + this.slice(1);
+            },
+            enumerable: false
+        });
+
+        // Load hot posts on page load
+        localStorage.setItem('currrentDropdown', "top")
+        renderPosts("hot", "r/cybersecurity");
+    </script>
+
+
+</body>
+<script src="../static/js/rain.js"></script>
+</html>
