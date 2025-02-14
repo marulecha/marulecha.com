@@ -49,14 +49,19 @@ a {
     color: #43ABC9;
 
 }
-
+.mainListNews{
+    background: #222234;
+    font-size: 1.0em;
+    border: 2px solid #107896;
+    border-radius: 10px;
+    height: 115%;
+}
 .mainText {
     font-size: 1.9em;
     color: #43ABC9;
     background: #222233;
     border-radius: 10px;
     border: 3px solid #107896;
-    font-family: miniKaliber;
 }
 
 .mainList{
@@ -68,6 +73,10 @@ a {
 }
 .listLeft{
     float: left;
+}
+
+.mainTitle{
+    font-family: miniKaliber;
 }
 
 .meowGif{
@@ -220,7 +229,7 @@ ul.nav li {
 #myBar {
     width: 1%;
     height: 55px;
-    background-color: #009000;
+    background-color: #107896;
     font-family: miniKaliber;
     color: white;
     border-radius: 10px;
@@ -315,7 +324,7 @@ ul.nav li {
     position: absolute;
     border-radius: 50%;
     z-index: -1;
-    background-color: #03C03C;
+    background-color: #f7f8f7;
     transition: 0.8s ease;
 }
 
@@ -503,4 +512,32 @@ ul.nav li {
         border-radius: 10px;
         height: 80%;
     }
-    
+    .news-container {
+        margin-top: 10px;
+        padding: 10px;
+        background: #222234;
+        border-radius: 10px;
+        border: 2px solid #107896;
+        color: #43ABC9;
+        font-size: 0.7em;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .news-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .news-item img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+      .news-item a {
+        color: #DDA0DD;
+        text-decoration: none;
+        /* font-weight: bold; */
+        flex: 1;
+      }
