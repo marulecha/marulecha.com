@@ -26,7 +26,7 @@ body {
 
 @font-face {
     font-family: miniKaliber;
-    src: url(../fonts/mini-kaliber-tt-brk.mini-kaliber-s-tt-brk.ttf);
+    src: url(../fonts/Orbitron-VariableFont_wght.ttf);
 
 }
 
@@ -51,12 +51,12 @@ a {
 }
 
 .mainText {
-    font-family: miniKaliber;
     font-size: 1.9em;
     color: #43ABC9;
     background: #222233;
     border-radius: 10px;
     border: 3px solid #107896;
+    font-family: miniKaliber;
 }
 
 .mainList{
@@ -205,6 +205,7 @@ ul.nav li {
 
 #resumePage {
     color: #107896;
+    font-family: miniKaliber;
 }
 
 
