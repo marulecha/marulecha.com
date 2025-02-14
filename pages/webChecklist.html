@@ -31,7 +31,7 @@
     </ul>
   </div>
   <canvas id="matrix" width="514" height="916"></canvas>
-  <div class="mainText"><p>Web Application Checklist &#129399; フィーンド</p></div>
+  <div class="mainText"><p class="mainTitle">Web Application Checklist &#129399; フィーンド</p></div>
   <div class="mainText">
     <!-- <p class="mainText" style="text-align: center"> Web Application PenTest Checklist.</p> -->
 
@@ -76,7 +76,7 @@
                   if (cb_state == "unchecked") {
                     x.innerHTML += '<li class="rightBtnWC"><button class="button-64" id="' + cb_name + '"style="background-color: black; color: white;">' + cb_name + '</button></li>'
                   } else if (cb_state == "checked") {
-                    x.innerHTML += '<li class="rightBtnWC"><button class="button-64" id="' + cb_name + '"style="background-color: #03C03C; color: white;">' + cb_name + '</button></li>'
+                    x.innerHTML += '<li class="rightBtnWC"><button class="button-64" id="' + cb_name + '"style="background-color: #107896; color: white;">' + cb_name + '</button></li>'
                   }
 
                 })
@@ -98,7 +98,7 @@
         function changeButtonState(id) {
           var property = document.getElementById(id);
           if (property.style.backgroundColor == 'black') {
-            property.style.backgroundColor = '#03C03C';
+            property.style.backgroundColor = '#107896';
             const category = localStorage.getItem('category')
             for (let i in checkList) {
               checkList[i].map((k) => {
