@@ -4,7 +4,7 @@
         "description": "A vulnerability allowing attackers to manipulate SQL queries.",
         "impact": "Data leakage, database modification, authentication bypass.",
         "recommendations": "Use prepared statements, parameterized queries, and ORM frameworks.",
-        "references": ["https://owasp.org/www-community/attacks/SQL_Injection"]
+        "references": ["https://owasp.org/www-community/attacks/SQL_Injection","https://2.com/sa"]
     },
     {
         "title": "Cross-Site Scripting (XSS)",
