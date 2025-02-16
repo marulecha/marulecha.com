@@ -1,0 +1,23 @@
+[
+    {
+        "title": "SQL Injection",
+        "description": "A vulnerability allowing attackers to manipulate SQL queries.",
+        "impact": "Data leakage, database modification, authentication bypass.",
+        "recommendations": "Use prepared statements, parameterized queries, and ORM frameworks.",
+        "references": ["https://owasp.org/www-community/attacks/SQL_Injection"]
+    },
+    {
+        "title": "Cross-Site Scripting (XSS)",
+        "description": "A vulnerability that allows injection of malicious scripts into webpages.",
+        "impact": "Session hijacking, defacement, data theft.",
+        "recommendations": "Implement input validation, content security policy (CSP), and escaping output.",
+        "references": ["https://owasp.org/www-community/attacks/xss/"]
+    },
+    {
+        "title": "Insecure Direct Object Reference (IDOR)",
+        "description": "Attackers can access unauthorized resources by manipulating object references.",
+        "impact": "Unauthorized data exposure, privilege escalation.",
+        "recommendations": "Use access controls, avoid exposing direct object references.",
+        "references": ["https://owasp.org/www-community/attacks/IDOR"]
+    }
+]
