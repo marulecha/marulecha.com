@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="../static/css/styles.css">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" con tent="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cyber Security research, Penetration Testing and more...">
+  <meta name="keywords" content="marulecha, Cyber Security, Pentesting, Penetration Tester">
+  <title>marulecha | VulnDB</title>
+  <link rel="icon" href="../static/img/spacelettuceIcon.png" type="image/x-icon">
+
+
+</head>
+<body>
+
+  <div id="inlineDiv">
+    <a class="marulecha" style="text-decoration: none;" href="/"><img class="roundImg" src="../static/img/spacelettuce.png"
+        alt="Space Logo" width="135" height="135">marulecha</a>
+
+    <ul class="nav">
+      <li style="display:inline"><a href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank"><img
+            class="roundImg" width="45px" height="45px" src="../static/img/linkedInV2-fill-custom.svg"></img></a></li>
+      <li style="display:inline"><a href="https://github.com/marulecha" target="_blank"><img class="roundImg"
+            width="45px" height="45px" src="../static/img/github-custom1.svg"></img></a></li>
+      <li style="display:inline"><a href="https://app.hackthebox.com/profile/1440" target="_blank"><img class="roundImg"
+            width="45px" height="45px" src="../static/img/hackthebox.svg"></img></a></li>
+    </ul>
+  </div>
+
+  <canvas id="matrix" width="514" height="916"></canvas>
+  <div class="mainText"><p class="mainTitle">Vulnerability Database &#129399; フィーンド</p></div>
+  
+    <div class="vulnList">
+      <h4 id="resumePage">Search the DB:</h4>
+  <!-- <div class="search-container"> -->
+    <input type="text" id="searchInput" placeholder="Search for security issues..." onkeyup="searchDatabase()">
+<!-- </div> -->
+<!-- <h4 id="resumePage">Database results:</h4> -->
+  <div class="result-container" id="results"></div>
+  <h4 id="resumePage">Something is missing? Report it here ;)</h4>
+<script>
+
+    let securityIssues = [];
+
+    // Load the JSON data
+    async function loadDatabase() {
+        const response = await fetch('../data/vulndb.json');
+        securityIssues = await response.json();
+    }
+
+    function copyToClipboard(index) {
+    const results = document.getElementsByClassName("result-item");
+
+    if (results[index]) {
+        let textToCopy = results[index].cloneNode(true); // Clone the content to modify it
+        const button = textToCopy.querySelector("button"); // Select the copy button
+
+        if (button) {
+            button.remove(); // Remove the copy button from the copied text
+        }
+
+        // Convert content to plain text and format it properly
+        let cleanText = textToCopy.innerText
+            .replace(/^(.+?)\n/, '$1\n\n') // Ensure a newline after the title
+            .replace(/\s*Description\s*/g, '\n\nDescription\n') // Ensure a blank line after section headers
+            .replace(/\s*Impact\s*/g, '\n\nImpact\n')
+            .replace(/\s*Recommendations\s*/g, '\n\nRecommendations\n')
+            .replace(/\s*References\s*/g, '\n\nReferences\n')
+            .replace(/\n{3,}/g, '\n\n') // Ensure only two newlines where needed
+            .trim(); // Trim spaces at start/end
+
+        navigator.clipboard.writeText(cleanText).catch(err => {
+            console.error("Failed to copy: ", err);
+        });
+    }
+}
+
+function searchDatabase() {
+    const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+    const resultsContainer = document.getElementById('results');
+    resultsContainer.innerHTML = '';
+
+    // If the search bar is empty, do not display any results
+    if (searchTerm === '') {
+        return;
+    }
+
+    // Filter only by title
+    const filteredResults = securityIssues.filter(issue =>
+        issue.title.toLowerCase().includes(searchTerm)
+    );
+
+    if (filteredResults.length === 0) {
+        resultsContainer.innerHTML = '<p style="color: #DDA0DD;">No results found.</p>';
+        return;
+    }
+
+    filteredResults.forEach((issue, index) => {
+        const resultItem = document.createElement('div');
+        resultItem.classList.add('result-item');
+
+        const issueText = `Title: ${issue.title}\n\nDescription: ${issue.description}\n\nImpact: ${issue.impact}\n\nRecommendations: ${issue.recommendations}\n\nReferences: ${issue.references.join(', ')}`;
+
+        resultItem.innerHTML = `
+            <div class="vulnList">
+                <h2 class="title">${issue.title}</h2>
+                <div class="description"><strong><br>Description</strong><br>${issue.description}</div>
+                <div class="impact"><strong><br>Impact</strong><br>${issue.impact}</div>
+                <div class="recommendations"><strong><br>Recommendations</strong><br>${issue.recommendations}</div>
+                <div class="references"><strong><br>References</strong><br>${issue.references.map(ref => `${ref}`).join(',<br>')}</div>
+                <button class="button-67" onclick="copyToClipboard(${index})">Copy</button>
+            </div>
+        `;
+
+        resultItem.setAttribute("data-copy-text", issueText);
+        resultsContainer.appendChild(resultItem);
+    });
+}
+
+
+
+
+    // Load the database on startup
+    loadDatabase();
+</script>
+</div>
+
+
+</body>
+<script src="../static/js/rain.js"></script>
+</html>
