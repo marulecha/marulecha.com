@@ -40,14 +40,14 @@
 <!-- </div> -->
 <!-- <h4 id="resumePage">Database results:</h4> -->
   <div class="result-container" id="results"></div>
-  <h4 id="resumePage">Something is missing? Report it here ;)</h4>
-<script>
+  <h4 id="resumePage">Something is missing? Report it<a href="contact.html" target="_blank" style="color: #DDA0DD; font-size: inherit;">here</a>;)</h4>
+  <script>
 
     let securityIssues = [];
 
     // Load the JSON data
     async function loadDatabase() {
-        const response = await fetch('../static/data/vulndb.json');
+        const response = await fetch('https://marulecha.com/static/data/vulndb.json');
         securityIssues = await response.json();
     }
 
@@ -105,7 +105,7 @@ function searchDatabase() {
         const issueText = `Title: ${issue.title}\n\nDescription: ${issue.description}\n\nImpact: ${issue.impact}\n\nRecommendations: ${issue.recommendations}\n\nReferences: ${issue.references.join(', ')}`;
 
         resultItem.innerHTML = `
-            <div class="vulnList">
+            <div class="vulnListResults">
                 <h2 class="title">${issue.title}</h2>
                 <div class="description"><strong><br>Description</strong><br>${issue.description}</div>
                 <div class="impact"><strong><br>Impact</strong><br>${issue.impact}</div>
@@ -119,9 +119,6 @@ function searchDatabase() {
         resultsContainer.appendChild(resultItem);
     });
 }
-
-
-
 
     // Load the database on startup
     loadDatabase();
