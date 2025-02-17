@@ -197,7 +197,7 @@ ul.nav li {
 
 .indexGif {
     position: absolute;
-    bottom: 23%; /* Set to a percentage value */
+    bottom: 28%; /* Set to a percentage value */
     right: 20%; /* Set to a percentage value */
     height: calc(100% - 560px); /*Set to a percentage value minus the image height */
     border-radius: 10px; /* Round the corners of the border */
@@ -324,7 +324,7 @@ ul.nav li {
     position: absolute;
     border-radius: 50%;
     z-index: -1;
-    background-color: #107896;
+    background-color: #c964c9;
     transition: 0.8s ease;
 }
 
@@ -541,3 +541,109 @@ ul.nav li {
         /* font-weight: bold; */
         flex: 1;
       }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+        #searchInput {
+            width: 80%;
+            max-width: 500px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .result-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* margin: auto; */
+            text-align: left;
+        }
+        .result-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+        }
+        .description, .impact, .recommendations, .references {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .references a {
+            color: blue;
+            text-decoration: none;
+        }
+        .vulnList{
+            background: #222234;
+            font-size: 1.2em;
+            border: 2px solid #107896;
+            border-radius: 10px;
+            height: 350%;
+            width: 150%
+        }
+
+        .result-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: transparent; /* Removes the white background */
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: none; /* Removes shadow if needed */
+            text-align: left;
+        }
+        
+        .result-item {
+            border-bottom: 1px solid #107896;
+            padding: 10px;
+            color: white; /* Makes text white */
+        }
+        
+        .title {
+            font-weight: bold;
+            font-size: 20px;
+            color: #DDA0DD; /* Soft purple title */
+        }
+        
+        .description, .impact, .recommendations, .references {
+            /* margin: 5px 0; */
+            font-size: 17px;
+            color: white; /* Ensures all text is white */
+        }
+        
+        .references a {
+            color: #43ABC9; /* Links should match theme */
+            text-decoration: none;
+        }
+        
+        .vulnList {
+            background: #222234;
+            font-size: 1.2em;
+            border: 2px solid #107896;
+            border-radius: 10px;
+            padding: 15px;
+            color: white; /* Ensure all text is white */
+        }
+        
+        .button-67 {
+            background-color: #3c6478;
+            border: 2px solid #43ABC9;
+            padding: 10px;
+            color: #F0F8FF;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .button-67:hover {
+            background-color: #1287a8;
+        }
