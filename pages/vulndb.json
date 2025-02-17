@@ -21,7 +21,7 @@
         "references": ["Snyk – Outdated Library Risks: https://snyk.io/learn/outdated-libraries/"]
     },
     {
-        "title": "HTTP Strict Transport Security Header Missing",
+        "title": "HTTP Strict Transport Security Header Missing (HSTS)",
         "description": "HTTP Strict Transport Security (HSTS) is a security feature that forces browsers to use only HTTPS when communicating with a website. If HSTS is not implemented, attackers can perform Man-in-the-Middle (MITM) attacks, such as SSL stripping, to downgrade secure HTTPS connections to unencrypted HTTP.",
         "impact": "Without HSTS, users may unknowingly connect to a website over insecure HTTP, allowing attackers to intercept or manipulate data in transit.",
         "recommendations": "Enable HSTS by setting the Strict-Transport-Security header in the web server configuration. The header should include directives such as max-age=31536000; includeSubDomains; preload",
@@ -63,7 +63,7 @@
         "references": ["OWASP – Authentication Cheat Sheet: https://owasp.org/www-project-authentication-cheat-sheet/","OWASP Top 10 – Identification and Authentication Failures: https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/","PortSwigger – Username Enumeration: https://portswigger.net/web-security/information-disclosure/exploiting"]
     },
     {
-        "title": "Insecure Direct Object Reference",
+        "title": "Insecure Direct Object Reference (IDOR)",
         "description": "Insecure Direct Object Reference (IDOR) occurs when an application exposes direct access to internal objects (such as database records, files, or user accounts) without proper authorization checks. Attackers can manipulate parameters in URLs, APIs, or form data to access unauthorized information. This flaw typically arises due to missing or improper access control mechanisms.",
         "impact": "If exploited, IDOR can lead to unauthorized access to sensitive data, account takeover, or modification/deletion of critical records. Attackers can escalate privileges, extract personal user information, or even manipulate financial transactions. IDOR is a common vulnerability in APIs and web applications, making it a serious risk.",
         "recommendations": "Implement proper access controls at both client-side and server-side to validate user permissions before granting access to objects. Use unique and unpredictable identifiers (e.g., UUIDs instead of sequential IDs) to prevent enumeration.",
@@ -77,7 +77,7 @@
         "references": ["OWASP – Unrestricted File Upload: https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload","CWE-434 – Unrestricted Upload of File with Dangerous Type: https://cwe.mitre.org/data/definitions/434.html","PortSwigger – File Upload Vulnerabilities: https://portswigger.net/web-security/file-upload"]
     },
     {
-        "title": "Local File Inclusion / Path Traversal",
+        "title": "Local File Inclusion / Path Traversal (LFI)",
         "description": "Local File Inclusion (LFI) and Path Traversal vulnerabilities occur when an application improperly processes user-supplied input to access or include local files on the server. Attackers can manipulate file paths (e.g., ../../etc/passwd) to read sensitive system files, execute scripts, or gain deeper access to the server. This flaw often arises due to insufficient input validation and improper use of file inclusion functions in web applications.",
         "impact": "Exploiting LFI or Path Traversal can lead to information disclosure, remote code execution (RCE), privilege escalation, and full system compromise. Attackers can steal credentials, access configuration files, or execute malicious scripts. If combined with file upload vulnerabilities, LFI can escalate into remote command execution, posing a critical security risk.",
         "recommendations": "Implement strict input validation to prevent directory traversal sequences (../). Use allowlists to limit accessible files and avoid dynamically including user-controlled input in file paths. Disable PHP’s include() and require() functions for untrusted sources, and configure the server to restrict file access permissions.",
@@ -119,21 +119,21 @@
         "references": ["OWASP – Cryptographic Storage Cheat Sheet: https://owasp.org/www-project-cheat-sheets/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html","CWE-327 – Use of a Broken or Risky Cryptographic Algorithm: https://cwe.mitre.org/data/definitions/327.html"]
     },
     {
-        "title": "Cross-Site Scripting - Reflected",
+        "title": "Cross-Site Scripting - Reflected (XSS)",
         "description": "Reflected Cross-Site Scripting (Reflected XSS) occurs when an application improperly handles user input and reflects it back in HTTP responses without sanitization or encoding. Attackers can craft malicious links containing JavaScript payloads that execute when a victim visits the manipulated URL. This can lead to session hijacking, credential theft, or redirection to malicious websites.",
         "impact": "Reflected XSS enables attackers to execute arbitrary scripts in a victim’s browser, allowing them to steal cookies, impersonate users, deface web pages, or spread malware. Since the attack relies on social engineering (e.g., phishing emails, malicious links), it can affect a large number of users.",
         "recommendations": "Validate and sanitize all user inputs by stripping or encoding special characters (<, >, \", ', etc.). Use Content Security Policy (CSP) to restrict script execution and implement HTTP-only and Secure flags for cookies to mitigate session hijacking.",
         "references": ["OWASP – Cross-Site Scripting (XSS) Prevention Cheat Sheet: https://owasp.org/www-community/attacks/xss/","CWE-79 – Improper Neutralization of Input During Web Page Generation ('XSS'): https://cwe.mitre.org/data/definitions/79.html","PortSwigger – Reflected XSS Exploitation Guide: https://portswigger.net/web-security/cross-site-scripting/reflected"]
     },
     {
-        "title": "Cross-Site Scripting - Stored",
+        "title": "Cross-Site Scripting - Stored (XSS)",
         "description": "Stored Cross-Site Scripting (Stored XSS) occurs when an application permanently stores unvalidated user input (such as comments, messages, or form submissions) and later displays it to other users without proper sanitization or encoding. Unlike Reflected XSS, which requires user interaction (e.g., clicking a link), Stored XSS executes automatically when users visit the affected page, making it more dangerous.",
         "impact": "Stored XSS allows attackers to inject persistent JavaScript payloads, leading to session hijacking, account takeovers, data theft, keylogging, or malware distribution. Since the malicious script is stored on the server, it can affect all users who view the compromised content, potentially leading to mass exploitation.",
         "recommendations": "Validate and sanitize all user inputs before storing them, and encode output to prevent script execution. Use Content Security Policy (CSP) to limit JavaScript execution and ensure HTTP-only, Secure, and SameSite flags are set for cookies.",
         "references": ["OWASP – Cross-Site Scripting (XSS) Prevention Cheat Sheet: https://owasp.org/www-community/attacks/xss/","CWE-79 – Improper Neutralization of Input During Web Page Generation ('XSS'): https://cwe.mitre.org/data/definitions/79.html","PortSwigger – Stored XSS Exploitation Guide: https://portswigger.net/web-security/cross-site-scripting/stored"]
     },
     {
-        "title": "Cross-Site Scripting - DOM",
+        "title": "Cross-Site Scripting - DOM (XSS)",
         "description": "DOM-based Cross-Site Scripting (DOM XSS) occurs when a web application modifies the Document Object Model (DOM) using untrusted user input without proper sanitization or encoding. Unlike Reflected or Stored XSS, where the server processes malicious input, DOM XSS occurs entirely in the browser, making it harder to detect via traditional security tools. This often happens when JavaScript functions like innerHTML, document.write(), eval(), or location.href handle user-controlled data insecurely.",
         "impact": "An attacker can exploit DOM XSS to inject and execute malicious JavaScript within the victim’s browser, leading to session hijacking, credential theft, keylogging, or phishing attacks. Since the attack is client-side, it bypasses server-side sanitization, and traditional security mechanisms like Web Application Firewalls (WAFs) may not detect it. Exploited vulnerabilities in Single Page Applications (SPAs) and JavaScript-heavy frameworks (React, Angular, Vue.js) can result in widespread exploitation.",
         "recommendations": "Avoid directly inserting user input into the DOM; instead, use safe JavaScript APIs such as textContent or setAttribute(). Implement JavaScript sandboxing techniques and enforce Content Security Policy (CSP) to restrict script execution. Use security libraries like DOMPurify to sanitize user-controlled inputs before rendering them on the page.",
@@ -154,21 +154,21 @@
         "references": ["OWASP – NoSQL Injection Guide: https://owasp.org/www-community/attacks/NoSQL_Injection","CWE-943 – Improper Neutralization of Special Elements in NoSQL Queries: https://cwe.mitre.org/data/definitions/943.html","PortSwigger – NoSQL Injection Exploitation: https://portswigger.net/web-security/nosql-injection"]
     },
     {
-        "title": "Server Side Template Injection",
+        "title": "Server Side Template Injection (SSTI)",
         "description": "Server-Side Template Injection (SSTI) occurs when an attacker injects malicious template code into an application that processes user input using a server-side templating engine (e.g., Jinja2, Twig, Freemarker, Velocity, Pug). If user-controlled input is improperly handled within a template, attackers can execute arbitrary code, leak sensitive data, or gain remote command execution (RCE) on the server.",
         "impact": "Exploiting SSTI can lead to data leakage, account compromise, and full server takeover if the attacker gains remote code execution (RCE). Depending on the template engine used, attackers can execute shell commands, read environment variables (e.g., database credentials, API keys), or modify server-side templates. SSTI is a critical vulnerability in modern web applications that rely on dynamic template rendering.",
         "recommendations": "Avoid rendering user-supplied input in server-side templates. Use safe rendering functions (e.g., Jinja2’s selectattr(), Twig’s sandbox mode) and enforce strict input validation and sanitization. Where possible, disable template execution functions (eval, exec) and use static templates to minimize risk.",
         "references": ["OWASP – Server-Side Template Injection Guide: https://owasp.org/www-community/attacks/Server-Side_Template_Injection","CWE-1336 – Improper Neutralization of Special Elements in Template Engines: https://cwe.mitre.org/data/definitions/1336.html","PortSwigger – SSTI Exploitation Guide: https://portswigger.net/web-security/server-side-template-injection"]
     },
     {
-        "title": "Server Side Request Forgery",
+        "title": "Server Side Request Forgery (SSRF)",
         "description": "Server-Side Request Forgery (SSRF) occurs when an attacker manipulates a server into making unintended requests to internal or external resources. This happens when an application accepts and processes unvalidated user input as part of a request to another server. Attackers exploit SSRF to bypass network restrictions, access internal systems, exfiltrate sensitive data, or scan internal networks.",
         "impact": "SSRF can lead to internal network reconnaissance, data leakage, and remote code execution (RCE) if the server interacts with cloud metadata services (e.g., AWS EC2 Instance Metadata API). Attackers can abuse SSRF to bypass firewalls, interact with internal APIs, or exploit vulnerable services, making it a significant risk for cloud-based applications and microservices architectures.",
         "recommendations": "Enforce strict allowlists for outbound requests and reject all requests to internal/private IP ranges (127.0.0.1, 169.254.169.254). Validate and sanitize user-supplied URLs before processing requests, and disable unnecessary URL-fetching features. Implement network segmentation and firewalls to block access to sensitive internal services, and use Web Application Firewalls (WAFs) and monitoring tools to detect SSRF attempts.",
         "references": ["OWASP – SSRF Prevention Cheat Sheet: https://owasp.org/www-community/attacks/Server_Side_Request_Forgery","CWE-918 – Server-Side Request Forgery (SSRF): https://cwe.mitre.org/data/definitions/918.html","PortSwigger – SSRF Exploitation Guide: https://portswigger.net/web-security/ssrf"]
     },
     {
-        "title": "Cross Side Request Forgery",
+        "title": "Cross Side Request Forgery (CSRF)",
         "description": "Cross-Site Request Forgery (CSRF/XSRF) is an attack where an attacker tricks a victim into making unintended requests to a web application where they are authenticated. This happens when the application does not properly verify request origins, allowing attackers to perform unauthorized actions on behalf of the victim. CSRF exploits authenticated sessions, especially in applications that rely solely on cookies for authentication.",
         "impact": "A successful CSRF attack can lead to account takeovers, unauthorized fund transfers, password changes, and data modifications. Attackers can force users to perform unintended actions such as updating account settings, posting malicious content, or even executing admin-level operations.",
         "recommendations": "Use CSRF tokens (anti-CSRF tokens) to validate requests and ensure they originate from legitimate users. Implement SameSite cookie attributes (Strict or Lax) to prevent unauthorized cookie usage. Enforce CORS (Cross-Origin Resource Sharing) policies and require user re-authentication for critical actions. Additionally, use CAPTCHA or multi-factor authentication (MFA) to mitigate automated CSRF attacks.",
@@ -182,7 +182,7 @@
         "references": ["OWASP – Command Injection Guide: https://owasp.org/www-community/attacks/Command_Injection","CWE-78 – Improper Neutralization of Special Elements in OS Command: https://cwe.mitre.org/data/definitions/78.html","PortSwigger – Command Injection Exploitation Guide: https://portswigger.net/web-security/os-command-injection"]
     },
     {
-        "title": "XML Injection",
+        "title": "XML Injection (XXE) ",
         "description": "XML Injection occurs when an attacker manipulates user-supplied input within an XML document or query, causing unintended behavior in the application. This typically happens in XML-based data exchanges, such as SOAP requests, web services, or XML parsers, that fail to properly validate input. Attackers can exploit XML Injection to modify application logic, extract sensitive data, or even execute external entity attacks (XXE).",
         "impact": "A successful XML Injection attack can lead to data leaks, unauthorized modifications, or bypassing access controls in XML-based applications. When combined with XXE (XML External Entity) vulnerabilities, attackers can read server files, execute remote code, and perform SSRF (Server-Side Request Forgery) attacks.",
         "recommendations": "Validate and sanitize all user-supplied input before parsing XML documents. Use allowlists to permit only expected values and reject malformed XML structures. Disable DTD (Document Type Definitions) and external entity processing in XML parsers to prevent XXE attacks. Where possible, replace XML-based communication with more secure formats like JSON.",
@@ -196,14 +196,14 @@
         "references": ["OWASP – LDAP Injection Guide: https://owasp.org/www-community/attacks/LDAP_Injection","CWE-90 – Improper Neutralization of Special Elements in LDAP Queries: https://cwe.mitre.org/data/definitions/90.html","PortSwigger – LDAP Injection Exploitation Guide: https://portswigger.net/web-security/ldap-injection"]
     },
     {
-        "title": "Server Side Inclusion",
+        "title": "Server Side Inclusion (SSI)",
         "description": "Server-Side Inclusion (SSI) Injection occurs when an attacker injects malicious server-side directives into an application that improperly processes SSI commands. This vulnerability allows attackers to execute unauthorized commands, read sensitive files, or gain remote code execution (RCE) if the server parses and executes user-supplied input as SSI directives. SSI Injection typically affects web servers and applications that support .shtml, .stm, .shtm files, or include dynamic server-side scripts.",
         "impact": "A successful SSI Injection attack can allow an attacker to exfiltrate sensitive files, execute system commands, and compromise the underlying server. This can lead to data leaks, privilege escalation, and full server takeover. If an application allows user-controlled SSI directives, it can be used to bypass authentication, inject malicious scripts, or exploit internal network services.",
         "recommendations": "Disable SSI processing if not required, or restrict it to trusted sources. Validate and sanitize user-supplied input to prevent malicious directives from being executed. Enforce least privilege execution for web servers and applications to minimize damage if an exploit occurs. Use Web Application Firewalls (WAFs) and monitoring tools to detect and block potential SSI Injection attempts.",
         "references": ["OWASP – SSI Injection Guide: https://owasp.org/www-community/attacks/Server-Side_Includes_(SSI)_Injection","CWE-98 – Improper Control of Filename for Include/Require Statement: https://cwe.mitre.org/data/definitions/98.html","PortSwigger – Server-Side Inclusion Exploitation: https://portswigger.net/web-security/ssi"]
     },
     {
-        "title": "Remote File Inclusion",
+        "title": "Remote File Inclusion (RFI)",
         "description": "Remote File Inclusion (RFI) occurs when an application dynamically includes external files from user input without proper validation, allowing attackers to inject malicious scripts or execute remote code. This vulnerability typically affects PHP, ASP, and JSP-based applications that allow file inclusion functions such as include(), require(), or file_get_contents() to process unvalidated URLs or file paths.",
         "impact": "A successful RFI attack can lead to remote code execution (RCE), server compromise, data theft, and malware distribution. Attackers can host malicious scripts on external servers and force the vulnerable application to execute them, potentially stealing credentials, exfiltrating sensitive data, or gaining full control of the system. RFI is often used as a launch point for larger cyber attacks, including webshell deployment and persistent backdoors.",
         "recommendations": "Disable remote file inclusion by setting allow_url_include=Off and allow_url_fopen=Off in PHP configurations. Implement strict input validation and allowlists to restrict file paths to trusted directories. Use hardcoded file paths instead of user-controlled input for file inclusion. Employ Web Application Firewalls (WAFs) and intrusion detection systems (IDS) to detect and block RFI attempts.",
