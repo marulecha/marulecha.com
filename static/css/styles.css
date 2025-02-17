@@ -69,7 +69,7 @@ a {
     font-size: 1.0em;
     border: 2px solid #107896;
     border-radius: 10px;
-    height: 50%;
+    height: auto;
 }
 .listLeft{
     float: left;
@@ -574,10 +574,14 @@ ul.nav li {
             font-weight: bold;
             font-size: 18px;
             color: #333;
+            width: auto;
+            height: auto;
         }
         .description, .impact, .recommendations, .references {
             margin: 5px 0;
             font-size: 14px;
+            width: auto;
+            height: auto;
         }
         .references a {
             color: blue;
@@ -588,10 +592,25 @@ ul.nav li {
             font-size: 1.2em;
             border: 2px solid #107896;
             border-radius: 10px;
-            height: 350%;
-            width: 150%
+            height: auto;
+            width: auto;
         }
-
+        .vulnListResults{
+            background: #222234;
+            font-size: 1.2em;
+            border: 2px solid #107896;
+            border-radius: 10px;
+            height: auto;
+            width: auto;
+        }
+        .contactMeList{
+            background: #222234;
+            font-size: 1.2em;
+            border: 2px solid #107896;
+            border-radius: 10px;
+            height: auto;
+            width: auto;
+        }
         .result-container {
             width: 100%;
             max-width: 800px;
@@ -600,6 +619,8 @@ ul.nav li {
             border-radius: 10px;
             box-shadow: none; /* Removes shadow if needed */
             text-align: left;
+            height: auto;
+            width: auto;
         }
         
         .result-item {
@@ -625,14 +646,14 @@ ul.nav li {
             text-decoration: none;
         }
         
-        .vulnList {
+        /* .vulnList {
             background: #222234;
             font-size: 1.2em;
             border: 2px solid #107896;
             border-radius: 10px;
             padding: 15px;
-            color: white; /* Ensure all text is white */
-        }
+            color: white; }/* Ensure all text is white */
+        
         
         .button-67 {
             background-color: #3c6478;
