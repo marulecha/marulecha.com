@@ -30,7 +30,7 @@
     {
         "title": "Unauthenticated API Access",
         "description": "Unauthenticated API access occurs when an application’s API endpoints can be accessed without proper authentication mechanisms in place. This vulnerability allows unauthorized users to interact with the API, potentially exposing sensitive data and functionality that should be restricted to authenticated users only.",
-        "impact": "cant security risks, including data breaches, unauthorized data manipulation, and exposure of sensitive information. Attackers can exploit this vulnerability to gain access to user accounts, perform malicious actions, or extract confidential data, resulting in financial loss and reputational damage for the organization.",
+        "impact": "The lack of authentication for API access can lead to significant security risks, including data breaches, unauthorized data manipulation, and exposure of sensitive information. Attackers can exploit this vulnerability to gain access to user accounts, perform malicious actions, or extract confidential data, resulting in financial loss and reputational damage for the organization.",
         "recommendations": "To mitigate the risks associated with unauthenticated API access, it is crucial to implement robust authentication and authorization mechanisms for all API endpoints. Utilizing industry-standard protocols such as OAuth 2.0 or API keys, along with regular security assessments, can help ensure that only authorized users can access sensitive API resources.",
         "references": ["OWASP - API8:2023 Security Misconfiguration https://owasp.org/API-Security/editions/2023/en/0xa8-security-misconfiguration/"]
     },
