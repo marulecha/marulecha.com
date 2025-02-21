@@ -30,7 +30,7 @@
     {
         "title": "Vulnerable Server Software Version",
         "description": "A vulnerable server version refers to an outdated or unpatched version of a server software that contains known security flaws. These vulnerabilities can be exploited by attackers to gain unauthorized access, execute arbitrary code, or disrupt services, thereby threatening the security and stability of the hosted applications.",
-        "impact": "Operating a vulnerable server version can lead to severe security incidents, including data breaches, unauthorized data manipulation, and denial-of-service attacks. Attackers can exploit these vulnerabilities to compromise sensitive information, disrupt business operations, and potentially escalate their access to other systems within the network, resulting in significant financial and reputational damage.",
+        "impact": "Operating a vulnerable server version can lead to severe security incidents, including data breaches, unauthorized data manipulation, and denial-of-service attacks. Attackers can exploit these vulnerabilities to compromise sensitive information, disrupt business operations, and potentially escalate their access to other systems within the network.",
         "recommendations": "To mitigate the risks associated with a vulnerable server version, it is crucial to regularly update the server software to the latest stable release and promptly apply security patches. Organizations should also conduct regular security assessments and implement a proactive maintenance strategy to ensure that all server components are secure and up to date.",
         "references": ["OWASP - A06:2021 – Vulnerable and Outdated Components https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/"]
     },
