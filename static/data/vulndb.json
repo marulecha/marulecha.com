@@ -29,8 +29,8 @@
     },
     {
         "title": "Clickjacking",
-        "description": "Clickjacking is a user interface redressing attack where an attacker tricks users into clicking on a hidden or disguised element within an iframe. This can lead to unauthorized actions on legitimate websites, such as changing account settings, making unintended transactions, or granting permissions to malicious sites.",
-        "impact": "An attacker can exploit Clickjacking to steal sensitive information, perform privilege escalation, or manipulate user interactions. For example, a victim may unknowingly approve a transaction, enable camera access, or click on a phishing link. This can lead to account takeovers, financial fraud, and session hijacking on affected applications.",
+        "description": "Clickjacking is a type of user interface manipulation attack where an attacker deceives users into clicking on a concealed or disguised element within an iframe. This can result in unauthorized actions on legitimate websites, such as altering account settings, executing unintended transactions, or granting permissions to malicious sites.",
+        "impact": "An attacker can leverage Clickjacking to obtain sensitive information, escalate privileges, or manipulate user actions. For instance, a victim might unknowingly authorize a transaction, enable access to their camera, or click on a phishing link. This can lead to account takeovers, financial fraud, and session hijacking in the affected applications.",
         "recommendations": "Prevent Clickjacking by implementing the X-Frame-Options HTTP header with the value DENY (to block all iframes) or SAMEORIGIN (to allow only same-origin frames).",
         "references": ["OWASP – Clickjacking Defense Cheat Sheet: https://owasp.org/www-community/attacks/Clickjacking","Mozilla MDN – X-Frame-Options Header: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options"]
     },
