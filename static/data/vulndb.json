@@ -12,6 +12,13 @@
         "impact": "Exposed error messages provide valuable insights for attackers, helping them identify vulnerable components, database structures, or authentication mechanisms. This can possibly lead to SQL injection, remote code execution, or even privilege escalation if the attacker leverages the leaked information.",
         "recommendations": "Ensure that error messages are generic and do not expose sensitive details to end users. Implement custom error pages for handling exceptions and configure the application to log detailed errors securely on the server while displaying user-friendly messages. Use try-catch blocks, centralized error handling, and logging frameworks to manage errors effectively without leaking information.",
         "references": ["OWASP – Improper Error Handling Guide: https://owasp.org/www-community/Improper_Error_Handling","CWE-209 – Information Exposure Through an Error Message: https://cwe.mitre.org/data/definitions/209.html","PortSwigger – Information Disclosure via Error Messages: https://portswigger.net/web-security/information-disclosure"]
+    },    
+    {
+        "title": "Default Root WebPage",
+        "description": "The default root webpage refers to the initial page that is displayed when a web server is accessed without specifying a particular resource. Often, this page contains generic information about the server or application, which may inadvertently reveal sensitive details about the server's configuration, software versions, or potential vulnerabilities.",
+        "impact": "Exposing a default root webpage can provide attackers with valuable information that aids in reconnaissance and planning for an attack. This information may include server software details, directory structures, and other insights that could be exploited to compromise the system or launch targeted attacks.",
+        "recommendations": "To mitigate the risks associated with a default root webpage, it is essential to customize or disable the default page to prevent the disclosure of sensitive information. Additionally, implementing proper security measures, such as access controls and regular security assessments, can help protect against potential threats.",
+        "references": ["Security issues of exposing default server home page - https://security.stackexchange.com/questions/194119/what-are-the-security-issues-of-exposing-default-server-home-page-in-public-inte"]
     },
     {
         "title": "Outdated Libraries",
