@@ -147,6 +147,13 @@
         "references": ["OWASP – Cryptographic Storage Cheat Sheet: https://owasp.org/www-project-cheat-sheets/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html","CWE-327 – Use of a Broken or Risky Cryptographic Algorithm: https://cwe.mitre.org/data/definitions/327.html"]
     },
     {
+        "title": "Weak SSH Ciphers",
+        "description": "Weak SSH ciphers, particularly those using Cipher Block Chaining (CBC) mode, have been identified in the server configuration, exposing the system to various cryptographic vulnerabilities. These ciphers, such as 3des-cbc and blowfish-cbc, are susceptible to attacks, including the SSH Terrapin Prefix Truncation Weakness (CVE-2023-48795).",
+        "impact": "The presence of weak SSH ciphers can lead to unauthorized access and data breaches, as attackers may exploit these vulnerabilities to decrypt sensitive information or manipulate SSH sessions. Specifically, the SSH Terrapin Prefix Truncation Weakness allows for potential data exposure and integrity issues.",
+        "recommendations": "It is recommended to disable all weak CBC ciphers in the SSH configuration and replace them with stronger alternatives, such as AES-CTR or ChaCha20-Poly1305. Regularly review and update cryptographic settings to ensure compliance with current security standards.",
+        "references": ["CVE-2023-48795: SSH Terrapin Prefix Truncation Weakness: https://nvd.nist.gov/vuln/detail/CVE-2023-48795"]
+    },
+    {
         "title": "Cross-Site Scripting - Reflected (XSS)",
         "description": "Reflected Cross-Site Scripting (Reflected XSS) occurs when an application improperly handles user input and reflects it back in HTTP responses without sanitization or encoding. Attackers can craft malicious links containing JavaScript payloads that execute when a victim visits the manipulated URL. This can lead to session hijacking, credential theft, or redirection to malicious websites.",
         "impact": "Reflected XSS enables attackers to execute arbitrary scripts in a victim’s browser, allowing them to steal cookies, impersonate users, deface web pages, or spread malware. Since the attack relies on social engineering (e.g., phishing emails, malicious links), it can affect a large number of users.",
