@@ -140,18 +140,25 @@
         "references": ["OWASP – Transport Layer Protection Cheat Sheet: https://owasp.org/www-project-cheat-sheets/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html","CWE-319 – Cleartext Transmission of Sensitive Information: https://cwe.mitre.org/data/definitions/319.html"]
     },
     {
-        "title": "Weak Security Ciphers",
+        "title": "Weak Security Ciphers Supported",
         "description": "Weak security ciphers refer to the use of outdated, vulnerable, or cryptographically weak encryption algorithms for securing communications or data. Common examples include MD5, SHA-1, RC4, DES, and 3DES, which are susceptible to collision attacks, brute-force cracking, and cryptanalysis. Applications that rely on these weak ciphers risk exposing sensitive data to interception or tampering.",
         "impact": "Using weak ciphers can lead to compromised encryption, unauthorized data decryption, and exposure to MITM (Man-in-the-Middle) attacks. Attackers can exploit these weaknesses to decrypt confidential information, impersonate users, forge digital signatures, or hijack encrypted sessions.",
         "recommendations": "Disable outdated and vulnerable ciphers, and enforce the use of modern, secure cryptographic algorithms such as AES-256, SHA-256, TLS 1.2, and TLS 1.3.",
         "references": ["OWASP – Cryptographic Storage Cheat Sheet: https://owasp.org/www-project-cheat-sheets/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html","CWE-327 – Use of a Broken or Risky Cryptographic Algorithm: https://cwe.mitre.org/data/definitions/327.html"]
     },
     {
-        "title": "Weak SSH Ciphers",
+        "title": "Weak SSH Ciphers Supported (CVE-2023-48795)",
         "description": "Weak SSH ciphers, particularly those using Cipher Block Chaining (CBC) mode, have been identified in the server configuration, exposing the system to various cryptographic vulnerabilities. These ciphers, such as 3des-cbc and blowfish-cbc, are susceptible to attacks, including the SSH Terrapin Prefix Truncation Weakness (CVE-2023-48795).",
         "impact": "The presence of weak SSH ciphers can lead to unauthorized access and data breaches, as attackers may exploit these vulnerabilities to decrypt sensitive information or manipulate SSH sessions. Specifically, the SSH Terrapin Prefix Truncation Weakness allows for potential data exposure and integrity issues.",
         "recommendations": "It is recommended to disable all weak CBC ciphers in the SSH configuration and replace them with stronger alternatives, such as AES-CTR or ChaCha20-Poly1305. Regularly review and update cryptographic settings to ensure compliance with current security standards.",
         "references": ["CVE-2023-48795: SSH Terrapin Prefix Truncation Weakness: https://nvd.nist.gov/vuln/detail/CVE-2023-48795"]
+    },
+	{
+        "title": "Weak SSH Ciphers Supported",
+        "description": "Weak SSH ciphers refer to cryptographic algorithms used in Secure Shell (SSH) that are outdated or vulnerable to attacks, compromising the confidentiality and integrity of data transmitted over the network. These ciphers can be exploited by attackers to decrypt sensitive information or perform man-in-the-middle attacks.",
+        "impact": "The use of weak SSH ciphers can lead to unauthorized access to systems, data breaches, and the potential loss of sensitive information, resulting in significant financial and reputational damage to organizations. Additionally, it may expose systems to compliance violations and legal repercussions.",
+        "recommendations": "Organizations should regularly review and update their SSH configurations to disable weak ciphers and enable stronger alternatives, such as AES or ChaCha20. Implementing security best practices, including regular audits and using tools to assess cipher strength, can help mitigate risks associated with weak SSH ciphers.",
+        "references": ["CBC ciphers and SSH vulnerabilities https://www.ibm.com/docs/en/guardium-insights/3.x?topic=setup-cbc-ciphers-ssh-vulnerabilities","SSH Supports Weak Cipher https://support.securityscorecard.com/hc/en-us/articles/115003473046-SSH-Supports-Weak-Cipher"]
     },
     {
         "title": "Cross-Site Scripting - Reflected (XSS)",
