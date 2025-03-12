@@ -7,6 +7,13 @@
         "references": ["OWASP – Information Leakage Guide: https://owasp.org/www-community/Information_Leakage","CWE-200 – Exposure of Sensitive Information: https://cwe.mitre.org/data/definitions/200.html","PortSwigger – Information Disclosure via HTTP Headers: https://portswigger.net/web-security/information-disclosure"]
     },
     {
+        "title": "Unsupported Software",
+        "description": "Unsupported software refers to applications, operating systems, or platforms that are no longer maintained or updated by their vendors. This can occur when a vendor stops providing updates, patches, or technical support for a product. Unsupported software may contain unpatched vulnerabilities that can be exploited by attackers, leading to potential security breaches.",
+        "impact": "The use of unsupported software significantly increases the risk of exploitation, as attackers often target these systems due to their unpatched vulnerabilities. This can lead to unauthorized access to sensitive data, resulting in data breaches that can have severe financial and reputational consequences for organizations.",
+        "recommendations": "To mitigate the risks associated with unsupported software, organizations should prioritize upgrading to the latest supported versions and applying all available security patches. Maintaining a software inventory and conducting regular risk assessments can help identify unsupported applications, while user education can promote awareness of the risks involved.",
+        "references": ["OWASP – Vulnerable and Outdated Components: https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/"]
+    },
+    {
         "title": "Improper Error Handling",
         "description": "Improper error handling can lead to sensitive information exposure when applications return detailed error messages to users. These errors may include stack traces, database queries, file paths, or system configurations, which can assist attackers in understanding the application’s internal workings.",
         "impact": "Exposed error messages provide valuable insights for attackers, helping them identify vulnerable components, database structures, or authentication mechanisms. This can possibly lead to SQL injection, remote code execution, or even privilege escalation if the attacker leverages the leaked information.",
