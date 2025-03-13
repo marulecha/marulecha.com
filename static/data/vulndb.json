@@ -7,6 +7,13 @@
         "references": ["OWASP – Information Leakage Guide: https://owasp.org/www-community/Information_Leakage","CWE-200 – Exposure of Sensitive Information: https://cwe.mitre.org/data/definitions/200.html","PortSwigger – Information Disclosure via HTTP Headers: https://portswigger.net/web-security/information-disclosure"]
     },
     {
+        "title": "SSL Certificate Signed Using Weak Hashing",
+        "description": "Services that utilize an SSL certificate signed with a weak hashing algorithm, such as the deprecated SHA1, MD5,MD4 or MD2. These signature algorithms are vulnerable to collision attacks, which could allow an attacker to create a fraudulent SSL certificate with the same signature, enabling them to impersonate the target service.",
+        "impact": "By exploiting weak hashing algorithms, an attacker could generate a different certificate that matches the original one, complete with a valid digital signature. This would allow the attacker to impersonate the organization's target service, potentially harming its reputation, hijacking the original service’s traffic, and deceiving clients into connecting to the fraudulent service instead of the legitimate one.",
+        "recommendations": "Recreate the vulnerable certificate and sign it with robust hashing algorithms, such as SHA-128 or SHA-256.",
+        "references": ["Microsoft Security Advisory - Feasibility of collision attacks against MD5: https://learn.microsoft.com/en-us/security-updates/SecurityAdvisories/2008/961509","Shattered - Broken SHA-1 in Practice: https://shattered.io/","Microsoft - Configure SQL Server Database Engine for encrypting connections: https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-sql-server-encryption?view=sql-server-ver16"]
+    },
+    {
         "title": "Unsupported Software",
         "description": "Unsupported software refers to applications, operating systems, or platforms that are no longer maintained or updated by their vendors. This can occur when a vendor stops providing updates, patches, or technical support for a product. Unsupported software may contain unpatched vulnerabilities that can be exploited by attackers, leading to potential security breaches.",
         "impact": "The use of unsupported software significantly increases the risk of exploitation, as attackers often target these systems due to their unpatched vulnerabilities. This can lead to unauthorized access to sensitive data, resulting in data breaches that can have severe financial and reputational consequences for organizations.",
