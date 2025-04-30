@@ -7,6 +7,13 @@
         "references": ["OWASP – Information Leakage Guide: https://owasp.org/www-community/Information_Leakage","CWE-200 – Exposure of Sensitive Information: https://cwe.mitre.org/data/definitions/200.html","PortSwigger – Information Disclosure via HTTP Headers: https://portswigger.net/web-security/information-disclosure"]
     },
     {
+        "title": "Session Token in Url",
+        "description": "This issue occurs when sensitive session tokens are included in the URL of a web application. This practice can expose the token to various vulnerabilities, such as being logged in browser history, server logs, or referrer headers, making it easier for attackers to hijack user sessions.",
+        "impact": "If an attacker gains access to a session token, they can impersonate the user and gain unauthorized access to sensitive information and functionalities within the application. This can lead to data breaches and loss of user trust.",
+        "recommendations": "To mitigate this issue, developers should avoid including session tokens in URLs and instead use secure methods such as HTTP-only cookies to store session information. Additionally, implementing secure coding practices, such as token expiration and regeneration, can further enhance security and protect user sessions from being compromised.",
+        "references": ["CWE-200: Exposure of Sensitive Information to an Unauthorized Actor: https://cwe.mitre.org/data/definitions/200.html","PortSwigger - Session token in URL: https://portswigger.net/kb/issues/00500700_session-token-in-url"]
+    },
+    {
         "title": "SSL Certificate Signed Using Weak Hashing",
         "description": "Services that utilize an SSL certificate signed with a weak hashing algorithm, such as the deprecated SHA1, MD5,MD4 or MD2. These signature algorithms are vulnerable to collision attacks, which could allow an attacker to create a fraudulent SSL certificate with the same signature, enabling them to impersonate the target service.",
         "impact": "By exploiting weak hashing algorithms, an attacker could generate a different certificate that matches the original one, complete with a valid digital signature. This would allow the attacker to impersonate the organization's target service, potentially harming its reputation, hijacking the original service’s traffic, and deceiving clients into connecting to the fraudulent service instead of the legitimate one.",
