@@ -1,0 +1,396 @@
+{
+    "1. Information Gathering": [
+        {
+            "name": "Conduct Search Engine Discovery Reconnaissance",
+            "state": "unchecked"
+        },
+        {
+            "name": "Fingerprint Web Server",
+            "state": "unchecked"
+        },
+        {
+            "name": "Review Webserver Metafiles for Information Leakage",
+            "state": "unchecked"
+        },
+        {
+            "name": "Enumerate Applications on Webserver",
+            "state": "unchecked"
+        },
+        {
+            "name": "Review Webpage Content for Information Leakage",
+            "state": "unchecked"
+        },
+        {
+            "name": "Identify Application Entry Points",
+            "state": "unchecked"
+        },
+        {
+            "name": "Map Execution Paths Through Application",
+            "state": "unchecked"
+        },
+        {
+            "name": "Fingerprint Web Application Framework",
+            "state": "unchecked"
+        },
+        {
+            "name": "Fingerprint Web Application",
+            "state": "unchecked"
+        },
+        {
+            "name": "Map Application Architecture",
+            "state": "unchecked"
+        }
+    ],
+    "2. Configuration and Deployment Management": [
+        {
+            "name": "Test Network/Infrastructure Configuration",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test Application Platform Configuration",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test File Extensions Handling for Sensitive Information",
+            "state": "unchecked"
+        },
+        {
+            "name": "Review Old, Backup and Unreferenced Files for Sensitive Information",
+            "state": "unchecked"
+        },
+        {
+            "name": "Enumerate Infrastructure and Application Admin Interfaces",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test HTTP Methods",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test HTTP Strict Transport Security",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test RIA Cross Domain Policy",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test File Permission",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test for Subdomain Takeover",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test Cloud Storage",
+            "state": "unchecked"
+        }
+    ],
+    "3. Identity Management Testing": [
+        {
+            "name": "Test Role Definitions",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test User Registration Process",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test Account Provisioning Process",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Account Enumeration and Guessable User Account",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Weak or Unenforced Username Policy",
+            "state": "unchecked"
+        }
+    ],
+    "4. Authentication Testing": [
+        {
+            "name": "Test for Credentials Transported over an Encrypted Channel",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test for Default Credentials",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test for Weak Lock Out Mechanism",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test for Bypassing Authentication Schema",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test for Vulnerable Remember Password",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test for Browser Cache Weaknesses",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test for Weak Password Policy",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test for Weak Security Question Answer",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test for Weak Password Change or Reset Functionalities",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test for Weaker Authentication in Alternative Channel",
+            "state": "unchecked"
+        }
+    ],
+    "5. Authorization Testing": [
+        {
+            "name": "Testing Directory Traversal/File Include",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Bypassing Authorization Schema",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Privilege Escalation",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Insecure Direct Object References",
+            "state": "unchecked"
+        }
+    ],
+    "6. Session Management Testing": [
+        {
+            "name": "Testing for Session Management Schema",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Cookies Attributes",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Session Fixation",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Exposed Session Variables",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Cross Site Request Forgery",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Logout Functionality",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing Session Timeout",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Session Puzzling",
+            "state": "unchecked"
+        }
+    ],
+    "7. Input Validation Testing": [
+        {
+            "name": "Testing for Reflected Cross Site Scripting",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Stored Cross Site Scripting",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for HTTP Verb Tampering",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for SQL Injection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for LDAP Injection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for ORM Injection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for XML Injection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for SSI Injection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for XPath Injection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for IMAP/SMTP Injection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Code Injection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Command Injection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Buffer Overflow",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Incubated Vulnerability",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for HTTP Splitting/Smuggling",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for HTTP Incoming Request Requests",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Host Header Injection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Server Side Request Forgery",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Server Side Template Injection",
+            "state": "unchecked"
+        }
+    ],
+    "8. Testing for Error Handling": [
+        {
+            "name": "Testing for Improper Error Handling",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Stack Traces",
+            "state": "unchecked"
+        }
+    ],
+    "9. Testing for Weak Cryptography": [
+        {
+            "name": "Testing for Weak SSL/TLS Ciphers, Insufficient Transport Layer Protection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Padding Oracle",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Sensitive Information Sent via Unencrypted Channels",
+            "state": "unchecked"
+        }
+    ],
+    "10. Business Logic Testing": [
+        {
+            "name": "Test Business Logic Data Validation",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test Ability to Forge Requests",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test Integrity Checks",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test for Process Timing",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test Number of Times a Function Can be Used Limits",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for the Circumvention of Work Flows",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test Defenses Against Application Misuse",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test Upload of Unexpected File Types",
+            "state": "unchecked"
+        },
+        {
+            "name": "Test Upload of Malicious Files",
+            "state": "unchecked"
+        }
+    ],
+    "11. Client Side Testing": [
+        {
+            "name": "Testing for DOM based Cross Site Scripting",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for JavaScript Execution",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for HTML Injection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Client Side URL Redirect",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for CSS Injection",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Client Side Resource Manipulation",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing Cross Origin Resource Sharing",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Cross Site Flashing",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing for Clickjacking",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing WebSockets",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing Web Messaging",
+            "state": "unchecked"
+        },
+        {
+            "name": "Testing Local Storage",
+            "state": "unchecked"
+        }
+    ]
+}
