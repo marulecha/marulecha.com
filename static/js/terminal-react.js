@@ -77,7 +77,7 @@ const TerminalApp = () => {
             // Type whoami
             timeout = setTimeout(() => {
                 typeCommand('whoami', () => {
-                    setLines(prev => [...prev, { type: 'shell-command', text: 'whoami' }]);
+                    setLines(prev => [...prev, { type: 'shell-command', text: 'whoami', prompt: '$' }]);
                     setCurrentCommand('');
                     setStage(4);
                 });
@@ -90,7 +90,7 @@ const TerminalApp = () => {
             // Type whoami
             timeout = setTimeout(() => {
                 typeCommand('id', () => {
-                    setLines(prev => [...prev, { type: 'shell-command', text: 'id' }]);
+                    setLines(prev => [...prev, { type: 'shell-command', text: 'id', prompt: '$' }]);
                     setCurrentCommand('');
                     setStage(6);
                 });
@@ -103,7 +103,7 @@ const TerminalApp = () => {
             // Type whoami
             timeout = setTimeout(() => {
                 typeCommand('/bin/bash', () => {
-                    setLines(prev => [...prev, { type: 'shell-command', text: '/bin/bash' }]);
+                    setLines(prev => [...prev, { type: 'shell-command', text: '/bin/bash', prompt: '$' }]);
                     setCurrentCommand('');
                     setStage(8);
                 });
@@ -112,7 +112,7 @@ const TerminalApp = () => {
             // Type whoami
             timeout = setTimeout(() => {
                 typeCommand('whoami', () => {
-                    setLines(prev => [...prev, { type: 'shell-command', text: 'whoami' }]);
+                    setLines(prev => [...prev, { type: 'shell-command', text: 'whoami', prompt: '#' }]);
                     setCurrentCommand('');
                     setStage(9);
                 });
@@ -154,15 +154,17 @@ const TerminalApp = () => {
                 <div key={idx} className="console-line" style={{ width: '100%' }}>
                     {line.type === 'command' && <span style={{ color: '#00d9ff' }}>kali@kali:~$ {line.text}</span>}
                     {line.type === 'output' && <span style={{ color: '#0099bb' }}>{line.text}</span>}
-                    {line.type === 'shell-command' && <span style={{ color: '#ff0055' }}># {line.text}</span>}
+                    {line.type === 'shell-command' && <span style={{ color: '#ff0055' }}>{line.prompt || '$'} {line.text}</span>}
                 </div>
             ))}
 
             <div className="console-line">
                 {stage === 0 && <span style={{ color: '#00d9ff' }}>kali@kali:~$ {currentCommand}</span>}
                 {stage === 1 && <span style={{ color: '#0099bb' }}>{/* Listening... */}</span>}
-                {/* Stages 3, 5, 7, 8 are typing input */}
-                {(stage === 3 || stage === 5 || stage === 7 || stage === 8) && <span style={{ color: '#ff0055' }}># {currentCommand}</span>}
+                {/* Stages 3, 5, 7 use $ prompt */}
+                {(stage === 3 || stage === 5 || stage === 7) && <span style={{ color: '#ff0055' }}>$ {currentCommand}</span>}
+                {/* Stage 8 uses # prompt */}
+                {stage === 8 && <span style={{ color: '#ff0055' }}># {currentCommand}</span>}
 
                 {/* Typing cursor during typing phases */}
                 {(stage === 0 || stage === 3 || stage === 5 || stage === 7 || stage === 8) && (
