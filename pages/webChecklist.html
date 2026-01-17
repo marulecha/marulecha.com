@@ -275,20 +275,36 @@
   <script src="../static/js/matrix-effect.js"></script>
   <script>
     // Checklist Data
-    let defaultCheckList = {
-      "Information Gathering": [{ "name": "OSINT Recon / Google Dorks", "state": "unchecked" }, { "name": "Spidering / Crawling Directories", "state": "unchecked" }, { "name": "Identify Technologies / Injection Points", "state": "unchecked" }, { "name": "Information Disclosure - Error Messages", "state": "unchecked" }, { "name": "Outdated Libraries", "state": "unchecked" }, { "name": "HTTP Headers", "state": "unchecked" }, { "name": "Business Logic", "state": "unchecked" }],
-      "Authentication / Session": [{ "name": "Cookie Entropy / Cookie Flags", "state": "unchecked" }, { "name": "Improper Session Termination", "state": "unchecked" }, { "name": "HTTP Strict Transport Security", "state": "unchecked" }, { "name": "Session Fixation / Session Hijacking", "state": "unchecked" }, { "name": "Authentication Bypass", "state": "unchecked" }, { "name": "JWT Vulnerabilities", "state": "unchecked" }, { "name": "Clickjacking", "state": "unchecked" }, { "name": "Flawed 2FA", "state": "unchecked" }],
-      "Authorization": [{ "name": "Default / Weak Password", "state": "unchecked" }, { "name": "User Enumeration", "state": "unchecked" }, { "name": "User Segregation", "state": "unchecked" }, { "name": "Insecure Direct Object Reference", "state": "unchecked" }, { "name": "Unrestricted File Upload", "state": "unchecked" }, { "name": "File Inclusion / Path Traversal", "state": "unchecked" }, { "name": "HTTP Basic Authentication", "state": "unchecked" }, { "name": "Lack of Antivirus", "state": "unchecked" }, { "name": "Session No Brute Force Protection", "state": "unchecked" }, { "name": "Privilege Escalation", "state": "unchecked" }],
-      "Cryptography": [{ "name": "Algorithms & Ciphers", "state": "unchecked" }, { "name": "Self-Signed Certificates", "state": "unchecked" }, { "name": "Improper Password Storage", "state": "unchecked" }, { "name": "Lack of SSL", "state": "unchecked" }],
-      "Input Validation / Injections": [{ "name": "Cross-Site Scripting", "state": "unchecked" }, { "name": "SQL / NoSQL Injections", "state": "unchecked" }, { "name": "Server Side Template Injection", "state": "unchecked" }, { "name": "Server Side Request Forgery", "state": "unchecked" }, { "name": "Cross Site Request Forgery", "state": "unchecked" }, { "name": "Command Injection", "state": "unchecked" }, { "name": "XML Injection - XXE/XPATH", "state": "unchecked" }, { "name": "LDAP Injection", "state": "unchecked" }, { "name": "Server Side Inclusion", "state": "unchecked" }, { "name": "Local / Remote File Includes", "state": "unchecked" }, { "name": "HTTP Request Smuggling", "state": "unchecked" }, { "name": "Host Header Injection", "state": "unchecked" }, { "name": "Open Redirect", "state": "unchecked" }, { "name": "CORS", "state": "unchecked" }],
-      "Denial of Service": [{ "name": "Account Lockout", "state": "unchecked" }, { "name": "Cache Poisoning", "state": "unchecked" }]
-    };
-
-    let checkList = JSON.parse(localStorage.getItem('checkList')) || defaultCheckList;
+    let checkList = JSON.parse(localStorage.getItem('checkList')) || null;
     let progressBarPercentage = JSON.parse(localStorage.getItem('progressBarPercentage')) || 0;
 
     // UI Initialization
-    function init() {
+    async function init() {
+      // Migration Check: If we have data but it doesn't look like the new format (e.g. keys start with numbers), clear it.
+      if (checkList) {
+        const keys = Object.keys(checkList);
+        const isNewFormat = keys.some(k => k.match(/^\d+\./));
+        if (!isNewFormat) {
+          console.log("Old data format detected. Clearing cache.");
+          checkList = null;
+          localStorage.removeItem('checkList');
+          localStorage.removeItem('progressBarPercentage');
+          localStorage.removeItem('category');
+        }
+      }
+
+      if (!checkList) {
+        try {
+          const response = await fetch('../static/data/webChecklist.json');
+          checkList = await response.json();
+          localStorage.setItem('checkList', JSON.stringify(checkList));
+        } catch (error) {
+          console.error("Failed to load checklist data:", error);
+          // Fallback 
+          checkList = { "Error": [{ "name": "Failed to load data", "state": "unchecked" }] };
+        }
+      }
+
       renderCategories();
       updateProgress();
 
