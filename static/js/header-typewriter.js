@@ -29,10 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!isDeleting && charIndex === currentSentence.length) {
             // Finished typing sentence
-            if (sentenceIndex === sentences.length - 1) {
-                // Loop back to start
-                sentenceIndex = -1; // Will be incremented to 0 below
-            }
             // Wait before deleting
             typeSpeed = 2000;
             isDeleting = true;
@@ -40,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Finished deleting sentence
             isDeleting = false;
             sentenceIndex++;
+            if (sentenceIndex >= sentences.length) {
+                sentenceIndex = 0;
+            }
             typeSpeed = 500; // Normal pause before next sentence
         }
 
