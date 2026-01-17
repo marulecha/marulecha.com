@@ -2,225 +2,418 @@
 <html lang="en">
 
 <head>
-  <link rel="stylesheet" href="../static/css/styles.css">
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Cyber Security research, Penetration Testing and more...">
-  <meta name="keywords" content="marulecha, Cyber Security, Pentesting, Penetration Tester">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-    crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+  <meta name="description" content="Web Application Checklist - marulecha Cyber Security">
   <title>marulecha | WebApp Checklist</title>
-  <link rel="icon" href="./../static/img/spacelettuceIcon.png" type="image/x-icon">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+  <link rel="stylesheet" href="../static/css/theme.css">
+  <style>
+    /* Custom overrides for Checklist page */
+    .checklist-container {
+      background: #0a0a0a;
+      border: 2px solid #00d9ff;
+      border-radius: 5px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+    }
+
+    .checklist-header {
+      border-bottom: 1px solid #00d9ff;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .checklist-title {
+      color: #00d9ff;
+      font-size: 1.2em;
+      margin: 0;
+    }
+
+    /* Progress Bar */
+    .progress-wrapper {
+      width: 100%;
+      margin-bottom: 25px;
+      background: #001a1f;
+      border: 1px solid #005f70;
+      padding: 5px;
+    }
+
+    .progress-text {
+      text-align: right;
+      color: #00d9ff;
+      font-size: 0.9em;
+      margin-bottom: 5px;
+    }
+
+    .progress-bar-container {
+      height: 20px;
+      width: 100%;
+      background-color: #000;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #00d9ff;
+      width: 0%;
+      box-shadow: 0 0 10px #00d9ff;
+      transition: width 0.3s ease;
+    }
+
+    /* Split Layout */
+    .checklist-interface {
+      display: flex;
+      gap: 20px;
+      min-height: 400px;
+    }
+
+    .categories-panel {
+      flex: 1;
+      border-right: 1px solid #005f70;
+      padding-right: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .items-panel {
+      flex: 2;
+      padding-left: 5px;
+    }
+
+    /* Buttons */
+    .cat-btn {
+      background: rgba(0, 217, 255, 0.05);
+      border: 1px solid #005f70;
+      color: #00d9ff;
+      padding: 10px;
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Share Tech Mono', monospace;
+      transition: all 0.2s;
+    }
+
+    .cat-btn:hover,
+    .cat-btn.active {
+      background: #00d9ff;
+      color: #000;
+      border-color: #00d9ff;
+      box-shadow: 0 0 10px rgba(0, 217, 255, 0.4);
+    }
+
+    .item-btn {
+      display: block;
+      width: 100%;
+      background: #000;
+      border: 1px solid #005f70;
+      color: #ccc;
+      padding: 10px;
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Share Tech Mono', monospace;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .item-btn:hover {
+      border-color: #00d9ff;
+    }
+
+    .item-btn.checked {
+      background: rgba(0, 217, 255, 0.15);
+      border-color: #00d9ff;
+      color: #00d9ff;
+    }
+
+    .item-btn.checked::after {
+      content: '[X]';
+      position: absolute;
+      right: 10px;
+      color: #00d9ff;
+    }
+
+    .item-btn::after {
+      content: '[ ]';
+      position: absolute;
+      right: 10px;
+      color: #005f70;
+    }
+
+    /* Export Button */
+    .action-btn {
+      background: transparent;
+      border: 1px solid #00d9ff;
+      color: #00d9ff;
+      padding: 8px 15px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+
+    .action-btn:hover {
+      background: #00d9ff;
+      color: #000;
+      box-shadow: 0 0 10px #00d9ff;
+    }
+
+    @media (max-width: 768px) {
+      .checklist-interface {
+        flex-direction: column;
+      }
+
+      .categories-panel {
+        border-right: none;
+        border-bottom: 1px solid #005f70;
+        padding-bottom: 15px;
+        padding-right: 0;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <div id="inlineDiv">
-    <a class="marulecha" style="text-decoration: none;" href="/"><img class="roundImg"
-        src="./../static/img/spacelettuce.png" alt="Space Logo" width="135" height="135">marulecha</a>
-    <ul class="nav">
-      <li style="display:inline"><a href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank"><img
-            class="roundImg" width="45px" height="45px" src="./../static/img/linkedInV2-fill-custom.svg"></img></a></li>
-      <li style="display:inline"><a href="https://github.com/marulecha" target="_blank"><img class="roundImg"
-            width="45px" height="45px" src="./../static/img/github-custom1.svg"></img></a></li>
-      <li style="display:inline"><a href="https://app.hackthebox.com/profile/1440" target="_blank"><img class="roundImg"
-            width="45px" height="45px" src="./../static/img/hackthebox.svg"></img></a></li>
-    </ul>
+  <!-- Scanline Effect -->
+  <div class="scanline"></div>
+
+  <!-- Matrix Background Canvas -->
+  <canvas id="matrix"></canvas>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <a href="../index.html" class="logo-section">
+        <img src="../static/img/spacelettuceIcon.png" alt="Logo" class="logo-img">
+        <span class="logo-text glitch">marulecha</span>
+      </a>
+
+      <ul class="nav-links">
+        <li>
+          <a href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank">
+            <img
+              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300d9ff'%3E%3Cpath d='M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z'/%3E%3C/svg%3E"
+              alt="LinkedIn" class="nav-icon">
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/marulecha" target="_blank">
+            <img
+              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300d9ff'%3E%3Cpath d='M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z'/%3E%3C/svg%3E"
+              alt="GitHub" class="nav-icon">
+          </a>
+        </li>
+        <li>
+          <a href="https://app.hackthebox.com/profile/1440" target="_blank">
+            <img
+              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300d9ff'%3E%3Cpath d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l7.46 3.73L12 11.63 4.54 7.91 12 4.18zM4 9.7l7 3.5v6.61l-7-3.5V9.7zm9 10.11v-6.61l7-3.5v6.61l-7 3.5z'/%3E%3C/svg%3E"
+              alt="HackTheBox" class="nav-icon">
+          </a>
+        </li>
+      </ul>
+    </header>
+
+    <!-- Terminal Section -->
+    <section class="terminal">
+      <div class="terminal-header">
+        <div class="terminal-btn"></div>
+        <div class="terminal-btn"></div>
+        <div class="terminal-btn"></div>
+      </div>
+      <h1 class="terminal-title">./run_checklist.py<span class="cursor"></span></h1>
+      <p class="terminal-subtitle">[+] Methodology | Recon | Exploitation</p>
+    </section>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+      <div class="menu-section">
+        <h2 class="menu-title">ls -la</h2>
+        <ul class="menu-list">
+          <li><a href="resume.html">Resume</a></li>
+          <li><a href="contact.html">Contact Me</a></li>
+          <li><a href="vulndb.html">Vulnerability Database</a></li>
+          <li><a href="webChecklist.html"
+              style="border-left: 5px solid #00d9ff; padding-left: 25px; background: #001a1f;">Web Application
+              Checklist</a></li>
+        </ul>
+      </div>
+
+      <div class="checklist-container">
+        <div class="checklist-header">
+          <h2 class="checklist-title">./run_checklist.py</h2>
+          <button class="action-btn" onclick="generateReport()">Export Report (TXT)</button>
+        </div>
+
+        <div class="progress-wrapper">
+          <div class="progress-text" id="progressText">Progress: 0%</div>
+          <div class="progress-bar-container">
+            <div class="progress-fill" id="progressBar"></div>
+          </div>
+        </div>
+
+        <div class="checklist-interface">
+          <!-- Categories -->
+          <div class="categories-panel" id="categoryList">
+            <!-- Categories will be injected here -->
+          </div>
+
+          <!-- Items -->
+          <div class="items-panel" id="itemsList">
+            <p style="color: #005f70;">&lt; Select a category to view items</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <canvas id="matrix" width="514" height="916"></canvas>
-  <div class="mainText"><p class="mainTitle">Web Application Checklist &#129399; フィーンド</p></div>
-  <div class="mainText">
-    <!-- <p class="mainText" style="text-align: center"> Web Application PenTest Checklist.</p> -->
 
-    <!-- Progress bar -->
-    <div id="myProgress">
-      <script>
-        let x = document.getElementById("myProgress");
-        x.innerHTML = '<div id="myBar">0%</div>'
-      </script>
-    </div>
+  <script src="../static/js/matrix-effect.js"></script>
+  <script>
+    // Checklist Data
+    let defaultCheckList = {
+      "Information Gathering": [{ "name": "OSINT Recon / Google Dorks", "state": "unchecked" }, { "name": "Spidering / Crawling Directories", "state": "unchecked" }, { "name": "Identify Technologies / Injection Points", "state": "unchecked" }, { "name": "Information Disclosure - Error Messages", "state": "unchecked" }, { "name": "Outdated Libraries", "state": "unchecked" }, { "name": "HTTP Headers", "state": "unchecked" }, { "name": "Business Logic", "state": "unchecked" }],
+      "Authentication / Session": [{ "name": "Cookie Entropy / Cookie Flags", "state": "unchecked" }, { "name": "Improper Session Termination", "state": "unchecked" }, { "name": "HTTP Strict Transport Security", "state": "unchecked" }, { "name": "Session Fixation / Session Hijacking", "state": "unchecked" }, { "name": "Authentication Bypass", "state": "unchecked" }, { "name": "JWT Vulnerabilities", "state": "unchecked" }, { "name": "Clickjacking", "state": "unchecked" }, { "name": "Flawed 2FA", "state": "unchecked" }],
+      "Authorization": [{ "name": "Default / Weak Password", "state": "unchecked" }, { "name": "User Enumeration", "state": "unchecked" }, { "name": "User Segregation", "state": "unchecked" }, { "name": "Insecure Direct Object Reference", "state": "unchecked" }, { "name": "Unrestricted File Upload", "state": "unchecked" }, { "name": "File Inclusion / Path Traversal", "state": "unchecked" }, { "name": "HTTP Basic Authentication", "state": "unchecked" }, { "name": "Lack of Antivirus", "state": "unchecked" }, { "name": "Session No Brute Force Protection", "state": "unchecked" }, { "name": "Privilege Escalation", "state": "unchecked" }],
+      "Cryptography": [{ "name": "Algorithms & Ciphers", "state": "unchecked" }, { "name": "Self-Signed Certificates", "state": "unchecked" }, { "name": "Improper Password Storage", "state": "unchecked" }, { "name": "Lack of SSL", "state": "unchecked" }],
+      "Input Validation / Injections": [{ "name": "Cross-Site Scripting", "state": "unchecked" }, { "name": "SQL / NoSQL Injections", "state": "unchecked" }, { "name": "Server Side Template Injection", "state": "unchecked" }, { "name": "Server Side Request Forgery", "state": "unchecked" }, { "name": "Cross Site Request Forgery", "state": "unchecked" }, { "name": "Command Injection", "state": "unchecked" }, { "name": "XML Injection - XXE/XPATH", "state": "unchecked" }, { "name": "LDAP Injection", "state": "unchecked" }, { "name": "Server Side Inclusion", "state": "unchecked" }, { "name": "Local / Remote File Includes", "state": "unchecked" }, { "name": "HTTP Request Smuggling", "state": "unchecked" }, { "name": "Host Header Injection", "state": "unchecked" }, { "name": "Open Redirect", "state": "unchecked" }, { "name": "CORS", "state": "unchecked" }],
+      "Denial of Service": [{ "name": "Account Lockout", "state": "unchecked" }, { "name": "Cache Poisoning", "state": "unchecked" }]
+    };
 
-    <!-- checkList/keys show  -->
-    <div class="container" style="display: flex">
-      <div id="leftButtons" class="btn-group">
+    let checkList = JSON.parse(localStorage.getItem('checkList')) || defaultCheckList;
+    let progressBarPercentage = JSON.parse(localStorage.getItem('progressBarPercentage')) || 0;
 
-        <script>
-          //Checklist json Object - Data
-          let checkList = { "Information Gathering": [{ "name": "OSINT Recon / Google Dorks", "state": "unchecked" }, { "name": "Spidering / Crawling Directories", "state": "unchecked" }, { "name": "Identify Technologies / Injection Points", "state": "unchecked" }, { "name": "Information Disclosure - Error Messages", "state": "unchecked" }, { "name": "Outdated Libraries", "state": "unchecked" }, { "name": "HTTP Headers", "state": "unchecked" }, { "name": "Business Logic", "state": "unchecked" }], "Authentication / Session": [{ "name": "Cookie Entropy / Cookie Flags", "state": "unchecked" }, { "name": "Improper Session Termination", "state": "unchecked" }, { "name": "HTTP Strict Transport Security", "state": "unchecked" }, { "name": "Session Fixation / Session Hijacking", "state": "unchecked" }, { "name": "Authentication Bypass", "state": "unchecked" }, { "name": "JWT Vulnerabilities", "state": "unchecked" }, { "name": "Clickjacking", "state": "unchecked" }, { "name": "Flawed 2FA", "state": "unchecked" }], "Authorization": [{ "name": "Default / Weak Password", "state": "unchecked" }, { "name": "User Enumeration", "state": "unchecked" }, { "name": "User Segregation", "state": "unchecked" }, { "name": "Insecure Direct Object Reference", "state": "unchecked" }, { "name": "Unrestricted File Upload", "state": "unchecked" }, { "name": "File Inclusion / Path Traversal", "state": "unchecked" }, { "name": "HTTP Basic Authentication", "state": "unchecked" }, { "name": "Lack of Antivirus", "state": "unchecked" }, { "name": "Session No Brute Force Protection", "state": "unchecked" }, { "name": "Privilege Escalation", "state": "unchecked" }], "Cryptography": [{ "name": "Algorithms & Ciphers", "state": "unchecked" }, { "name": "Self-Signed Certificates", "state": "unchecked" }, { "name": "Improper Password Storage", "state": "unchecked" }, { "name": "Lack of SSL", "state": "unchecked" }], "Input Validation / Injections": [{ "name": "Cross-Site Scripting", "state": "unchecked" }, { "name": "SQL / NoSQL Injections", "state": "unchecked" }, { "name": "Server Side Template Injection", "state": "unchecked" }, { "name": "Server Side Request Forgery", "state": "unchecked" }, { "name": "Cross Site Request Forgery", "state": "unchecked" }, { "name": "Command Injection", "state": "unchecked" }, { "name": "XML Injection - XXE/XPATH", "state": "unchecked" }, { "name": "LDAP Injection", "state": "unchecked" }, { "name": "Server Side Inclusion", "state": "unchecked" }, { "name": "Local / Remote File Includes", "state": "unchecked" }, { "name": "HTTP Request Smuggling", "state": "unchecked" }, { "name": "Host Header Injection", "state": "unchecked" }, { "name": "Open Redirect", "state": "unchecked" }, { "name": "CORS", "state": "unchecked" }], "Denial of Service": [{ "name": "Account Lockout", "state": "unchecked" }, { "name": "Cache Poisoning", "state": "unchecked" }] };
+    // UI Initialization
+    function init() {
+      renderCategories();
+      updateProgress();
 
-          for (let i in checkList) {
-            document.getElementById("leftButtons").innerHTML += '<button class="button-63" id="' + i + '"><h4>' + `${i}` + '</h4></button>'
-          }
-        </script>
+      // Load default or saved category
+      const savedCategory = localStorage.getItem('category');
+      if (savedCategory && checkList[savedCategory]) {
+        loadItems(savedCategory);
+        // Highlight active button
+        const btn = document.getElementById('cat-' + savedCategory);
+        if (btn) btn.classList.add('active');
+      }
+    }
 
-      </div>
-      <!-- checkList/values show  -->
-      <div id="listRighButtons"> </div>
+    function renderCategories() {
+      const catContainer = document.getElementById('categoryList');
+      catContainer.innerHTML = '';
 
-      <script>
-        // eventListener for Left buttons
-        let btns = document.querySelectorAll('.button-63');
-        btns.forEach(function (t) {
-          t.addEventListener('mouseover', event => {
-            localStorage.setItem('category', t.id)
-            var x = document.getElementById("listRighButtons");
-            x.innerHTML = ' '
-            for (let i in checkList) {
-              if (`${i}` == t.id) {
-                checkList[i].map((k) => {
-                  cb_name = k['name']
-                  cb_state = k['state']
-                  if (cb_state == "unchecked") {
-                    x.innerHTML += '<li class="rightBtnWC"><button class="button-64" id="' + cb_name + '"style="background-color: black; color: white;">' + cb_name + '</button></li>'
-                  } else if (cb_state == "checked") {
-                    x.innerHTML += '<li class="rightBtnWC"><button class="button-64" id="' + cb_name + '"style="background-color: #107896; color: white;">' + cb_name + '</button></li>'
-                  }
+      for (let category in checkList) {
+        const btn = document.createElement('button');
+        btn.className = 'cat-btn';
+        btn.id = 'cat-' + category;
+        btn.innerText = `> ${category}`;
+        btn.onclick = () => {
+          // Remove active class from all
+          document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          localStorage.setItem('category', category);
+          loadItems(category);
+        };
+        catContainer.appendChild(btn);
+      }
+    }
 
-                })
-              }
-            }
-          });
+    function loadItems(category) {
+      const itemsContainer = document.getElementById('itemsList');
+      itemsContainer.innerHTML = `<h3 style="color:#00d9ff; border-bottom: 1px solid #005f70; padding-bottom:10px; margin-top:0;">${category}</h3>`;
+
+      checkList[category].forEach(item => {
+        const btn = document.createElement('button');
+        btn.className = `item-btn ${item.state === 'checked' ? 'checked' : ''}`;
+        btn.innerText = item.name;
+        btn.onclick = () => toggleItem(category, item.name);
+        itemsContainer.appendChild(btn);
+      });
+    }
+
+    function toggleItem(category, itemName) {
+      // Update state
+      checkList[category].forEach(item => {
+        if (item.name === itemName) {
+          item.state = item.state === 'checked' ? 'unchecked' : 'checked';
+        }
+      });
+
+      // Save
+      localStorage.setItem('checkList', JSON.stringify(checkList));
+
+      // Re-render items
+      loadItems(category);
+      updateProgress();
+    }
+
+    function updateProgress() {
+      let total = 0;
+      let checked = 0;
+
+      for (let cat in checkList) {
+        checkList[cat].forEach(item => {
+          total++;
+          if (item.state === 'checked') checked++;
         });
+      }
 
+      let percentage = total === 0 ? 0 : (checked / total) * 100;
+      percentage = parseFloat(percentage).toFixed(2);
 
-        // Get the button-64 element, add a click listener for changing state and progress %
-        document.getElementById("listRighButtons").onclick = function (e) {
-          if (e.target && e.target.className == "button-64") {
-            changeButtonState(e.target.id)
-            progress()
-          }
-        }
+      localStorage.setItem('progressBarPercentage', JSON.stringify(percentage));
 
-        // Set the checkList object state and save JSON to localstorage    
-        function changeButtonState(id) {
-          var property = document.getElementById(id);
-          if (property.style.backgroundColor == 'black') {
-            property.style.backgroundColor = '#107896';
-            const category = localStorage.getItem('category')
-            for (let i in checkList) {
-              checkList[i].map((k) => {
-                if (id == k['name']) {
-                  k['state'] = 'checked'
-                  localStorage.setItem('checkList', JSON.stringify(checkList))
-                }
-              })
-            }
-          }
-          else {
-            property.style.backgroundColor = 'black'
-            const category = localStorage.getItem('category')
-            for (let i in checkList) {
-              checkList[i].map((k) => {
-                if (id == k['name']) {
-                  k['state'] = 'unchecked'
-                  localStorage.setItem('checkList', JSON.stringify(checkList))
-                }
-              })
-            }
-          }
-        }
+      document.getElementById('progressBar').style.width = percentage + '%';
+      document.getElementById('progressText').innerText = `Progress: ${percentage}%`;
+    }
 
-        // Export progress on checklist to a file
-        function generatePDF() {
+    // Text Export
+    function generateReport() {
+      let total = 0;
+      let checked = 0;
 
-          //// Create a doc object
-          window.jsPDF = window.jspdf.jsPDF;
-          let doc = new jsPDF();
+      // Calculate counts
+      for (let cat in checkList) {
+        checkList[cat].forEach(item => {
+          total++;
+          if (item.state === 'checked') checked++;
+        });
+      }
 
-          // Load the checkList data from localStorage
-          checkList = JSON.parse(localStorage.getItem('checkList'));
-          progressBarPercentage = JSON.parse(localStorage.getItem('progressBarPercentage'));
-          // Get the current date and time and format it as a string
-          var now = new Date();
-          var dateString = now.toLocaleString();
-          var y = 8;
+      let report = `MARULECHA WEB CHECKLIST REPORT\n`;
+      report += `==============================\n`;
+      report += `Date: ${new Date().toLocaleString()}\n`;
+      report += `Progress: ${checked}/${total} items checked (${((checked / total) * 100).toFixed(1)}%)\n\n`;
 
-          doc.setFont("helvetica", "bold");
-          doc.setTextColor(67, 171, 201);
-          doc.text('Date: ' + dateString + '\t\t\t\t\tProgress: ' + progressBarPercentage + '%\n', 10, y);
-          y = 20;
-          // Loop through your checkList and add pages as needed
-          for (let i in checkList) {
-            if (y > 265) { // if we've reached the bottom of the page, add a new page
-              doc.addPage();
-              y = 10; // reset the y-coordinate to the top of the new page
-            }
-            doc.setFont("helvetica", "bold");
-            doc.setTextColor(211, 89, 159);
-            doc.text(i + ':\n', 10, y);
-            doc.setFont("helvetica", "normal");
-            doc.setTextColor('black');
-            y += 10;
-            checkList[i].map((k) => {
-              cb_name = k['name'];
-              cb_state = k['state'];
-              if (cb_state == "unchecked") {
-                doc.text('\t' + cb_name, 10, y);
-                doc.setTextColor(255, 0, 0);
-                doc.setFont("helvetica", "bold");
-                doc.text('N/A', 150, y)
-                doc.setFont("helvetica", "normal");
-                y += 10;
-                doc.setTextColor('black');
-              } else if (cb_state == "checked") {
-                doc.text('\t' + cb_name, 10, y);
-                doc.setTextColor(0, 144, 0);
-                doc.setFont("helvetica", "bold");
-                doc.text('Done', 150, y)
-                doc.setFont("helvetica", "normal");
-                y += 10;
-                doc.setTextColor('black');
-              }
-              if (y > 265) { // if we've reached the bottom of the page, add a new page
-                doc.addPage();
-                y = 0; // reset the y-coordinate to the top of the new page
-              }
-            });
-          }
+      for (let category in checkList) {
+        report += `[ ${category.toUpperCase()} ]\n`;
+        report += `----------------------------------------\n`;
 
-          // doc.setFontSize(22); // reset font size
-          // // doc.setFillOpacity(1); // reset opacity
-          // doc.setFont("helvetica", "bold");
-          // doc.setTextColor(211, 89, 159);
-          // doc.text('marulecha', doc.internal.pageSize.width / 2, doc.internal.pageSize.height / 2, { align: 'center', valign: 'middle', angle: 45 });
+        checkList[category].forEach(item => {
+          const mark = item.state === 'checked' ? '[x]' : '[ ]';
+          report += `${mark} ${item.name}\n`;
+        });
+        report += `\n`;
+      }
 
-          // Generate the PDF file
-          doc.save('WebApplication-Checklist-' + dateString);
+      // Create download link
+      const blob = new Blob([report], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `marulecha-checklist-${new Date().toISOString().split('T')[0]}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }
 
-        }
-
-        // Progress Bar Live Percetage
-        function progress() {
-          let total = 0;
-          let checkedCount = 0;
-
-          for (let i in checkList) {
-            checkList[i].map((k) => {
-
-              if (k['state'] == 'checked') {
-                checkedCount++;
-              }
-              total++;
-            })
-            let percentage = (checkedCount / total) * 100;
-            localStorage.setItem('progressBarPercentage', JSON.stringify(parseFloat(percentage).toFixed(2)))
-            let x = document.getElementById("myProgress");
-            x.innerHTML = '<div id="myBar">' + parseFloat(percentage).toFixed(2) + '%</div> '
-            let myBar = document.getElementById("myBar");
-            myBar.style.width = percentage + '%';
-          }
-        }
-      </script>
-
-      <div>
-        <button class="button-65" onclick="generatePDF()">Export Progress</button>
-      </div>
-    </div>
-
+    // Launch
+    init();
+  </script>
 </body>
-<script src="../static/js/rain.js"></script>
 
 </html>
