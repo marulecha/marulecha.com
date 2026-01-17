@@ -84,9 +84,31 @@ const TerminalApp = () => {
             }, 1000);
         } else if (stage === 4) {
             // Show root and final prompt
-            setLines(prev => [...prev, { type: 'output', text: 'root' }]);
+            setLines(prev => [...prev, { type: 'output', text: 'marulecha' }]);
             setStage(5); // End state
         } else if (stage === 5) {
+            // Type whoami
+            timeout = setTimeout(() => {
+                typeCommand('sudo -u root /bin/bash', () => {
+                    setLines(prev => [...prev, { type: 'shell-command', text: 'sudo -u root /bin/bash' }]);
+                    setCurrentCommand('');
+                    setStage(6);
+                });
+            }, 1000);
+        } else if (stage === 6) {
+            // Type whoami
+            timeout = setTimeout(() => {
+                typeCommand('whoami', () => {
+                    setLines(prev => [...prev, { type: 'shell-command', text: 'whoami' }]);
+                    setCurrentCommand('');
+                    setStage(7);
+                });
+            }, 1000);
+        } else if (stage === 7) {
+            // Show root and final prompt
+            setLines(prev => [...prev, { type: 'output', text: 'root' }]);
+            setStage(8); // End state
+        } else if (stage === 8) {
             // Loop back to start after a delay? Or just stay? 
             // Let's loop for the "screensaver" feel
             timeout = setTimeout(() => {
@@ -126,11 +148,11 @@ const TerminalApp = () => {
             <div className="console-line">
                 {stage === 0 && <span style={{ color: '#00d9ff' }}>root@marulecha:~$ {currentCommand}</span>}
                 {stage === 1 && <span style={{ color: '#0099bb' }}>{/* Listening... */}</span>}
-                {stage === 3 && <span style={{ color: '#ff0055' }}># {currentCommand}</span>}
-                {stage === 5 && <span style={{ color: '#ff0055' }}># <span className="cursor" style={{ opacity: cursorVisible ? 1 : 0 }}>_</span></span>}
+                {/* Stages 3, 5, 6 are typing input */}
+                {(stage === 3 || stage === 5 || stage === 6) && <span style={{ color: '#ff0055' }}># {currentCommand}</span>}
 
                 {/* Typing cursor during typing phases */}
-                {(stage === 0 || stage === 3) && (
+                {(stage === 0 || stage === 3 || stage === 5 || stage === 6) && (
                     <span className="cursor" style={{ opacity: cursorVisible ? 1 : 0, marginLeft: '2px' }}>_</span>
                 )}
             </div>
