@@ -1,4 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if animations are disabled
+    if (localStorage.getItem('animationsDisabled') === 'true') {
+        const element = document.getElementById('typewriter-text');
+        element.textContent = "";
+        element.style.animation = "none";
+        element.style.textShadow = "none";
+        return;
+    }
+
     const sentences = [
         "Hello friend.",
         "Hello friend? That's lame..",

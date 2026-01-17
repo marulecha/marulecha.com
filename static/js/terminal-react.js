@@ -164,5 +164,13 @@ const TerminalApp = () => {
     );
 };
 
-const root = ReactDOM.createRoot(document.getElementById('react-terminal-root'));
-root.render(<TerminalApp />);
+const rootElement = document.getElementById('react-terminal-root');
+
+// Check if animations are disabled
+if (localStorage.getItem('animationsDisabled') === 'true') {
+    // Render static content (Empty as requested)
+    rootElement.innerHTML = '';
+} else {
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<TerminalApp />);
+}

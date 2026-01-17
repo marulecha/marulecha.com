@@ -50,15 +50,24 @@
               alt="HackTheBox" class="nav-icon">
           </a>
         </li>
+        </li>
       </ul>
     </header>
 
     <!-- Terminal Section -->
     <section class="terminal">
       <div class="terminal-header">
-        <div class="terminal-btn"></div>
-        <div class="terminal-btn"></div>
-        <div class="terminal-btn"></div>
+        <div class="terminal-buttons">
+          <div class="terminal-btn"></div>
+          <div class="terminal-btn"></div>
+          <div class="terminal-btn"></div>
+        </div>
+        <div class="toggle-container">
+          <label class="switch">
+            <input type="checkbox" id="toggle-animations-switch">
+            <span class="slider round"></span>
+          </label>
+        </div>
       </div>
       <h1 class="terminal-title"><span id="typewriter-text"></span><span class="cursor"></span></h1>
       <p class="terminal-subtitle">[+] Penetration Testing | Offensive Security | Security Research </p>
@@ -95,6 +104,9 @@
 
   <!-- Header Typewriter -->
   <script src="static/js/header-typewriter.js"></script>
+
+  <!-- Settings -->
+  <script src="static/js/settings.js"></script>
 
   <script src="static/js/matrix-effect.js"></script>
 </body>
