@@ -139,14 +139,14 @@ const TerminalApp = () => {
 
             {lines.map((line, idx) => (
                 <div key={idx} className="console-line" style={{ width: '100%' }}>
-                    {line.type === 'command' && <span style={{ color: '#00d9ff' }}>root@marulecha:~$ {line.text}</span>}
+                    {line.type === 'command' && <span style={{ color: '#00d9ff' }}>kali@kali:~$ {line.text}</span>}
                     {line.type === 'output' && <span style={{ color: '#0099bb' }}>{line.text}</span>}
                     {line.type === 'shell-command' && <span style={{ color: '#ff0055' }}># {line.text}</span>}
                 </div>
             ))}
 
             <div className="console-line">
-                {stage === 0 && <span style={{ color: '#00d9ff' }}>root@marulecha:~$ {currentCommand}</span>}
+                {stage === 0 && <span style={{ color: '#00d9ff' }}>kali@kali:~$ {currentCommand}</span>}
                 {stage === 1 && <span style={{ color: '#0099bb' }}>{/* Listening... */}</span>}
                 {/* Stages 3, 5, 6 are typing input */}
                 {(stage === 3 || stage === 5 || stage === 6) && <span style={{ color: '#ff0055' }}># {currentCommand}</span>}
