@@ -84,7 +84,7 @@ const TerminalApp = () => {
             }, 1000);
         } else if (stage === 4) {
             // Show root and final prompt
-            setLines(prev => [...prev, { type: 'output', text: 'marulecha' }]);
+            setLines(prev => [...prev, { type: 'output', text: 'jsmith' }]);
             setStage(5); // End state
         } else if (stage === 5) {
             // Type whoami
@@ -97,9 +97,31 @@ const TerminalApp = () => {
             }, 1000);
         } else if (stage === 6) {
             // Show root and final prompt
-            setLines(prev => [...prev, { type: 'output', text: 'uid=0(marulecha) gid=0(root) groups=0(root),27(sudo)' }]);
+            setLines(prev => [...prev, { type: 'output', text: 'uid=0(jsmith) gid=0(root) groups=0(root),27(sudo)' }]);
             setStage(7); // End state
         } else if (stage === 7) {
+            // Type whoami
+            timeout = setTimeout(() => {
+                typeCommand('/bin/bash', () => {
+                    setLines(prev => [...prev, { type: 'shell-command', text: '/bin/bash' }]);
+                    setCurrentCommand('');
+                    setStage(8);
+                });
+            }, 1000);
+        } else if (stage === 8) {
+            // Type whoami
+            timeout = setTimeout(() => {
+                typeCommand('whoami', () => {
+                    setLines(prev => [...prev, { type: 'shell-command', text: 'whoami' }]);
+                    setCurrentCommand('');
+                    setStage(9);
+                });
+            }, 1000);
+        } else if (stage === 9) {
+            // Show root and final prompt
+            setLines(prev => [...prev, { type: 'output', text: 'root' }]);
+            setStage(10); // End state
+        } else if (stage === 10) {
             // Loop back to start after a delay? Or just stay? 
             // Let's loop for the "screensaver" feel
             timeout = setTimeout(() => {
@@ -139,11 +161,11 @@ const TerminalApp = () => {
             <div className="console-line">
                 {stage === 0 && <span style={{ color: '#00d9ff' }}>kali@kali:~$ {currentCommand}</span>}
                 {stage === 1 && <span style={{ color: '#0099bb' }}>{/* Listening... */}</span>}
-                {/* Stages 3, 5, 6 are typing input */}
-                {(stage === 3 || stage === 5 || stage === 6) && <span style={{ color: '#ff0055' }}># {currentCommand}</span>}
+                {/* Stages 3, 5, 7, 8 are typing input */}
+                {(stage === 3 || stage === 5 || stage === 7 || stage === 8) && <span style={{ color: '#ff0055' }}># {currentCommand}</span>}
 
                 {/* Typing cursor during typing phases */}
-                {(stage === 0 || stage === 3 || stage === 5 || stage === 6) && (
+                {(stage === 0 || stage === 3 || stage === 5 || stage === 7 || stage === 8) && (
                     <span className="cursor" style={{ opacity: cursorVisible ? 1 : 0, marginLeft: '2px' }}>_</span>
                 )}
             </div>
