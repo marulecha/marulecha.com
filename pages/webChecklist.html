@@ -247,7 +247,10 @@
       <div class="checklist-container">
         <div class="checklist-header">
           <h2 class="checklist-title">./run_checklist.py</h2>
-          <button class="action-btn" onclick="generateReport()">Export Report (TXT)</button>
+          <div style="display: flex; gap: 10px;">
+            <button class="action-btn" onclick="resetChecklist()">Initialize List</button>
+            <button class="action-btn" onclick="generateReport()">Export Report (TXT)</button>
+          </div>
         </div>
 
         <div class="progress-wrapper">
@@ -393,39 +396,48 @@
       let checked = 0;
 
       // Calculate counts
-      for (let cat in checkList) {
-        checkList[cat].forEach(item => {
-          total++;
-          if (item.state === 'checked') checked++;
-        });
-      }
+      let reportContent = "SpaceLettuce Web Application Vulnerability Checklist\n";
+      reportContent += "====================================================\n\n";
 
-      let report = `MARULECHA WEB CHECKLIST REPORT\n`;
-      report += `==============================\n`;
-      report += `Date: ${new Date().toLocaleString()}\n`;
-      report += `Progress: ${checked}/${total} items checked (${((checked / total) * 100).toFixed(1)}%)\n\n`;
+      let totalItems = 0;
+      let checkedItems = 0;
 
       for (let category in checkList) {
-        report += `[ ${category.toUpperCase()} ]\n`;
-        report += `----------------------------------------\n`;
-
         checkList[category].forEach(item => {
-          const mark = item.state === 'checked' ? '[x]' : '[ ]';
-          report += `${mark} ${item.name}\n`;
+          totalItems++;
+          if (item.state === 'checked') {
+            checkedItems++;
+          }
         });
-        report += `\n`;
       }
 
-      // Create download link
-      const blob = new Blob([report], { type: 'text/plain' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `marulecha-checklist-${new Date().toISOString().split('T')[0]}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+      reportContent += `Progress: ${checkedItems}/${totalItems} items checked\n\n`;
+
+      for (let category in checkList) {
+        reportContent += `[ ${category} ]\n`;
+        checkList[category].forEach(item => {
+          let status = item.state === 'checked' ? "[x]" : "[ ]";
+          reportContent += `${status} ${item.name}\n`;
+        });
+        reportContent += "\n";
+      }
+
+      const blob = new Blob([reportContent], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "SpaceLettuce_Checklist_Report.txt";
+      link.click();
+    }
+
+    function resetChecklist() {
+      if (confirm("Are you sure you want to initialize the list? This will uncheck all items.")) {
+        // Clear data from localStorage
+        localStorage.removeItem('checkList');
+        localStorage.removeItem('progressBarPercentage');
+
+        // Reload the page to fetch fresh data from JSON
+        location.reload();
+      }
     }
 
     // Launch
