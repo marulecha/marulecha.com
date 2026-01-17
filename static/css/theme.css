@@ -378,7 +378,7 @@ input:checked+.slider:before {
 /* Responsive */
 @media (min-width: 768px) {
   .content-wrapper {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: auto 1fr;
   }
 }
 
