@@ -83,6 +83,31 @@
       transform: scale(1.1);
       filter: drop-shadow(0 0 8px rgba(0, 217, 255, 0.6));
     }
+
+    .cert-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cert-name {
+      position: absolute;
+      bottom: -30px;
+      color: #00d9ff;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      text-shadow: 0 0 5px #00d9ff;
+      white-space: nowrap;
+      pointer-events: none;
+      font-weight: bold;
+      z-index: 100;
+    }
+
+    .cert-wrapper:hover .cert-name {
+      opacity: 1;
+    }
   </style>
 </head>
 
@@ -181,11 +206,26 @@
         <div class="resume-section">
           <h3>Certifications</h3>
           <div class="certs-list">
-            <img src="../static/img/crto1.png" class="cert-img" alt="CRTO">
-            <img src="../static/img/oasp1.png" class="cert-img" alt="OASP">
-            <img src="../static/img/oscp1.png" class="cert-img" alt="OSCP">
-            <img src="../static/img/crpt1.png" class="cert-img" alt="CRPT">
-            <img src="../static/img/ccna1.png" class="cert-img" alt="CCNA">
+            <div class="cert-wrapper">
+              <img src="../static/img/crto1.png" class="cert-img" alt="CRTO">
+              <span class="cert-name">Certified Red Team Operator</span>
+            </div>
+            <div class="cert-wrapper">
+              <img src="../static/img/oasp1.png" class="cert-img" alt="OASP">
+              <span class="cert-name">Offensive Azure Security Professional</span>
+            </div>
+            <div class="cert-wrapper">
+              <img src="../static/img/oscp1.png" class="cert-img" alt="OSCP">
+              <span class="cert-name">Offensive Security Certified Professional</span>
+            </div>
+            <div class="cert-wrapper">
+              <img src="../static/img/crpt1.png" class="cert-img" alt="CRPT">
+              <span class="cert-name">Crest Register Penetration Tester</span>
+            </div>
+            <div class="cert-wrapper">
+              <img src="../static/img/ccna1.png" class="cert-img" alt="CCNA">
+              <span class="cert-name">Cisco Certified Network Associate</span>
+            </div>
           </div>
         </div>
       </div>
