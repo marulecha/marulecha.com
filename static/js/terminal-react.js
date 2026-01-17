@@ -89,26 +89,17 @@ const TerminalApp = () => {
         } else if (stage === 5) {
             // Type whoami
             timeout = setTimeout(() => {
-                typeCommand('sudo -u root /bin/bash', () => {
-                    setLines(prev => [...prev, { type: 'shell-command', text: 'sudo -u root /bin/bash' }]);
+                typeCommand('id', () => {
+                    setLines(prev => [...prev, { type: 'shell-command', text: 'id' }]);
                     setCurrentCommand('');
                     setStage(6);
                 });
             }, 1000);
         } else if (stage === 6) {
-            // Type whoami
-            timeout = setTimeout(() => {
-                typeCommand('whoami', () => {
-                    setLines(prev => [...prev, { type: 'shell-command', text: 'whoami' }]);
-                    setCurrentCommand('');
-                    setStage(7);
-                });
-            }, 1000);
-        } else if (stage === 7) {
             // Show root and final prompt
-            setLines(prev => [...prev, { type: 'output', text: 'root' }]);
-            setStage(8); // End state
-        } else if (stage === 8) {
+            setLines(prev => [...prev, { type: 'output', text: 'uid=0(marulecha) gid=0(root) groups=0(root),27(sudo)' }]);
+            setStage(7); // End state
+        } else if (stage === 7) {
             // Loop back to start after a delay? Or just stay? 
             // Let's loop for the "screensaver" feel
             timeout = setTimeout(() => {
