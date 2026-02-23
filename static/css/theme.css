@@ -466,3 +466,76 @@ input:checked+.slider:before {
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
   }
 }
+
+/* Dropdown Menu Styles */
+.menu-list li details {
+  background: #000000;
+  border: 1px solid #00d9ff;
+  border-left: 3px solid #00d9ff;
+  color: #00d9ff;
+  font-family: 'Share Tech Mono', monospace;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+}
+
+.menu-list li details summary {
+  display: block;
+  padding: 12px 15px;
+  cursor: pointer;
+  position: relative;
+  list-style: none; /* Hide default arrow */
+  transition: all 0.3s ease;
+}
+
+.menu-list li details summary::-webkit-details-marker {
+  display: none;
+}
+
+.menu-list li details summary::before {
+  content: '+ [DIR] ';
+  color: #00d9ff;
+  margin-right: 5px;
+}
+
+.menu-list li details[open] summary::before {
+  content: '- [DIR] ';
+}
+
+.menu-list li details summary:hover {
+  background: #001a1f;
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.5);
+  padding-left: 25px;
+  border-left: 2px solid #00d9ff;
+}
+
+.dropdown-menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 15px 15px 25px;
+  gap: 10px;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 8px 12px !important;
+  background: transparent !important;
+  border: none !important;
+  border-left: 1px dashed #00d9ff !important;
+  color: #00d9ff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.dropdown-menu li a::before {
+  content: '> ' !important;
+  color: #00d9ff;
+  margin-right: 5px;
+}
+
+.dropdown-menu li a:hover {
+  background: #001a1f !important;
+  box-shadow: inset 0 0 10px rgba(0, 217, 255, 0.2) !important;
+  padding-left: 20px !important;
+  border-left: 2px solid #00d9ff !important;
+}
