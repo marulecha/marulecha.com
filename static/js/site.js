@@ -56,12 +56,17 @@
     if (navBtn && nav) {
       navBtn.addEventListener('click', function () {
         var open = nav.classList.toggle('is-open');
+        html.classList.toggle('nav-open', open);
         navBtn.setAttribute('aria-expanded', String(open));
         navBtn.querySelector('.i-menu').hidden = open;
         navBtn.querySelector('.i-close').hidden = !open;
       });
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && nav.classList.contains('is-open')) navBtn.click();
+      });
+      // leaving the phone breakpoint with the sheet open: reset state
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 860 && nav.classList.contains('is-open')) navBtn.click();
       });
     }
 
@@ -94,6 +99,9 @@
     /* "/" focuses the first search input on the page */
     var search = document.querySelector('input[type="search"]');
     if (search) {
+      if (search.dataset.placeholderShort && window.matchMedia('(max-width: 700px)').matches) {
+        search.placeholder = search.dataset.placeholderShort;
+      }
       document.addEventListener('keydown', function (e) {
         var tag = (e.target.tagName || '').toLowerCase();
         var typing = tag === 'input' || tag === 'textarea' || e.target.isContentEditable;
