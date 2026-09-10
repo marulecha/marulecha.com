@@ -1,0 +1,46 @@
+/* Palette: Red Team
+   Crimson primary with amber secondary. Aggressive, on-brand for offensive work.
+   Enable by adding after theme.css:
+   <link rel="stylesheet" href="static/css/palettes/red-team.css">
+   (use ../static/... from /pages). Only tokens change; layout is untouched. */
+:root {
+  --bg: #0b0507;
+  --bg-2: #14080c;
+  --surface: rgba(20, 8, 12, 0.78);
+  --surface-2: rgba(58, 15, 26, 0.55);
+  --surface-solid: #14080c;
+  --line: rgba(255, 157, 176, 0.12);
+  --line-strong: rgba(255, 157, 176, 0.32);
+  --text: #f5e6ea;
+  --text-2: #b79aa3;
+  --text-3: #7a6169;
+
+  --cyan: #ff3d5e;
+  --cyan-2: #ff9db0;
+  --cyan-ink: #2a0510;
+  --violet: #ffb454;
+  --violet-2: #ffd18a;
+  --green: #7ee787;
+  --pink: #ff3d5e;
+  --amber: #ffb454;
+
+  --cyan-a10: rgba(255, 61, 94, 0.1);
+  --cyan-a20: rgba(255, 61, 94, 0.2);
+  --cyan-a40: rgba(255, 61, 94, 0.4);
+  --violet-a15: rgba(255, 180, 84, 0.15);
+  --violet-a40: rgba(255, 180, 84, 0.4);
+  --green-a10: rgba(126, 231, 135, 0.1);
+  --green-a40: rgba(126, 231, 135, 0.4);
+
+  --wash-a: rgba(255, 61, 94, 0.13);
+  --wash-b: rgba(255, 180, 84, 0.14);
+  --grid-line: rgba(255, 157, 176, 0.045);
+  --scroll-thumb: rgba(255, 157, 176, 0.22);
+  --header-bg: rgba(11, 5, 7, 0.86);
+  --panel-bg: rgba(11, 5, 7, 0.92);
+  --mark-bg: #3a0f1a;
+  --matrix-head: rgba(255, 157, 176, 0.9);
+  --matrix-head-alt: rgba(255, 180, 84, 0.95);
+  --matrix-trail: rgba(255, 61, 94, 0.35);
+  --matrix-fade: rgba(11, 5, 7, 0.12);
+}

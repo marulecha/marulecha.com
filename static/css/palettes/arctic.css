@@ -1,0 +1,46 @@
+/* Palette: Arctic
+   Near-monochrome silver on graphite with one electric-blue secondary. Quietest option.
+   Enable by adding after theme.css:
+   <link rel="stylesheet" href="static/css/palettes/arctic.css">
+   (use ../static/... from /pages). Only tokens change; layout is untouched. */
+:root {
+  --bg: #07090d;
+  --bg-2: #0c1017;
+  --surface: rgba(12, 16, 23, 0.78);
+  --surface-2: rgba(29, 37, 49, 0.55);
+  --surface-solid: #0c1017;
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.32);
+  --text: #e6ebf2;
+  --text-2: #97a3b3;
+  --text-3: #616c7c;
+
+  --cyan: #dfe7f1;
+  --cyan-2: #ffffff;
+  --cyan-ink: #0b1220;
+  --violet: #4c8dff;
+  --violet-2: #a8c4ff;
+  --green: #7ee787;
+  --pink: #ff5c8a;
+  --amber: #ffb454;
+
+  --cyan-a10: rgba(223, 231, 241, 0.1);
+  --cyan-a20: rgba(223, 231, 241, 0.2);
+  --cyan-a40: rgba(223, 231, 241, 0.4);
+  --violet-a15: rgba(76, 141, 255, 0.15);
+  --violet-a40: rgba(76, 141, 255, 0.4);
+  --green-a10: rgba(126, 231, 135, 0.1);
+  --green-a40: rgba(126, 231, 135, 0.4);
+
+  --wash-a: rgba(223, 231, 241, 0.13);
+  --wash-b: rgba(76, 141, 255, 0.14);
+  --grid-line: rgba(255, 255, 255, 0.045);
+  --scroll-thumb: rgba(255, 255, 255, 0.22);
+  --header-bg: rgba(7, 9, 13, 0.86);
+  --panel-bg: rgba(7, 9, 13, 0.92);
+  --mark-bg: #1d2531;
+  --matrix-head: rgba(255, 255, 255, 0.9);
+  --matrix-head-alt: rgba(76, 141, 255, 0.95);
+  --matrix-trail: rgba(223, 231, 241, 0.35);
+  --matrix-fade: rgba(7, 9, 13, 0.12);
+}

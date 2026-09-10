@@ -1,0 +1,46 @@
+/* Palette: Phosphor
+   Classic green-screen terminal. Amber as the secondary voice.
+   Enable by adding after theme.css:
+   <link rel="stylesheet" href="static/css/palettes/phosphor.css">
+   (use ../static/... from /pages). Only tokens change; layout is untouched. */
+:root {
+  --bg: #040806;
+  --bg-2: #071009;
+  --surface: rgba(7, 16, 9, 0.78);
+  --surface-2: rgba(15, 42, 26, 0.55);
+  --surface-solid: #071009;
+  --line: rgba(166, 255, 204, 0.12);
+  --line-strong: rgba(166, 255, 204, 0.32);
+  --text: #dcf3e4;
+  --text-2: #93b39f;
+  --text-3: #5d7a68;
+
+  --cyan: #3dff8f;
+  --cyan-2: #a6ffcc;
+  --cyan-ink: #03170c;
+  --violet: #ffc857;
+  --violet-2: #ffe0a3;
+  --green: #3dff8f;
+  --pink: #ff5c7a;
+  --amber: #ffc857;
+
+  --cyan-a10: rgba(61, 255, 143, 0.1);
+  --cyan-a20: rgba(61, 255, 143, 0.2);
+  --cyan-a40: rgba(61, 255, 143, 0.4);
+  --violet-a15: rgba(255, 200, 87, 0.15);
+  --violet-a40: rgba(255, 200, 87, 0.4);
+  --green-a10: rgba(61, 255, 143, 0.1);
+  --green-a40: rgba(61, 255, 143, 0.4);
+
+  --wash-a: rgba(61, 255, 143, 0.13);
+  --wash-b: rgba(255, 200, 87, 0.14);
+  --grid-line: rgba(166, 255, 204, 0.045);
+  --scroll-thumb: rgba(166, 255, 204, 0.22);
+  --header-bg: rgba(4, 8, 6, 0.86);
+  --panel-bg: rgba(4, 8, 6, 0.92);
+  --mark-bg: #0f2a1a;
+  --matrix-head: rgba(166, 255, 204, 0.9);
+  --matrix-head-alt: rgba(255, 200, 87, 0.95);
+  --matrix-trail: rgba(61, 255, 143, 0.35);
+  --matrix-fade: rgba(4, 8, 6, 0.12);
+}

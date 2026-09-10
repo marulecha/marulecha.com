@@ -1,376 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Vulnerability Database - marulecha Cyber Security">
-    <meta name="keywords" content="marulecha, VulnDB, Cyber Security, CVE">
-    <title>marulecha | VulnDB</title>
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
-    <link rel="stylesheet" href="../static/css/theme.css">
-    <link rel="icon" href="../static/img/spacelettuceIcon.png" type="image/png">
-    <style>
-        /* Custom overrides for VulnDB page */
-        .vulndb-container {
-            background: #0a0a0a;
-            border: 2px solid #00d9ff;
-            border-radius: 5px;
-            padding: 25px;
-            box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
-        }
-
-        .vulndb-header {
-            border-bottom: 1px solid #00d9ff;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .vulndb-title {
-            color: #00d9ff;
-            font-size: 20px;
-            text-shadow: 0 0 10px #00d9ff;
-        }
-
-        /* Search Input Styling */
-        #searchInput {
-            width: 100%;
-            padding: 12px;
-            background: #000;
-            border: 1px solid #00d9ff;
-            color: #00d9ff;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 16px;
-            margin-bottom: 20px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        #searchInput:focus {
-            box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
-            border-left: 5px solid #00d9ff;
-        }
-
-        #searchInput::placeholder {
-            color: #005f70;
-        }
-
-        /* Results Styling */
-        .result-item {
-            border: 1px solid #005f70;
-            padding: 15px;
-            margin-bottom: 15px;
-            background: rgba(0, 217, 255, 0.02);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .result-item:hover {
-            border-color: #00d9ff;
-            box-shadow: 0 0 10px rgba(0, 217, 255, 0.1);
-        }
-
-        .result-item h2.title {
-            color: #00d9ff;
-            font-size: 1.2em;
-            border-bottom: 1px dashed #005f70;
-            padding-bottom: 5px;
-            margin-bottom: 10px;
-        }
-
-        .result-item div {
-            margin-bottom: 8px;
-            color: #ccc;
-        }
-
-        .result-item div strong {
-            color: #0099bb;
-            display: block;
-            margin-bottom: 3px;
-        }
-
-        /* Button Styling */
-        .button-67 {
-            background: transparent;
-            border: 1px solid #00d9ff;
-            color: #00d9ff;
-            padding: 5px 15px;
-            font-family: inherit;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .button-67:hover {
-            background: #00d9ff;
-            color: #000;
-            box-shadow: 0 0 10px #00d9ff;
-        }
-
-        /* Scrollbar for results if needed */
-        .result-container {
-            max-height: 800px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .result-container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .result-container::-webkit-scrollbar-track {
-            background: #0a0a0a;
-        }
-
-        .result-container::-webkit-scrollbar-thumb {
-            background: #005f70;
-        }
-
-        .result-container::-webkit-scrollbar-thumb:hover {
-            background: #00d9ff;
-        }
-
-        .report-link {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 0.9em;
-            color: #005f70;
-            border-top: 1px solid #005f70;
-            padding-top: 15px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>marulecha | Web Application Vulnerability Database</title>
+  <meta name="description" content="Searchable database of common penetration-testing findings with description, impact, remediation and references.">
+  <meta name="theme-color" content="#0a0718">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="marulecha | Web Application Vulnerability Database">
+  <meta property="og:description" content="Searchable database of common penetration-testing findings with description, impact, remediation and references.">
+  <meta property="og:image" content="https://marulecha.com/static/img/spacelettuce.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../static/css/theme.css">
+  <link rel="icon" href="../static/img/favicon-64.png" type="image/png">
+  <link rel="apple-touch-icon" href="../static/img/spacelettuceIcon-160.png">
 </head>
 
 <body>
-    <!-- Scanline Effect -->
-    <div class="scanline"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="backdrop" aria-hidden="true"></div>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
 
-    <!-- Matrix Background Canvas -->
-    <canvas id="matrix"></canvas>
-
+  <header class="site-header">
     <div class="container">
-        <!-- Header -->
-        <header>
-            <a href="../index.html" class="logo-section">
-                <img src="../static/img/spacelettuceIcon.png" alt="Logo" class="logo-img">
-                <span class="logo-text glitch">marulecha</span>
-            </a>
+      <a class="brand" href="../index.html" aria-label="marulecha — home">
+        <img class="brand__mark" src="../static/img/spacelettuceIcon-160.webp" alt="" width="36" height="36">
+        <span>marulecha<span class="brand__cursor" aria-hidden="true"></span></span>
+      </a>
 
-            <ul class="nav-links">
-                <li>
-                    <a href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300d9ff'%3E%3Cpath d='M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z'/%3E%3C/svg%3E"
-                            alt="LinkedIn" class="nav-icon">
-                    </a>
-                </li>
-                <li>
-                    <a href="https://github.com/marulecha" target="_blank">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300d9ff'%3E%3Cpath d='M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z'/%3E%3C/svg%3E"
-                            alt="GitHub" class="nav-icon">
-                    </a>
-                </li>
-                <li>
-                    <a href="https://app.hackthebox.com/profile/1440" target="_blank">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300d9ff'%3E%3Cpath d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l7.46 3.73L12 11.63 4.54 7.91 12 4.18zM4 9.7l7 3.5v6.61l-7-3.5V9.7zm9 10.11v-6.61l7-3.5v6.61l-7 3.5z'/%3E%3C/svg%3E"
-                            alt="HackTheBox" class="nav-icon">
-                    </a>
-                </li>
-            </ul>
-        </header>
+      <nav class="nav" id="site-nav" aria-label="Primary">
+        <a href="../index.html">~/home</a>
+        <a href="resume.html">resume</a>
+        <a href="vulndb.html">vulndb</a>
+        <a href="webChecklist.html">checklist</a>
+        <a href="webapptools.html">tools</a>
+        <a href="contact.html">contact</a>
+      </nav>
 
-        <!-- Terminal Section -->
-        <section class="terminal">
-            <div class="terminal-header">
-                <div class="terminal-buttons">
-                    <div class="terminal-btn"></div>
-                    <div class="terminal-btn"></div>
-                    <div class="terminal-btn"></div>
-                </div>
-                <div class="toggle-container">
-                    <label class="switch">
-                        <input type="checkbox" id="toggle-animations-switch">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-            </div>
-            <h1 class="terminal-title">./search_db.sh<span class="cursor"></span></h1>
-            <p class="terminal-subtitle">[+] Finding | Description | Impact | Mitigation | References</p>
-        </section>
+      <div class="header-actions">
+        <a class="icon-btn social" href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+        </a>
+        <a class="icon-btn social" href="https://github.com/marulecha" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+        </a>
+        <a class="icon-btn social" href="https://app.hackthebox.com/profile/1440" target="_blank" rel="noopener" aria-label="Hack The Box" title="Hack The Box">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l7.46 3.73L12 11.63 4.54 7.91 12 4.18zM4 9.7l7 3.5v6.61l-7-3.5V9.7zm9 10.11v-6.61l7-3.5v6.61l-7 3.5z"/></svg>
+        </a>
+        <span class="divider-v" aria-hidden="true"></span>
+        <label class="fx-toggle" title="Toggle background effects">
+          <input type="checkbox" id="fx-switch" aria-label="Background effects">
+          <span class="fx-toggle__track" aria-hidden="true"></span>
+          <span class="fx-toggle__label">fx</span>
+        </label>
+        <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+          <svg class="i-menu" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+          <svg class="i-close" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7l1.4-1.4 6.3 6.3 6.3-6.3z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
 
-        <!-- Main Content -->
-        <div class="content-wrapper">
-            <div class="menu-section">
-                <h2 class="menu-title">ls -la</h2>
-                <ul class="menu-list">
-                    <li><a href="resume.html">Resume</a></li>
-                    <li><a href="contact.html">Contact Me</a></li>
-                    <li><a href="vulndb.html"
-                            style="border-left: 5px solid #00d9ff; padding-left: 25px; background: #001a1f;">Vulnerability
-                            Database</a></li>
-                    <li><a href="webChecklist.html">Web Application Checklist</a></li>
-                    <li><a href="webapptools.html">Web App Tools</a></li>
-                </ul>
-            </div>
-
-            <div class="vulndb-container">
-                <div class="vulndb-header">
-                    <h2 class="vulndb-title">./search_db.sh</h2>
-                </div>
-
-                <input type="text" id="searchInput" placeholder="Search for security issues..."
-                    onkeyup="searchDatabase()">
-
-                <div class="result-container" id="results">
-                    <!-- Results will be loaded here -->
-                    <p style="color: #005f70;">Loading database...</p>
-                </div>
-
-                <div class="report-link">
-                    Something is missing? <a href="contact.html" style="color: #00d9ff; text-decoration: none;">Report
-                        it here</a>
-                </div>
-            </div>
-        </div>
+  <main id="main" class="container page">
+    <div class="page-head" data-reveal>
+      <div>
+        <div class="prompt"><b>root@marulecha</b>:<i>~/vulndb</i>$ ./search_db.sh</div>
+        <h1><span class="accent">./</span>search_db.sh</h1>
+        <p>A web application vulnerability database: report-ready write-ups for the findings that show up on almost every web application engagement. Each entry has a description, impact, remediation and references, so it can go straight into a report.</p>
+      </div>
+      <div class="stats" aria-live="polite">
+        <div class="stat"><b id="stat-total">—</b><span>findings</span></div>
+        <div class="stat"><b id="stat-shown">—</b><span>shown</span></div>
+      </div>
     </div>
 
-    <script src="../static/js/settings.js"></script>
-    <script src="../static/js/matrix-effect.js"></script>
-    <script>
-        let securityIssues = [];
+    <div data-reveal="2">
+      <div class="field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2a8 8 0 1 0 4.9 14.3l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></svg>
+        <input type="search" id="q" placeholder="Search findings by title, description, impact or fix…" autocomplete="off" spellcheck="false" aria-label="Search findings">
+        <kbd>/</kbd>
+      </div>
 
-        // Load the JSON data
-        async function loadDatabase() {
-            try {
-                const response = await fetch('../static/data/vulndb.json');
-                securityIssues = await response.json();
-                // Initial render or empty state
-                document.getElementById('results').innerHTML = '<p style="color: #0099bb;">Database loaded. Type to search.</p>';
-            } catch (error) {
-                console.error('Error loading database:', error);
-                document.getElementById('results').innerHTML = '<p style="color: #ff0000;">Error loading database properly.</p>';
-            }
-        }
+      <div class="results-bar">
+        <span id="results-label">Loading database…</span>
+        <div class="actions">
+          <button class="btn btn--ghost btn--sm" type="button" id="expand-all">Expand all</button>
+          <button class="btn btn--ghost btn--sm" type="button" id="collapse-all">Collapse all</button>
+        </div>
+      </div>
 
-        function copyToClipboard(index) {
-            const results = document.getElementsByClassName("result-item");
-            if (results[index]) {
-                const item = results[index];
+      <div class="results" id="results" aria-live="polite" aria-busy="true"></div>
 
-                // Clone to manipulate text without showing it
-                let textToCopy = item.cloneNode(true);
-                const button = textToCopy.querySelector("button");
-                if (button) button.remove();
+      <p class="dim mono" style="margin-top: 28px; font-size: var(--fs-sm); text-align: center;">
+        Something missing or wrong? <a href="contact.html">Report it</a> · Press <kbd class="key">/</kbd> to search, <kbd class="key">Esc</kbd> to clear.
+      </p>
+    </div>
+  </main>
 
-                // Preserve URLs in copy
-                const links = textToCopy.querySelectorAll('a');
-                links.forEach(link => {
-                    link.innerText = `${link.innerText}: ${link.href}`;
-                });
+  <footer class="site-footer">
+    <div class="container">
+      <span>© <span id="year">2026</span> marulecha · Agisilaos Maroulis</span>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/marulecha" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://app.hackthebox.com/profile/1440" target="_blank" rel="noopener">Hack The Box</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
 
-                let cleanText = textToCopy.innerText
-                    .replace(/^(.+?)\n/, '$1\n\n')
-                    .replace(/\s*Description\s*/g, '\n\nDescription\n')
-                    .replace(/\s*Impact\s*/g, '\n\nImpact\n')
-                    .replace(/\s*Recommendations\s*/g, '\n\nRecommendations\n')
-                    .replace(/\s*References\s*/g, '\n\nReferences\n')
-                    .replace(/\n{3,}/g, '\n\n')
-                    .trim();
+  <script src="../static/js/site.js"></script>
+  <script src="../static/js/matrix-effect.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    var DATA_URL = '../static/data/vulndb.json';
+    var items = [];
+    var q = document.getElementById('q');
+    var results = document.getElementById('results');
+    var label = document.getElementById('results-label');
+    var statTotal = document.getElementById('stat-total');
+    var statShown = document.getElementById('stat-shown');
 
-                // Try API first
-                if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(cleanText).then(() => {
-                        alert("Copied to clipboard!");
-                    }).catch(err => fallbackCopy(cleanText));
-                } else {
-                    fallbackCopy(cleanText);
-                }
-            }
-        }
+    var CHEV = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+    var COPY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>';
 
-        function fallbackCopy(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.top = "0";
-            textArea.style.left = "0";
-            textArea.style.opacity = "0";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+    function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) alert("Copied to clipboard!");
-                else alert("Unable to copy. Please select text manually.");
-            } catch (err) {
-                console.error('Fallback copy failed', err);
-                alert("Browser blocked copy. Please select text manually.");
-            }
+    function highlight(text, term) {
+      var safe = esc(text);
+      if (!term) return safe;
+      return safe.replace(new RegExp('(' + escRe(esc(term)) + ')', 'ig'), '<mark>$1</mark>');
+    }
 
-            document.body.removeChild(textArea);
-        }
+    function parseRef(ref) {
+      var m = ref.match(/(https?:\/\/[^\s]+)/);
+      if (!m) return { text: ref, url: null };
+      var url = m[0].replace(/[.,;)]+$/, '');
+      var text = ref.replace(m[0], '').trim().replace(/[:\s–—-]+$/, '');
+      if (!text) text = url.replace(/^https?:\/\//, '');
+      return { text: text, url: url };
+    }
 
-        function searchDatabase() {
-            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-            const resultsContainer = document.getElementById('results');
-            resultsContainer.innerHTML = '';
+    function card(item, idx, term) {
+      var refs = item.references.map(function (r) {
+        var p = parseRef(r);
+        return p.url
+          ? '<li><a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.text) + '</a></li>'
+          : '<li>' + esc(p.text) + '</li>';
+      }).join('');
 
-            if (searchTerm === '') {
-                resultsContainer.innerHTML = '<p style="color: #0099bb;">Type to search...</p>';
-                return;
-            }
+      return '<details class="finding" data-idx="' + idx + '"' + (term ? ' open' : '') + '>' +
+        '<summary>' +
+          '<span class="finding__id">' + String(idx + 1).padStart(2, '0') + '</span>' +
+          '<span class="finding__title">' + highlight(item.title.trim(), term) +
+            '<span class="finding__preview">' + highlight(item.description, term) + '</span>' +
+          '</span>' +
+          '<span class="finding__chev">' + CHEV + '</span>' +
+        '</summary>' +
+        '<div class="finding__body">' +
+          '<section class="fsec"><h4>Description</h4><p>' + highlight(item.description, term) + '</p></section>' +
+          '<section class="fsec"><h4>Impact</h4><p>' + highlight(item.impact, term) + '</p></section>' +
+          '<section class="fsec"><h4>Recommendations</h4><p>' + highlight(item.recommendations, term) + '</p></section>' +
+          '<section class="fsec"><h4>References</h4><ul>' + refs + '</ul></section>' +
+          '<div class="finding__foot">' +
+            '<button class="btn btn--sm" type="button" data-copy="' + idx + '">' + COPY + ' Copy for report</button>' +
+          '</div>' +
+        '</div>' +
+      '</details>';
+    }
 
-            const filteredResults = securityIssues.filter(issue =>
-                issue.title.toLowerCase().includes(searchTerm)
-            );
+    function plain(item) {
+      var refs = item.references.map(function (r) { var p = parseRef(r); return p.url ? '- ' + p.text + ': ' + p.url : '- ' + p.text; }).join('\n');
+      return item.title.trim() + '\n\n' +
+        'Description\n' + item.description + '\n\n' +
+        'Impact\n' + item.impact + '\n\n' +
+        'Recommendations\n' + item.recommendations + '\n\n' +
+        'References\n' + refs + '\n';
+    }
 
-            if (filteredResults.length === 0) {
-                resultsContainer.innerHTML = '<p style="color: #ff0055;">No results found.</p>';
-                return;
-            }
+    function matches(item, term) {
+      var hay = [item.title, item.description, item.impact, item.recommendations].join(' ').toLowerCase();
+      return hay.indexOf(term) !== -1;
+    }
 
-            filteredResults.forEach((issue, index) => {
-                const resultItem = document.createElement('div');
-                resultItem.classList.add('result-item');
+    function render() {
+      var term = q.value.trim().toLowerCase();
+      var shown = 0;
+      var html = '';
+      items.forEach(function (it, i) {
+        if (!term || matches(it, term)) { html += card(it, i, term); shown++; }
+      });
+      results.innerHTML = shown ? html : '<div class="empty">No findings match "' + esc(q.value.trim()) + '".<br><span class="dim">Try a shorter term, or <a href="contact.html">suggest an entry</a>.</span></div>';
+      results.setAttribute('aria-busy', 'false');
+      statShown.textContent = shown;
+      label.textContent = term ? shown + ' of ' + items.length + ' findings match "' + q.value.trim() + '"' : items.length + ' findings · click a title to expand';
+    }
 
-                resultItem.innerHTML = `
-                <div class="vulnListResults">
-                    <h2 class="title">${issue.title}</h2>
-                    <div class="description"><strong><br>Description</strong><br>${issue.description}</div>
-                    <div class="impact"><strong><br>Impact</strong><br>${issue.impact}</div>
-                    <div class="recommendations"><strong><br>Recommendations</strong><br>${issue.recommendations}</div>
-                <div class="references"><strong><br>References</strong><br>${issue.references.map(ref => {
-                    // Match URL but exclude trailing punctuation often found in text (.,;)
-                    const urlMatch = ref.match(/(https?:\/\/[^\s]+)/);
-                    if (urlMatch) {
-                        let url = urlMatch[0];
-                        // Strip trailing punctuation
-                        url = url.replace(/[.,;)]$/, '');
+    results.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-copy]');
+      if (!btn) return;
+      var item = items[+btn.getAttribute('data-copy')];
+      window.copyText(plain(item)).then(function () { window.toast('Copied "' + item.title.trim() + '"'); },
+        function () { window.toast('Copy blocked by browser — select the text manually'); });
+    });
 
-                        let text = ref.replace(urlMatch[0], '').trim();
-                        // Remove trailing colons or dashes
-                        text = text.replace(/[:\s-]+$/, '');
-                        if (!text) text = url; // Fallback
+    document.getElementById('expand-all').addEventListener('click', function () {
+      results.querySelectorAll('.finding').forEach(function (d) { d.open = true; });
+    });
+    document.getElementById('collapse-all').addEventListener('click', function () {
+      results.querySelectorAll('.finding').forEach(function (d) { d.open = false; });
+    });
 
-                        // Clean up
-                        if (text.length < 5 && url.includes(text)) text = "Reference Link";
+    var t;
+    q.addEventListener('input', function () { clearTimeout(t); t = setTimeout(render, 80); });
 
-                        // Using onclick as a robust fallback for navigation
-                        return `<a href="${url}" target="_blank" onclick="window.open('${url}', '_blank'); return false;" style="color: #00d9ff; text-decoration: none; border-bottom: 1px dotted #005f70; position: relative; z-index: 100; cursor: pointer; pointer-events: auto;">${text}</a>`;
-                    }
-                    return ref;
-                }).join('<br>')}</div>
-                    <button class="button-67" style="position: relative; z-index: 10;" onclick="copyToClipboard(${index})">Copy Details</button>
-                </div>
-            `;
-                resultsContainer.appendChild(resultItem);
-            });
-        }
-
-        // Load the database on startup
-        loadDatabase();
-    </script>
+    fetch(DATA_URL).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (data) {
+        items = data.slice().sort(function (a, b) { return a.title.trim().localeCompare(b.title.trim()); });
+        statTotal.textContent = items.length;
+        // support ?q= deep links
+        var pre = new URLSearchParams(location.search).get('q');
+        if (pre) q.value = pre;
+        render();
+      })
+      .catch(function (err) {
+        console.error(err);
+        label.textContent = 'Could not load the database.';
+        results.innerHTML = '<div class="empty">The database failed to load. Refresh the page or <a href="contact.html">report the problem</a>.</div>';
+        results.setAttribute('aria-busy', 'false');
+      });
+  })();
+  </script>
 </body>
-
-
 </html>

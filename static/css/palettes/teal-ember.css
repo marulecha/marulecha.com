@@ -1,0 +1,46 @@
+/* Palette: Teal & Ember
+   Teal primary with orange secondary and lime success. Close cousin of the current cyan.
+   Enable by adding after theme.css:
+   <link rel="stylesheet" href="static/css/palettes/teal-ember.css">
+   (use ../static/... from /pages). Only tokens change; layout is untouched. */
+:root {
+  --bg: #051110;
+  --bg-2: #081a17;
+  --surface: rgba(8, 26, 23, 0.78);
+  --surface-2: rgba(18, 51, 48, 0.55);
+  --surface-solid: #081a17;
+  --line: rgba(153, 246, 228, 0.12);
+  --line-strong: rgba(153, 246, 228, 0.32);
+  --text: #e2f4f1;
+  --text-2: #93b8b2;
+  --text-3: #5d7f79;
+
+  --cyan: #2dd4bf;
+  --cyan-2: #99f6e4;
+  --cyan-ink: #032a25;
+  --violet: #fb923c;
+  --violet-2: #fdba74;
+  --green: #a3e635;
+  --pink: #fb7185;
+  --amber: #fb923c;
+
+  --cyan-a10: rgba(45, 212, 191, 0.1);
+  --cyan-a20: rgba(45, 212, 191, 0.2);
+  --cyan-a40: rgba(45, 212, 191, 0.4);
+  --violet-a15: rgba(251, 146, 60, 0.15);
+  --violet-a40: rgba(251, 146, 60, 0.4);
+  --green-a10: rgba(163, 230, 53, 0.1);
+  --green-a40: rgba(163, 230, 53, 0.4);
+
+  --wash-a: rgba(45, 212, 191, 0.13);
+  --wash-b: rgba(251, 146, 60, 0.14);
+  --grid-line: rgba(153, 246, 228, 0.045);
+  --scroll-thumb: rgba(153, 246, 228, 0.22);
+  --header-bg: rgba(5, 17, 16, 0.86);
+  --panel-bg: rgba(5, 17, 16, 0.92);
+  --mark-bg: #123330;
+  --matrix-head: rgba(153, 246, 228, 0.9);
+  --matrix-head-alt: rgba(251, 146, 60, 0.95);
+  --matrix-trail: rgba(45, 212, 191, 0.35);
+  --matrix-fade: rgba(5, 17, 16, 0.12);
+}

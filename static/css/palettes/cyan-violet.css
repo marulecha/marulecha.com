@@ -1,0 +1,42 @@
+/* Palette: Cyan & Violet (the original default)
+   Enable by adding after theme.css:
+   <link rel="stylesheet" href="static/css/palettes/cyan-violet.css">
+   (use ../static/... from /pages). */
+:root {
+  --bg: #060910;
+  --bg-2: #0a0f19;
+  --surface: rgba(12, 18, 30, 0.78);
+  --surface-2: rgba(18, 26, 42, 0.75);
+  --surface-solid: #0c121e;
+  --line: rgba(120, 220, 255, 0.12);
+  --line-strong: rgba(120, 220, 255, 0.32);
+  --text: #dfe8f3;
+  --text-2: #98a7bb;
+  --text-3: #66758b;
+  --cyan: #2fd7ff;
+  --cyan-2: #8ceaff;
+  --cyan-ink: #04202a;
+  --violet: #8f7bff;
+  --violet-2: #c3b8ff;
+  --green: #7ee787;
+  --pink: #ff5c8a;
+  --amber: #ffb454;
+  --cyan-a10: rgba(47, 215, 255, 0.10);
+  --cyan-a20: rgba(47, 215, 255, 0.20);
+  --cyan-a40: rgba(47, 215, 255, 0.40);
+  --violet-a15: rgba(143, 123, 255, 0.15);
+  --violet-a40: rgba(143, 123, 255, 0.40);
+  --green-a10: rgba(126, 231, 135, 0.10);
+  --green-a40: rgba(126, 231, 135, 0.40);
+  --wash-a: rgba(47, 215, 255, 0.14);
+  --wash-b: rgba(143, 123, 255, 0.16);
+  --grid-line: rgba(120, 220, 255, 0.045);
+  --scroll-thumb: rgba(120, 220, 255, 0.22);
+  --header-bg: rgba(6, 9, 16, 0.86);
+  --panel-bg: rgba(6, 9, 16, 0.92);
+  --mark-bg: #1a2a44;
+  --matrix-head: rgba(140, 234, 255, 0.9);
+  --matrix-head-alt: rgba(143, 123, 255, 0.95);
+  --matrix-trail: rgba(47, 215, 255, 0.35);
+  --matrix-fade: rgba(6, 9, 16, 0.12);
+}

@@ -1,0 +1,46 @@
+/* Palette: Amber CRT
+   Warm monochrome monitor glow with ember highlights and lime for success.
+   Enable by adding after theme.css:
+   <link rel="stylesheet" href="static/css/palettes/amber-crt.css">
+   (use ../static/... from /pages). Only tokens change; layout is untouched. */
+:root {
+  --bg: #0a0703;
+  --bg-2: #120d06;
+  --surface: rgba(18, 13, 6, 0.78);
+  --surface-2: rgba(43, 29, 8, 0.55);
+  --surface-solid: #120d06;
+  --line: rgba(255, 214, 133, 0.12);
+  --line-strong: rgba(255, 214, 133, 0.32);
+  --text: #f3e9d8;
+  --text-2: #b8a98f;
+  --text-3: #7a6d58;
+
+  --cyan: #ffb020;
+  --cyan-2: #ffd685;
+  --cyan-ink: #1f1300;
+  --violet: #ff6a3d;
+  --violet-2: #ffb59c;
+  --green: #b6e35c;
+  --pink: #ff5c5c;
+  --amber: #ffd685;
+
+  --cyan-a10: rgba(255, 176, 32, 0.1);
+  --cyan-a20: rgba(255, 176, 32, 0.2);
+  --cyan-a40: rgba(255, 176, 32, 0.4);
+  --violet-a15: rgba(255, 106, 61, 0.15);
+  --violet-a40: rgba(255, 106, 61, 0.4);
+  --green-a10: rgba(182, 227, 92, 0.1);
+  --green-a40: rgba(182, 227, 92, 0.4);
+
+  --wash-a: rgba(255, 176, 32, 0.13);
+  --wash-b: rgba(255, 106, 61, 0.14);
+  --grid-line: rgba(255, 214, 133, 0.045);
+  --scroll-thumb: rgba(255, 214, 133, 0.22);
+  --header-bg: rgba(10, 7, 3, 0.86);
+  --panel-bg: rgba(10, 7, 3, 0.92);
+  --mark-bg: #2b1d08;
+  --matrix-head: rgba(255, 214, 133, 0.9);
+  --matrix-head-alt: rgba(255, 106, 61, 0.95);
+  --matrix-trail: rgba(255, 176, 32, 0.35);
+  --matrix-fade: rgba(10, 7, 3, 0.12);
+}

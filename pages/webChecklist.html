@@ -1,459 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Web Application Checklist - marulecha Cyber Security">
-  <title>marulecha | WebApp Checklist</title>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+  <title>marulecha | Web Application Penetration Testing Checklist</title>
+  <meta name="description" content="OWASP-aligned web application penetration testing checklist with saved progress and export.">
+  <meta name="theme-color" content="#0a0718">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="marulecha | Web Application Penetration Testing Checklist">
+  <meta property="og:description" content="OWASP-aligned web application penetration testing checklist with saved progress and export.">
+  <meta property="og:image" content="https://marulecha.com/static/img/spacelettuce.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="../static/css/theme.css">
-  <link rel="icon" href="../static/img/spacelettuceIcon.png" type="image/png">
-  <style>
-    /* Custom overrides for Checklist page */
-    .checklist-container {
-      background: #0a0a0a;
-      border: 2px solid #00d9ff;
-      border-radius: 5px;
-      padding: 20px;
-      box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
-    }
-
-    .checklist-header {
-      border-bottom: 1px solid #00d9ff;
-      padding-bottom: 15px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .checklist-title {
-      color: #00d9ff;
-      font-size: 1.2em;
-      margin: 0;
-    }
-
-    /* Progress Bar */
-    .progress-wrapper {
-      width: 100%;
-      margin-bottom: 25px;
-      background: #001a1f;
-      border: 1px solid #005f70;
-      padding: 5px;
-    }
-
-    .progress-text {
-      text-align: right;
-      color: #00d9ff;
-      font-size: 0.9em;
-      margin-bottom: 5px;
-    }
-
-    .progress-bar-container {
-      height: 20px;
-      width: 100%;
-      background-color: #000;
-      position: relative;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: #00d9ff;
-      width: 0%;
-      box-shadow: 0 0 10px #00d9ff;
-      transition: width 0.3s ease;
-    }
-
-    /* Split Layout */
-    .checklist-interface {
-      display: flex;
-      gap: 20px;
-      min-height: 400px;
-    }
-
-    .categories-panel {
-      flex: 1;
-      border-right: 1px solid #005f70;
-      padding-right: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .items-panel {
-      flex: 2;
-      padding-left: 5px;
-    }
-
-    /* Buttons */
-    .cat-btn {
-      background: rgba(0, 217, 255, 0.05);
-      border: 1px solid #005f70;
-      color: #00d9ff;
-      padding: 10px;
-      text-align: left;
-      cursor: pointer;
-      font-family: 'Share Tech Mono', monospace;
-      transition: all 0.2s;
-    }
-
-    .cat-btn:hover,
-    .cat-btn.active {
-      background: #00d9ff;
-      color: #000;
-      border-color: #00d9ff;
-      box-shadow: 0 0 10px rgba(0, 217, 255, 0.4);
-    }
-
-    .item-btn {
-      display: block;
-      width: 100%;
-      background: #000;
-      border: 1px solid #005f70;
-      color: #ccc;
-      padding: 10px;
-      text-align: left;
-      cursor: pointer;
-      font-family: 'Share Tech Mono', monospace;
-      margin-bottom: 10px;
-      transition: all 0.2s;
-      position: relative;
-    }
-
-    .item-btn:hover {
-      border-color: #00d9ff;
-    }
-
-    .item-btn.checked {
-      background: rgba(0, 217, 255, 0.15);
-      border-color: #00d9ff;
-      color: #00d9ff;
-    }
-
-    .item-btn.checked::after {
-      content: '[X]';
-      position: absolute;
-      right: 10px;
-      color: #00d9ff;
-    }
-
-    .item-btn::after {
-      content: '[ ]';
-      position: absolute;
-      right: 10px;
-      color: #005f70;
-    }
-
-    /* Export Button */
-    .action-btn {
-      background: transparent;
-      border: 1px solid #00d9ff;
-      color: #00d9ff;
-      padding: 8px 15px;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.3s;
-    }
-
-    .action-btn:hover {
-      background: #00d9ff;
-      color: #000;
-      box-shadow: 0 0 10px #00d9ff;
-    }
-
-    @media (max-width: 768px) {
-      .checklist-interface {
-        flex-direction: column;
-      }
-
-      .categories-panel {
-        border-right: none;
-        border-bottom: 1px solid #005f70;
-        padding-bottom: 15px;
-        padding-right: 0;
-      }
-    }
-  </style>
+  <link rel="icon" href="../static/img/favicon-64.png" type="image/png">
+  <link rel="apple-touch-icon" href="../static/img/spacelettuceIcon-160.png">
 </head>
 
 <body>
-  <!-- Scanline Effect -->
-  <div class="scanline"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="backdrop" aria-hidden="true"></div>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
 
-  <!-- Matrix Background Canvas -->
-  <canvas id="matrix"></canvas>
-
-  <div class="container">
-    <!-- Header -->
-    <header>
-      <a href="../index.html" class="logo-section">
-        <img src="../static/img/spacelettuceIcon.png" alt="Logo" class="logo-img">
-        <span class="logo-text glitch">marulecha</span>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="../index.html" aria-label="marulecha — home">
+        <img class="brand__mark" src="../static/img/spacelettuceIcon-160.webp" alt="" width="36" height="36">
+        <span>marulecha<span class="brand__cursor" aria-hidden="true"></span></span>
       </a>
 
-      <ul class="nav-links">
-        <li>
-          <a href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank">
-            <img
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300d9ff'%3E%3Cpath d='M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z'/%3E%3C/svg%3E"
-              alt="LinkedIn" class="nav-icon">
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/marulecha" target="_blank">
-            <img
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300d9ff'%3E%3Cpath d='M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z'/%3E%3C/svg%3E"
-              alt="GitHub" class="nav-icon">
-          </a>
-        </li>
-        <li>
-          <a href="https://app.hackthebox.com/profile/1440" target="_blank">
-            <img
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300d9ff'%3E%3Cpath d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l7.46 3.73L12 11.63 4.54 7.91 12 4.18zM4 9.7l7 3.5v6.61l-7-3.5V9.7zm9 10.11v-6.61l7-3.5v6.61l-7 3.5z'/%3E%3C/svg%3E"
-              alt="HackTheBox" class="nav-icon">
-          </a>
-        </li>
-      </ul>
-    </header>
+      <nav class="nav" id="site-nav" aria-label="Primary">
+        <a href="../index.html">~/home</a>
+        <a href="resume.html">resume</a>
+        <a href="vulndb.html">vulndb</a>
+        <a href="webChecklist.html">checklist</a>
+        <a href="webapptools.html">tools</a>
+        <a href="contact.html">contact</a>
+      </nav>
 
-    <!-- Terminal Section -->
-    <section class="terminal">
-      <div class="terminal-header">
-        <div class="terminal-buttons">
-          <div class="terminal-btn"></div>
-          <div class="terminal-btn"></div>
-          <div class="terminal-btn"></div>
-        </div>
-        <div class="toggle-container">
-          <label class="switch">
-            <input type="checkbox" id="toggle-animations-switch">
-            <span class="slider round"></span>
-          </label>
-        </div>
-      </div>
-      <h1 class="terminal-title">./run_checklist.py<span class="cursor"></span></h1>
-      <p class="terminal-subtitle">[+] Methodology | Recon | Exploitation</p>
-    </section>
-
-    <!-- Main Content -->
-    <div class="content-wrapper">
-      <div class="menu-section">
-        <h2 class="menu-title">ls -la</h2>
-        <ul class="menu-list">
-          <li><a href="resume.html">Resume</a></li>
-          <li><a href="contact.html">Contact Me</a></li>
-          <li><a href="vulndb.html">Vulnerability Database</a></li>
-          <li><a href="webChecklist.html"
-              style="border-left: 5px solid #00d9ff; padding-left: 25px; background: #001a1f;">Web Application
-              Checklist</a></li>
-          <li><a href="webapptools.html">Web App Tools</a></li>
-        </ul>
-      </div>
-
-      <div class="checklist-container">
-        <div class="checklist-header">
-          <h2 class="checklist-title">./run_checklist.py</h2>
-          <div style="display: flex; gap: 10px;">
-            <button class="action-btn" onclick="resetChecklist()">Initialize List</button>
-            <button class="action-btn" onclick="generateReport()">Export Report (TXT)</button>
-          </div>
-        </div>
-
-        <div class="progress-wrapper">
-          <div class="progress-text" id="progressText">Progress: 0%</div>
-          <div class="progress-bar-container">
-            <div class="progress-fill" id="progressBar"></div>
-          </div>
-        </div>
-
-        <div class="checklist-interface">
-          <!-- Categories -->
-          <div class="categories-panel" id="categoryList">
-            <!-- Categories will be injected here -->
-          </div>
-
-          <!-- Items -->
-          <div class="items-panel" id="itemsList">
-            <p style="color: #005f70;">&lt; Select a category to view items</p>
-          </div>
-        </div>
+      <div class="header-actions">
+        <a class="icon-btn social" href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+        </a>
+        <a class="icon-btn social" href="https://github.com/marulecha" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+        </a>
+        <a class="icon-btn social" href="https://app.hackthebox.com/profile/1440" target="_blank" rel="noopener" aria-label="Hack The Box" title="Hack The Box">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l7.46 3.73L12 11.63 4.54 7.91 12 4.18zM4 9.7l7 3.5v6.61l-7-3.5V9.7zm9 10.11v-6.61l7-3.5v6.61l-7 3.5z"/></svg>
+        </a>
+        <span class="divider-v" aria-hidden="true"></span>
+        <label class="fx-toggle" title="Toggle background effects">
+          <input type="checkbox" id="fx-switch" aria-label="Background effects">
+          <span class="fx-toggle__track" aria-hidden="true"></span>
+          <span class="fx-toggle__label">fx</span>
+        </label>
+        <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+          <svg class="i-menu" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+          <svg class="i-close" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7l1.4-1.4 6.3 6.3 6.3-6.3z"/></svg>
+        </button>
       </div>
     </div>
-  </div>
+  </header>
 
-  <script src="../static/js/settings.js"></script>
+  <main id="main" class="container page">
+    <div class="page-head" data-reveal>
+      <div>
+        <div class="prompt"><b>root@marulecha</b>:<i>~/checklist</i>$ ./run_checklist.py</div>
+        <h1><span class="accent">./</span>run_checklist.py</h1>
+        <p>A web application penetration testing checklist aligned with the OWASP Testing Guide. Tick items as you go: progress is saved in this browser and can be exported for your notes.</p>
+      </div>
+      <div class="stats">
+        <button class="btn btn--ghost" type="button" id="btn-copy-md" title="Copy the whole checklist as Markdown"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg> Copy Markdown</button>
+        <button class="btn" type="button" id="btn-export" title="Download a plain-text report"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18-5.5 5.5 1.4 1.4L11 5.8V16h2V5.8l3.1 3.1 1.4-1.4L12 2z"/></svg> Export TXT</button>
+        <button class="btn btn--ghost" type="button" id="btn-reset" title="Uncheck everything"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg> Reset</button>
+      </div>
+    </div>
+
+    <div class="tool" data-reveal="2">
+      <aside class="tool__side">
+        <div class="card" style="overflow:hidden">
+          <div class="progress">
+            <div class="progress__row"><span>Overall progress</span><b id="pct">0%</b></div>
+            <div class="progress__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="bar"><div class="progress__fill" id="fill"></div></div>
+            <div class="progress__row" style="font-size: var(--fs-xs); color: var(--text-3)"><span id="done-label">0 of 0 checks</span><span id="cats-label">0 of 0 phases complete</span></div>
+          </div>
+          <nav class="side-list" id="cats" aria-label="Checklist phases" style="border-top: 1px solid var(--line)"></nav>
+        </div>
+      </aside>
+
+      <section class="card" aria-live="polite">
+        <div class="check-head">
+          <h2 id="cat-title">Select a phase</h2>
+          <div class="actions">
+            <button class="btn btn--ghost btn--sm" type="button" id="btn-all">Mark all</button>
+            <button class="btn btn--ghost btn--sm" type="button" id="btn-none">Clear</button>
+          </div>
+        </div>
+        <div class="check-list" id="items">
+          <div class="empty">Loading checklist…</div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>© <span id="year">2026</span> marulecha · Agisilaos Maroulis</span>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/marulecha" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://app.hackthebox.com/profile/1440" target="_blank" rel="noopener">Hack The Box</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../static/js/site.js"></script>
   <script src="../static/js/matrix-effect.js"></script>
   <script>
-    // Checklist Data
-    let checkList = JSON.parse(localStorage.getItem('checkList')) || null;
-    let progressBarPercentage = JSON.parse(localStorage.getItem('progressBarPercentage')) || 0;
+  (function () {
+    'use strict';
+    var DATA_URL = '../static/data/webChecklist.json';
+    var KEY = 'checkList', KEY_CAT = 'category', KEY_PCT = 'progressBarPercentage';
+    var list = null, cats = [], active = null;
 
-    // UI Initialization
-    async function init() {
-      // Migration Check: If we have data but it doesn't look like the new format (e.g. keys start with numbers), clear it.
-      if (checkList) {
-        const keys = Object.keys(checkList);
-        const isNewFormat = keys.some(k => k.match(/^\d+\./));
-        if (!isNewFormat) {
-          console.log("Old data format detected. Clearing cache.");
-          checkList = null;
-          localStorage.removeItem('checkList');
-          localStorage.removeItem('progressBarPercentage');
-          localStorage.removeItem('category');
-        }
-      }
+    var $ = function (id) { return document.getElementById(id); };
+    var catsEl = $('cats'), itemsEl = $('items'), titleEl = $('cat-title');
 
-      if (!checkList) {
-        try {
-          const response = await fetch('../static/data/webChecklist.json');
-          checkList = await response.json();
-          localStorage.setItem('checkList', JSON.stringify(checkList));
-        } catch (error) {
-          console.error("Failed to load checklist data:", error);
-          // Fallback 
-          checkList = { "Error": [{ "name": "Failed to load data", "state": "unchecked" }] };
-        }
-      }
-
-      renderCategories();
-      updateProgress();
-
-      // Load default or saved category
-      const savedCategory = localStorage.getItem('category');
-      if (savedCategory && checkList[savedCategory]) {
-        loadItems(savedCategory);
-        // Highlight active button
-        const btn = document.getElementById('cat-' + savedCategory);
-        if (btn) btn.classList.add('active');
-      }
+    function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+    function save() { try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {} }
+    function load() { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } }
+    function shortName(cat) { return cat.replace(/^\d+\.\s*/, ''); }
+    function counts(cat) {
+      var c = 0; list[cat].forEach(function (it) { if (it.state === 'checked') c++; });
+      return { done: c, total: list[cat].length };
     }
 
-    function renderCategories() {
-      const catContainer = document.getElementById('categoryList');
-      catContainer.innerHTML = '';
-
-      for (let category in checkList) {
-        const btn = document.createElement('button');
-        btn.className = 'cat-btn';
-        btn.id = 'cat-' + category;
-        btn.innerText = `> ${category}`;
-        btn.onclick = () => {
-          // Remove active class from all
-          document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          localStorage.setItem('category', category);
-          loadItems(category);
-        };
-        catContainer.appendChild(btn);
-      }
+    function renderCats() {
+      catsEl.innerHTML = cats.map(function (cat) {
+        var c = counts(cat);
+        return '<button type="button" class="side-item' + (cat === active ? ' is-active' : '') + (c.done === c.total ? ' is-done' : '') + '" data-cat="' + esc(cat) + '" aria-current="' + (cat === active ? 'true' : 'false') + '">' +
+          '<span class="side-item__label">' + esc(cat) + '</span>' +
+          '<span class="side-item__count">' + c.done + '/' + c.total + '</span></button>';
+      }).join('');
     }
 
-    function loadItems(category) {
-      const itemsContainer = document.getElementById('itemsList');
-      itemsContainer.innerHTML = `<h3 style="color:#00d9ff; border-bottom: 1px solid #005f70; padding-bottom:10px; margin-top:0;">${category}</h3>`;
+    function renderItems() {
+      if (!active) return;
+      titleEl.textContent = active;
+      itemsEl.innerHTML = list[active].map(function (it, i) {
+        var on = it.state === 'checked';
+        return '<label class="check-item' + (on ? ' is-checked' : '') + '">' +
+          '<input type="checkbox" data-i="' + i + '"' + (on ? ' checked' : '') + '>' +
+          '<span class="check-item__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></svg></span>' +
+          '<span class="check-item__text">' + esc(it.name) + '</span>' +
+          '<span class="check-item__idx">' + String(i + 1).padStart(2, '0') + '</span>' +
+        '</label>';
+      }).join('');
+    }
 
-      checkList[category].forEach(item => {
-        const btn = document.createElement('button');
-        btn.className = `item-btn ${item.state === 'checked' ? 'checked' : ''}`;
-        btn.innerText = item.name;
-        btn.onclick = () => toggleItem(category, item.name);
-        itemsContainer.appendChild(btn);
+    function renderProgress() {
+      var total = 0, done = 0, catsDone = 0;
+      cats.forEach(function (cat) {
+        var c = counts(cat); total += c.total; done += c.done; if (c.done === c.total) catsDone++;
       });
+      var pct = total ? Math.round(done / total * 1000) / 10 : 0;
+      $('pct').textContent = pct + '%';
+      $('fill').style.width = pct + '%';
+      $('bar').setAttribute('aria-valuenow', String(pct));
+      $('done-label').textContent = done + ' of ' + total + ' checks';
+      $('cats-label').textContent = catsDone + ' of ' + cats.length + ' phases complete';
+      try { localStorage.setItem(KEY_PCT, JSON.stringify(pct.toFixed(2))); } catch (e) {}
     }
 
-    function toggleItem(category, itemName) {
-      // Update state
-      checkList[category].forEach(item => {
-        if (item.name === itemName) {
-          item.state = item.state === 'checked' ? 'unchecked' : 'checked';
-        }
+    function renderAll() { renderCats(); renderItems(); renderProgress(); }
+
+    function setActive(cat) {
+      active = cat;
+      try { localStorage.setItem(KEY_CAT, cat); } catch (e) {}
+      renderCats(); renderItems();
+      if (window.innerWidth < 900) itemsEl.closest('section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    catsEl.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-cat]'); if (b) setActive(b.getAttribute('data-cat'));
+    });
+
+    itemsEl.addEventListener('change', function (e) {
+      var cb = e.target.closest('input[type="checkbox"]'); if (!cb) return;
+      var it = list[active][+cb.getAttribute('data-i')];
+      it.state = cb.checked ? 'checked' : 'unchecked';
+      cb.closest('.check-item').classList.toggle('is-checked', cb.checked);
+      save(); renderCats(); renderProgress();
+    });
+
+    $('btn-all').addEventListener('click', function () { if (!active) return; list[active].forEach(function (it) { it.state = 'checked'; }); save(); renderAll(); });
+    $('btn-none').addEventListener('click', function () { if (!active) return; list[active].forEach(function (it) { it.state = 'unchecked'; }); save(); renderAll(); });
+
+    function reportText(md) {
+      var total = 0, done = 0;
+      cats.forEach(function (c) { var k = counts(c); total += k.total; done += k.done; });
+      var out = md ? '# Web Application Penetration Testing Checklist\n\n' : 'SpaceLettuce Web Application Vulnerability Checklist\n====================================================\n\n';
+      out += (md ? '**Progress:** ' : 'Progress: ') + done + '/' + total + ' items checked\n\n';
+      cats.forEach(function (c) {
+        out += (md ? '## ' + c : '[ ' + c + ' ]') + '\n';
+        list[c].forEach(function (it) {
+          out += (md ? '- ' : '') + (it.state === 'checked' ? '[x] ' : '[ ] ') + it.name + '\n';
+        });
+        out += '\n';
       });
-
-      // Save
-      localStorage.setItem('checkList', JSON.stringify(checkList));
-
-      // Re-render items
-      loadItems(category);
-      updateProgress();
+      return out;
     }
 
-    function updateProgress() {
-      let total = 0;
-      let checked = 0;
+    $('btn-export').addEventListener('click', function () {
+      var blob = new Blob([reportText(false)], { type: 'text/plain' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'SpaceLettuce_Checklist_Report.txt';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+      window.toast('Report downloaded');
+    });
 
-      for (let cat in checkList) {
-        checkList[cat].forEach(item => {
-          total++;
-          if (item.state === 'checked') checked++;
+    $('btn-copy-md').addEventListener('click', function () {
+      window.copyText(reportText(true)).then(function () { window.toast('Checklist copied as Markdown'); },
+        function () { window.toast('Copy blocked by browser'); });
+    });
+
+    $('btn-reset').addEventListener('click', function () {
+      if (!confirm('Reset the checklist? Every item will be unchecked.')) return;
+      cats.forEach(function (c) { list[c].forEach(function (it) { it.state = 'unchecked'; }); });
+      save(); renderAll(); window.toast('Checklist reset');
+    });
+
+    function boot(fresh) {
+      var saved = load();
+      // merge: keep saved states for items that still exist, adopt new items from the JSON
+      if (saved && Object.keys(saved).some(function (k) { return /^\d+\./.test(k); })) {
+        Object.keys(fresh).forEach(function (cat) {
+          if (!saved[cat]) return;
+          fresh[cat].forEach(function (it) {
+            var hit = saved[cat].filter(function (s) { return s.name === it.name; })[0];
+            if (hit) it.state = hit.state;
+          });
         });
       }
-
-      let percentage = total === 0 ? 0 : (checked / total) * 100;
-      percentage = parseFloat(percentage).toFixed(2);
-
-      localStorage.setItem('progressBarPercentage', JSON.stringify(percentage));
-
-      document.getElementById('progressBar').style.width = percentage + '%';
-      document.getElementById('progressText').innerText = `Progress: ${percentage}%`;
+      list = fresh;
+      cats = Object.keys(list);
+      save();
+      var savedCat = null; try { savedCat = localStorage.getItem(KEY_CAT); } catch (e) {}
+      active = (savedCat && list[savedCat]) ? savedCat : cats[0];
+      renderAll();
     }
 
-    // Text Export
-    function generateReport() {
-      let total = 0;
-      let checked = 0;
-
-      // Calculate counts
-      let reportContent = "SpaceLettuce Web Application Vulnerability Checklist\n";
-      reportContent += "====================================================\n\n";
-
-      let totalItems = 0;
-      let checkedItems = 0;
-
-      for (let category in checkList) {
-        checkList[category].forEach(item => {
-          totalItems++;
-          if (item.state === 'checked') {
-            checkedItems++;
-          }
-        });
-      }
-
-      reportContent += `Progress: ${checkedItems}/${totalItems} items checked\n\n`;
-
-      for (let category in checkList) {
-        reportContent += `[ ${category} ]\n`;
-        checkList[category].forEach(item => {
-          let status = item.state === 'checked' ? "[x]" : "[ ]";
-          reportContent += `${status} ${item.name}\n`;
-        });
-        reportContent += "\n";
-      }
-
-      const blob = new Blob([reportContent], { type: "text/plain" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "SpaceLettuce_Checklist_Report.txt";
-      link.click();
-    }
-
-    function resetChecklist() {
-      if (confirm("Are you sure you want to initialize the list? This will uncheck all items.")) {
-        // Clear data from localStorage
-        localStorage.removeItem('checkList');
-        localStorage.removeItem('progressBarPercentage');
-
-        // Reload the page to fetch fresh data from JSON
-        location.reload();
-      }
-    }
-
-    // Launch
-    init();
+    fetch(DATA_URL).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(boot)
+      .catch(function (err) {
+        console.error(err);
+        var saved = load();
+        if (saved) { boot(saved); window.toast('Loaded checklist from local copy'); return; }
+        itemsEl.innerHTML = '<div class="empty">Could not load the checklist. Refresh the page or <a href="contact.html">report the problem</a>.</div>';
+      });
+  })();
   </script>
 </body>
-
-
 </html>
