@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>marulecha | Contact</title>
-  <meta name="description" content="Get in touch with Agisilaos Maroulis (marulecha) via LinkedIn or email.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>marulecha | Passive Domain OSINT</title>
+  <meta name="description" content="Discover everything public about a domain from your browser: hostnames, addresses and networks, related domains, vendors and products, certificates, mail setup, registration and history. The target is never contacted.">
   <meta name="theme-color" content="#0a0718">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="marulecha | Contact">
-  <meta property="og:description" content="Get in touch with Agisilaos Maroulis (marulecha) via LinkedIn or email.">
+  <meta property="og:title" content="marulecha | Passive Domain OSINT">
+  <meta property="og:description" content="Discover everything public about a domain from your browser: hostnames, addresses and networks, related domains, vendors and products, certificates, mail setup, registration and history. The target is never contacted.">
   <meta property="og:image" content="https://marulecha.com/static/img/spacelettuce.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,38 +74,64 @@
   <main id="main" class="container page">
     <div class="page-head" data-reveal>
       <div>
-        <div class="prompt"><b>root@marulecha</b>:<i>~</i>$ ./send_message.sh</div>
-        <h1><span class="accent">./</span>send_message.sh</h1>
-        <p>Engagements, collaboration, a correction for the vulnerability database, or just to say hello. Two channels, both monitored.</p>
+        <div class="prompt"><b>root@marulecha</b>:<i>~/recon</i>$ ./passive_recon.sh</div>
+        <h1><span class="accent">./</span>passive_recon.sh</h1>
+        <p>Everything the public record knows about a domain, discovered from your browser: hostnames, addresses and networks, related domains, the vendors and products behind it, certificates, mail setup, registration and history. Nothing is sent to the target and nothing is sent to this site.</p>
       </div>
-      <span class="chip chip--green"><span aria-hidden="true">●</span> listening on [any] 1337</span>
+      <div class="stats" aria-live="polite">
+        <div class="stat"><b id="stat-modules">17</b><span>sources</span></div>
+        <div class="stat"><b id="stat-queries">0</b><span>queries</span></div>
+        <div class="stat"><b id="stat-items">—</b><span>items found</span></div>
+      </div>
     </div>
 
-    <div class="split">
-      <div class="contact-grid">
-        <div class="card contact-card" data-reveal="2">
-          <div class="contact-card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg></div>
-          <h3>LinkedIn</h3>
-          <p>Best for professional enquiries and a look at the full work history.</p>
-          <div class="row">
-            <a class="btn btn--primary" href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank" rel="noopener">Connect <svg class="stroke" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a>
-          </div>
+    <div data-reveal="2">
+      <form class="ds-form" id="scan-form" autocomplete="off">
+        <div class="field">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 9h-2.95a15.6 15.6 0 0 0-1.38-6.13A8.02 8.02 0 0 1 18.9 11zM12 4.04c.83 1.2 1.48 3.3 1.94 6.96h-3.88c.46-3.66 1.11-5.76 1.94-6.96zM5.1 11a8.02 8.02 0 0 1 4.33-6.13A15.6 15.6 0 0 0 8.05 11H5.1zm0 2h2.95c.1 2.3.56 4.44 1.38 6.13A8.02 8.02 0 0 1 5.1 13zM12 19.96c-.83-1.2-1.48-3.3-1.94-6.96h3.88c-.46 3.66-1.11 5.76-1.94 6.96zm2.57-.83A15.6 15.6 0 0 0 15.95 13h2.95a8.02 8.02 0 0 1-4.33 6.13z"/></svg>
+          <input type="text" id="domain" name="d" placeholder="example.com — or paste a URL" inputmode="url" autocapitalize="off" spellcheck="false" aria-label="Domain to discover" required>
+          <kbd>/</kbd>
         </div>
-
-        <div class="card contact-card" data-reveal="3">
-          <div class="contact-card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
-          <h3>Email</h3>
-          <p>Direct transmission. Encrypted channels available on request.</p>
-          <div class="row">
-            <a class="btn" href="mailto:marulecha@gmail.com">Write an email</a>
-            <button class="btn btn--ghost" type="button" id="copy-email" data-email="marulecha@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg> Copy address</button>
-          </div>
-          <code>marulecha@gmail.com</code>
-        </div>
+        <button class="btn btn--primary" type="submit" id="scan-btn">Discover</button>
+      </form>
+      <div class="ds-toggles" id="toggles" aria-label="Sources to use"></div>
+      <div class="ds-notice">
+        <span><span class="ok">●</span> passive: the target is never contacted</span>
+        <span>queries go to public resolvers, registries, certificate logs and archives, straight from your browser</span>
+        <span>use on domains you own or are authorised to assess</span>
       </div>
+      <div class="ds-recent" id="recent"></div>
+    </div>
 
-      <div class="split__art" data-reveal="4">
-        <img src="../static/img/letter1.webp" alt="Illustration of a sealed letter" width="360" height="360" loading="lazy">
+    <div class="tool ds-view" id="scan-view" hidden>
+      <aside class="tool__side">
+        <div class="card ds-summary">
+          <div class="ds-domain" id="sum-domain"></div>
+          <div class="ds-tally" id="tally"></div>
+          <div class="ds-state" id="sum-state"></div>
+        </div>
+        <div class="card" style="margin-top: 12px;">
+          <div class="card__head"><span>ls ~/recon/inventory</span></div>
+          <nav class="side-list" id="section-list" aria-label="Inventory sections"></nav>
+        </div>
+        <div class="card ds-actions" style="margin-top: 12px;">
+          <button class="btn btn--sm" type="button" id="act-md"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg> Copy report (Markdown)</button>
+          <button class="btn btn--sm btn--ghost" type="button" id="act-json"><svg class="stroke" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg> Download JSON</button>
+          <button class="btn btn--sm btn--ghost" type="button" id="act-link"><svg class="stroke" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a3.5 3.5 0 0 0 5 0l4-4a3.5 3.5 0 0 0-5-5l-.5.5M14 10a3.5 3.5 0 0 0-5 0l-4 4a3.5 3.5 0 0 0 5 5l.5-.5"/></svg> Copy link to this run</button>
+          <button class="btn btn--sm btn--ghost" type="button" id="act-rescan"><svg class="stroke" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"/></svg> Run again</button>
+        </div>
+      </aside>
+
+      <div class="ds-main">
+        <section class="window ds-log" aria-label="Discovery log">
+          <div class="window__bar"><span class="window__dot"></span><span class="window__dot"></span><span class="window__dot"></span><span class="window__title">passive_recon.sh — log</span></div>
+          <div class="window__body" id="log" aria-live="polite"></div>
+        </section>
+        <div class="ds-sources" id="sources" aria-label="Source status"></div>
+        <div id="sections" class="ds-main"></div>
+        <p class="dim mono" style="font-size: var(--fs-sm); text-align: center; margin-top: 8px;">
+          Inventory built from public records; relationships are inferred and worth confirming. Something wrong or missing? <a href="contact.html">Tell me</a>.
+        </p>
       </div>
     </div>
   </main>
@@ -122,11 +150,6 @@
 
   <script src="../static/js/site.js?v=20260910"></script>
   <script src="../static/js/matrix-effect.js?v=20260910"></script>
-  <script>
-    document.getElementById('copy-email').addEventListener('click', function () {
-      var email = this.getAttribute('data-email');
-      window.copyText(email).then(function () { window.toast('Copied ' + email); }, function () { window.toast('Copy blocked by browser'); });
-    });
-  </script>
+  <script src="../static/js/domainscan.js?v=20260910"></script>
 </body>
 </html>

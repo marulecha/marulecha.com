@@ -14,7 +14,7 @@
   <meta property="og:url" content="https://marulecha.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="static/css/theme.css?v=20260910">
+  <link rel="stylesheet" href="static/css/theme.css?v=20260910b">
   <link rel="icon" href="static/img/favicon-64.png" type="image/png">
   <link rel="apple-touch-icon" href="static/img/spacelettuceIcon-160.png">
 </head>
@@ -38,6 +38,7 @@
         <a href="pages/vulndb.html">vulndb</a>
         <a href="pages/webChecklist.html">checklist</a>
         <a href="pages/webapptools.html">tools</a>
+        <a href="pages/domainscan.html">osint</a>
         <a href="pages/contact.html">contact</a>
         <div class="nav__social">
           <a href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>LinkedIn</a>
@@ -107,7 +108,7 @@
     <section class="section" aria-labelledby="dir-title">
       <div class="section__head">
         <h2 id="dir-title">ls -la ~/</h2>
-        <span class="dim mono">6 entries</span>
+        <span class="dim mono">7 entries</span>
       </div>
 
       <div class="grid">
@@ -125,11 +126,18 @@
           <div class="tile__meta"><span>93 checks · 11 categories</span><span class="arrow">→</span></div>
         </a>
 
+        <a class="card tile" href="pages/domainscan.html" data-reveal="3">
+          <div class="tile__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/><circle cx="17.5" cy="17.5" r="3.5"/><path d="m20 20 2 2"/></svg></div>
+          <h3>Passive Domain OSINT</h3>
+          <p>Hostnames, networks, related domains, vendors, certificates, mail setup and history for any domain, assembled from public records in your browser. The target is never touched.</p>
+          <div class="tile__meta"><span>17 sources · client-side</span><span class="arrow">→</span></div>
+        </a>
+
         <a class="card tile" href="pages/webapptools.html" data-reveal="3">
           <div class="tile__icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 5 5L14 17l-3-3 5.7-7.7z"/><path d="m3 21 7-7"/><path d="M14 17l3 3 4-4-3-3"/></svg></div>
           <h3>Web App Tools</h3>
-          <p>Free browser tools I built for engagements: a targeted password list generator and a subdomain takeover scanner.</p>
-          <div class="tile__meta"><span>2 tools · hosted</span><span class="arrow">→</span></div>
+          <p>Free tools I built for engagements: a targeted password list generator, a subdomain takeover scanner and the passive domain OSINT tool above.</p>
+          <div class="tile__meta"><span>2 hosted · 3 on-site</span><span class="arrow">→</span></div>
         </a>
 
         <a class="card tile" href="pages/resume.html" data-reveal="4">
