@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-  <title>marulecha | Passive Domain OSINT</title>
-  <meta name="description" content="See what public records show about a domain, from your browser: hostnames, addresses and networks, related domains, vendors and products, certificates, mail setup, registration and history. Your browser never contacts the target.">
+  <title>marulecha | Games</title>
+  <meta name="description" content="AI prompting games by marulecha: witchcraft and space-v1. Coming soon.">
   <meta name="theme-color" content="#0a0718">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="marulecha | Passive Domain OSINT">
-  <meta property="og:description" content="See what public records show about a domain, from your browser: hostnames, addresses and networks, related domains, vendors and products, certificates, mail setup, registration and history. Your browser never contacts the target.">
+  <meta property="og:title" content="marulecha | Games">
+  <meta property="og:description" content="AI prompting games by marulecha: witchcraft and space-v1. Coming soon.">
   <meta property="og:image" content="https://marulecha.com/static/img/spacelettuce.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,64 +70,44 @@
   <main id="main" class="container page">
     <div class="page-head" data-reveal>
       <div>
-        <h1><span class="accent">./</span>passive_recon.sh</h1>
-      </div>
-      <div class="stats" aria-live="polite">
-        <div class="stat"><b id="stat-modules">17</b><span>sources</span></div>
-        <div class="stat"><b id="stat-queries">0</b><span>queries</span></div>
-        <div class="stat"><b id="stat-items">—</b><span>items found</span></div>
+        <h1><span class="accent">./</span>games.sh</h1>
       </div>
     </div>
 
-    <div data-reveal="2">
-      <form class="ds-form" id="scan-form" autocomplete="off">
-        <div class="field">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 9h-2.95a15.6 15.6 0 0 0-1.38-6.13A8.02 8.02 0 0 1 18.9 11zM12 4.04c.83 1.2 1.48 3.3 1.94 6.96h-3.88c.46-3.66 1.11-5.76 1.94-6.96zM5.1 11a8.02 8.02 0 0 1 4.33-6.13A15.6 15.6 0 0 0 8.05 11H5.1zm0 2h2.95c.1 2.3.56 4.44 1.38 6.13A8.02 8.02 0 0 1 5.1 13zM12 19.96c-.83-1.2-1.48-3.3-1.94-6.96h3.88c-.46 3.66-1.11 5.76-1.94 6.96zm2.57-.83A15.6 15.6 0 0 0 15.95 13h2.95a8.02 8.02 0 0 1-4.33 6.13z"/></svg>
-          <input type="text" id="domain" name="d" placeholder="example.com, or paste a URL" inputmode="url" autocapitalize="off" spellcheck="false" aria-label="Domain to discover" required>
-          <kbd>/</kbd>
+    <div class="window window--lit chat" data-reveal="1" aria-label="What the games are">
+      <div class="window__bar"><span class="window__dot"></span><span class="window__dot"></span><span class="window__dot"></span><span class="window__title">ai@marulecha</span></div>
+      <div class="window__body chat__body">
+        <div class="chat__msg chat__msg--ai">
+          <span class="chat__who"><svg class="chat__mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>model</span>
+          <div class="chat__reply">
+            <p>These are prompting games. In each level an AI model has instructions it must follow, such as keeping a password secret or staying in character. You win by writing prompts that make it break those instructions.</p>
+            <p>Each level teaches one technique: role-play, few-shot examples, step-by-step reasoning or context injection. When you clear a level, the game shows which part of your prompt worked.</p>
+          </div>
         </div>
-        <button class="btn btn--primary" type="submit" id="scan-btn">Discover</button>
-      </form>
-      <div class="ds-toggles" id="toggles" aria-label="Sources to use"></div>
-      <div class="ds-notice">
-        <span><span class="ok">●</span> passive, so your browser never contacts the target</span>
-        <span>queries go to public resolvers, registries, certificate logs and archives, straight from your browser</span>
-        <span>use it only on domains you own or are authorised to assess</span>
-      </div>
-      <div class="ds-recent" id="recent"></div>
-    </div>
-
-    <div class="tool ds-view" id="scan-view" hidden>
-      <aside class="tool__side">
-        <div class="card ds-summary">
-          <div class="ds-domain" id="sum-domain"></div>
-          <div class="ds-tally" id="tally"></div>
-          <div class="ds-state" id="sum-state"></div>
-        </div>
-        <div class="card" style="margin-top: 12px;">
-          <div class="card__head"><span>ls ~/recon/inventory</span></div>
-          <nav class="side-list" id="section-list" aria-label="Inventory sections"></nav>
-        </div>
-        <div class="card ds-actions" style="margin-top: 12px;">
-          <button class="btn btn--sm" type="button" id="act-md"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg> Copy report (Markdown)</button>
-          <button class="btn btn--sm btn--ghost" type="button" id="act-json"><svg class="stroke" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg> Download JSON</button>
-          <button class="btn btn--sm btn--ghost" type="button" id="act-link"><svg class="stroke" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a3.5 3.5 0 0 0 5 0l4-4a3.5 3.5 0 0 0-5-5l-.5.5M14 10a3.5 3.5 0 0 0-5 0l-4 4a3.5 3.5 0 0 0 5 5l.5-.5"/></svg> Copy link to this run</button>
-          <button class="btn btn--sm btn--ghost" type="button" id="act-rescan"><svg class="stroke" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"/></svg> Run again</button>
-        </div>
-      </aside>
-
-      <div class="ds-main">
-        <section class="window ds-log" aria-label="Discovery log">
-          <div class="window__bar"><span class="window__dot"></span><span class="window__dot"></span><span class="window__dot"></span><span class="window__title">passive_recon.log</span></div>
-          <div class="window__body" id="log" aria-live="polite"></div>
-        </section>
-        <div class="ds-sources" id="sources" aria-label="Source status"></div>
-        <div id="sections" class="ds-main"></div>
-        <p class="dim mono" style="font-size: var(--fs-sm); text-align: center; margin-top: 8px;">
-          This inventory comes from public records. The page infers the relationships, so confirm them before you rely on them. Something wrong or missing? <a href="contact.html">Tell me</a>.
-        </p>
       </div>
     </div>
+
+    <section class="section" aria-labelledby="games-title">
+      <div class="section__head">
+        <h2 id="games-title">play</h2>
+      </div>
+      <div class="game-grid">
+        <div class="window game" data-reveal="1">
+          <div class="window__bar"><span class="window__dot"></span><span class="window__dot"></span><span class="window__dot"></span></div>
+          <div class="window__body game__body">
+            <div class="game__name">witchcraft</div>
+            <div class="game__meta">coming soon</div>
+          </div>
+        </div>
+        <div class="window game" data-reveal="2">
+          <div class="window__bar"><span class="window__dot"></span><span class="window__dot"></span><span class="window__dot"></span></div>
+          <div class="window__body game__body">
+            <div class="game__name">space-v1</div>
+            <div class="game__meta">coming soon</div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -146,6 +124,5 @@
 
   <script src="../static/js/site.js?v=20261003l"></script>
   <script src="../static/js/matrix-effect.js?v=20261003m"></script>
-  <script src="../static/js/domainscan.js?v=20261003m"></script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-// Agisilaos Maroulis 
 // https://github.com/marulecha
 // 27-01-2023
 

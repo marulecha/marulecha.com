@@ -1,4 +1,4 @@
-/* Matrix rain — DPR aware, pauses when hidden, honours the FX toggle live. */
+/* Matrix rain. Scales for device pixel ratio, pauses while the tab is hidden, and follows the FX toggle without a reload. */
 (function () {
   'use strict';
 
@@ -8,9 +8,10 @@
   var ctx = canvas.getContext('2d');
   var CHARS = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン0123456789<>/\\|=+-*#$%&@';
   var FONT = 15;
-  var cols = 0, drops = [], speeds = [];
+  var cols = 0, drops = [], speeds = [], red = [];
+  var RED_SHARE = 0.15; // share of columns that fall in the root@target red
   var raf = 0, last = 0, running = false;
-  var INTERVAL = 55; // ms per step ~18fps: readable, cheap
+  var INTERVAL = 90; // 90 ms per step is about 11 fps, which keeps the rain slow, readable and cheap on the CPU
   var C = {};
 
   function readTheme() {
@@ -19,7 +20,8 @@
     C.bg = v('--bg', '#060910');
     C.fade = v('--matrix-fade', 'rgba(6,9,16,0.12)');
     C.head = v('--matrix-head', 'rgba(140,234,255,0.9)');
-    C.headAlt = v('--matrix-head-alt', 'rgba(143,123,255,0.95)');
+    C.redHead = v('--matrix-red-head', 'rgba(255,79,163,0.95)');
+    C.redTrail = v('--matrix-red-trail', 'rgba(255,79,163,0.35)');
     C.trail = v('--matrix-trail', 'rgba(47,215,255,0.35)');
   }
 
@@ -37,6 +39,7 @@
     for (var i = cols; i < newCols; i++) {
       drops[i] = Math.floor(Math.random() * -(h / FONT));
       speeds[i] = 0.6 + Math.random() * 0.8;
+      red[i] = Math.random() < RED_SHARE;
     }
     cols = newCols;
     readTheme();
@@ -58,15 +61,16 @@
       var y = drops[i] * FONT;
       if (y > 0) {
         var ch = CHARS.charAt((Math.random() * CHARS.length) | 0);
-        // bright head, dimmer trail; occasional violet head for depth
-        ctx.fillStyle = Math.random() < 0.06 ? C.headAlt : C.head;
+        // bright head and a dimmer trail; red columns use the root@target colour for both
+        ctx.fillStyle = red[i] ? C.redHead : C.head;
         ctx.fillText(ch, i * FONT, y);
-        ctx.fillStyle = C.trail;
+        ctx.fillStyle = red[i] ? C.redTrail : C.trail;
         ctx.fillText(CHARS.charAt((Math.random() * CHARS.length) | 0), i * FONT, y - FONT);
       }
       if (y > h && Math.random() > 0.975) {
         drops[i] = Math.floor(Math.random() * -20);
         speeds[i] = 0.6 + Math.random() * 0.8;
+        red[i] = Math.random() < RED_SHARE;
       }
       drops[i] += speeds[i];
     }

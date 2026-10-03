@@ -1,4 +1,4 @@
-/* marulecha.com — shared site behaviour
+/* marulecha.com shared site behaviour
    - FX toggle (persists to localStorage 'animationsDisabled', live, no reload)
    - mobile navigation
    - active nav link
@@ -64,7 +64,7 @@
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && nav.classList.contains('is-open')) navBtn.click();
       });
-      // leaving the phone breakpoint with the sheet open: reset state
+      // close the menu if the window grows past the phone breakpoint while it is open
       window.addEventListener('resize', function () {
         if (window.innerWidth > 860 && nav.classList.contains('is-open')) navBtn.click();
       });
@@ -75,7 +75,10 @@
       var here = location.pathname.replace(/\/index\.html$/, '/').replace(/\/$/, '/index.html');
       Array.prototype.forEach.call(nav.querySelectorAll('a[href]'), function (a) {
         var target = new URL(a.getAttribute('href'), location.href).pathname.replace(/\/index\.html$/, '/').replace(/\/$/, '/index.html');
-        if (target === here) a.setAttribute('aria-current', 'page');
+        // data-match lists other pages that belong under this link, e.g. the tools tab
+        var also = (a.getAttribute('data-match') || '').split(' ').filter(Boolean);
+        var file = here.split('/').pop();
+        if (target === here || also.indexOf(file) !== -1) a.setAttribute('aria-current', 'page');
       });
     }
 
@@ -89,7 +92,7 @@
           });
         }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
         revealables.forEach(function (el) { io.observe(el); });
-        // Safety net: never leave content hidden if the observer is slow or never fires.
+        // Show everything after 1.5 s in case the observer is slow or never fires.
         setTimeout(function () { revealables.forEach(function (el) { el.classList.add('is-in'); }); }, 1500);
       } else {
         revealables.forEach(function (el) { el.classList.add('is-in'); });

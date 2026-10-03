@@ -1,5 +1,5 @@
-/* Home page: scripted terminal (reverse shell demo) + hero typewriter.
-   Plain JS — replaces the previous React/Babel runtime. */
+/* Home page scripted terminal (reverse shell demo) and hero typewriter.
+   Plain JS. It replaced the previous React/Babel runtime. */
 (function () {
   'use strict';
 
@@ -12,8 +12,7 @@
   if (tw) {
     var PHRASES = [
       'Hello friend.',
-      'Hello friend? That\'s lame..',
-      'Break it. Understand it. Fix it.'
+      'Hello friend? That\'s lame..'
     ];
     var pi = 0, ci = 0, deleting = false, twTimer;
 
@@ -47,18 +46,16 @@
   var PROMPT_KALI = '<span class="p">kali@kali<i>:~</i>$</span> ';
   var PROMPT_ROOT = '<span class="root">root@target<i>:/</i>#</span> ';
 
-  // A scripted "session". type = shows characters one by one; out = prints line.
+  // A scripted "session". A `type` step types characters one at a time; an `out` step prints a whole line.
   var SCRIPT = [
     { type: 'nc -lvnp 1337', prompt: PROMPT_KALI },
     { out: '<span class="out">listening on [any] 1337 ...</span>', wait: 1600 },
     { out: '<span class="out">connect to [10.10.14.8] from (UNKNOWN) [10.129.2.14] 49822</span>', wait: 600 },
-    { type: 'whoami', prompt: PROMPT_ROOT },
-    { out: '<span class="ok">root</span>', wait: 500 },
     { type: 'id', prompt: PROMPT_ROOT },
     { out: '<span class="out">uid=0(root) gid=0(root) groups=0(root)</span>', wait: 500 },
     { type: 'cat /root/proof.txt', prompt: PROMPT_ROOT },
     { out: '<span class="hi">7f3a9c1e2b8d4f60a5c7e9b1d3f5a7c9</span>', wait: 700 },
-    { out: '<span class="out">[+] host compromised &mdash; documenting findings...</span>', wait: 3600 },
+    { out: '<span class="out">[+] host compromised, documenting findings...</span>', wait: 3600, inline: true },
     { clear: true }
   ];
 
@@ -68,10 +65,15 @@
   var stepIdx = 0;
   var timer;
   var MAX_LINES = 12;
+  var cursorInline = false; // true: the cursor sits at the end of the last line instead of on a new one
 
   function render() {
-    var html = lines.map(function (l) { return '<div class="tline">' + l + '</div>'; }).join('');
-    html += '<div class="tline">' + currentPrompt + '<span class="cmd">' + escapeHtml(current) + '</span><span class="tcursor" aria-hidden="true"></span></div>';
+    var CURSOR = '<span class="tcursor" aria-hidden="true"></span>';
+    var html = lines.map(function (l, i) {
+      var tail = cursorInline && i === lines.length - 1 ? ' ' + CURSOR : '';
+      return '<div class="tline">' + l + tail + '</div>';
+    }).join('');
+    if (!cursorInline) html += '<div class="tline">' + currentPrompt + '<span class="cmd">' + escapeHtml(current) + '</span>' + CURSOR + '</div>';
     root.innerHTML = html;
     root.scrollTop = root.scrollHeight;
   }
@@ -91,12 +93,13 @@
     stepIdx++;
 
     if (s.clear) {
-      lines = []; current = ''; currentPrompt = PROMPT_KALI; render();
+      lines = []; current = ''; currentPrompt = PROMPT_KALI; cursorInline = false; render();
       timer = setTimeout(next, 900);
       return;
     }
     if (s.out) {
       pushLine(s.out);
+      cursorInline = !!s.inline;
       render();
       timer = setTimeout(next, s.wait || 400);
       return;

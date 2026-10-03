@@ -1,4 +1,4 @@
-/* marulecha.com — passive domain scanner
+/* marulecha.com passive domain scanner
    Everything runs in the visitor's browser. The target is never contacted:
    queries go to public DNS-over-HTTPS resolvers, RDAP registries,
    certificate-transparency logs, IP intelligence and the Internet Archive.
@@ -60,16 +60,6 @@
   }
 
   var STATS = { queries: 0, inflight: {} };
-
-  /* ------------------------------------------------------------------ */
-  /* Optional relay (Netlify/Cloudflare). Empty = disabled; the page then */
-  /* behaves exactly as the pure client-side build. Set to your deployed  */
-  /* relay, e.g. 'https://proxy.marulecha.com/relay'. See netlify-proxy/.  */
-  /* ------------------------------------------------------------------ */
-  var PROXY = '';
-  function proxyOn() { return !!PROXY; }
-  function relayData(url) { return getJSON(PROXY + '?url=' + encodeURIComponent(url), {}, 15000); }
-  function relaySite(host, path) { return getJSON(PROXY + '?site=' + encodeURIComponent(host) + '&path=' + encodeURIComponent(path || '/'), {}, 15000); }
 
   /* ------------------------------------------------------------------ */
   /* DNS over HTTPS                                                       */
@@ -262,7 +252,7 @@
       }
 
       /* CAA */
-      if (!CAA.length) ctx.findings.push(F('low', 'No CAA record', 'Any public CA can issue certificates for this domain. CAA lets you restrict issuance to the CAs you actually use and receive violation reports.', 'Publish CAA records, e.g. 0 issue "letsencrypt.org" and 0 iodef "mailto:security@' + ctx.apex + '".'));
+      if (!CAA.length) ctx.findings.push(F('low', 'No CAA record', 'Any public CA can issue certificates for this domain. CAA lets you restrict issuance to the CAs you use and receive violation reports.', 'Publish CAA records, e.g. 0 issue "letsencrypt.org" and 0 iodef "mailto:security@' + ctx.apex + '".'));
       else {
         var issuers = CAA.map(function (c) { return c.data; });
         ctx.findings.push(F('ok', 'CAA restricts certificate issuance', issuers.join(' · '), ''));
@@ -272,7 +262,7 @@
       /* DNSSEC */
       if (out.dnssec) ctx.findings.push(F('ok', 'DNSSEC validated', 'The resolver returned the AD (authenticated data) flag and ' + plural(DK.length, 'DNSKEY record') + '.', ''));
       else if (DK.length) ctx.findings.push(F('medium', 'DNSKEY published but responses not validated', 'The zone has DNSKEY records but the validating resolver did not set AD. The DS record at the parent may be missing or mismatched, which can make the domain unreachable for validating clients.', 'Check the DS record at the registrar matches the current KSK.'));
-      else ctx.findings.push(F('low', 'DNSSEC not enabled', 'Responses for this zone are not signed. Cache-poisoning and spoofing of DNS answers is not cryptographically prevented.', 'Enable DNSSEC at the DNS provider and publish the DS record at the registrar.'));
+      else ctx.findings.push(F('low', 'DNSSEC not enabled', 'Responses for this zone are not signed. Nothing cryptographic stops cache poisoning or spoofed DNS answers.', 'Enable DNSSEC at the DNS provider and publish the DS record at the registrar.'));
 
       /* TXT: third-party inventory */
       var saas = [], other = [];
@@ -370,7 +360,7 @@
       /* SPF */
       var spfP = Promise.resolve();
       if (!spfAll.length) {
-        ctx.findings.push(F(MX.length && !nullMx ? 'high' : 'medium', 'No SPF record', 'Receivers cannot tell which servers may send mail as @' + d + '. Combined with a missing or weak DMARC policy, the domain can be spoofed freely.', 'Publish a TXT record such as v=spf1 include:<provider> -all, or v=spf1 -all for a domain that never sends mail.'));
+        ctx.findings.push(F(MX.length && !nullMx ? 'high' : 'medium', 'No SPF record', 'Receivers cannot tell which servers may send mail as @' + d + '. With a missing or weak DMARC policy, anyone can spoof the domain.', 'Publish a TXT record such as v=spf1 include:<provider> -all, or v=spf1 -all for a domain that never sends mail.'));
       } else if (spfAll.length > 1) {
         ctx.findings.push(F('high', 'Multiple SPF records (permerror)', 'RFC 7208 requires exactly one SPF record. Receivers treat this as a permanent error and ignore SPF entirely.', 'Merge the records into a single v=spf1 string.'));
       } else {
@@ -390,7 +380,7 @@
         });
         var spfProv = uniq(terms.map(function (t) { var m = t.match(/^[+\-~?]?(?:include|redirect)[:=](.+)$/i); return m ? (fingerprint(norm(m[1]), MX_PROVIDERS) || fingerprint(norm(m[1]), [[/sendgrid/, 'SendGrid'], [/mailchimp|servers\.mcsv/, 'Mailchimp'], [/mandrill/, 'Mandrill'], [/mailgun/, 'Mailgun'], [/mailjet/, 'Mailjet'], [/sendinblue|brevo/, 'Brevo'], [/salesforce|exacttarget|pardot/, 'Salesforce'], [/hubspot/, 'HubSpot'], [/zendesk/, 'Zendesk'], [/freshdesk/, 'Freshdesk'], [/atlassian/, 'Atlassian'], [/klaviyo/, 'Klaviyo'], [/postmark|mtasv/, 'Postmark'], [/sparkpost/, 'SparkPost'], [/amazonses/, 'Amazon SES'], [/constantcontact/, 'Constant Contact'], [/mailerlite/, 'MailerLite'], [/intercom/, 'Intercom'], [/marketo/, 'Marketo'], [/customer\.io|customeriomail/, 'Customer.io'], [/protection\.outlook/, 'Microsoft 365'], [/_spf\.google/, 'Google Workspace'], [/zoho/, 'Zoho'], [/mimecast/, 'Mimecast'], [/pphosted|proofpoint/, 'Proofpoint'], [/docusign/, 'DocuSign'], [/shopify/, 'Shopify'], [/stripe/, 'Stripe'], [/qualtrics/, 'Qualtrics'], [/surveymonkey/, 'SurveyMonkey'], [/workday/, 'Workday'], [/servicenow/, 'ServiceNow'], [/smartsheet/, 'Smartsheet'], [/gusto/, 'Gusto'], [/bamboohr/, 'BambooHR'], [/greenhouse/, 'Greenhouse'], [/lever/, 'Lever'], [/slack/, 'Slack'], [/notion/, 'Notion'], [/figma/, 'Figma'], [/github/, 'GitHub'], [/gitlab/, 'GitLab'], [/twilio/, 'Twilio'], [/okta/, 'Okta'], [/duo/, 'Duo']]) || norm(m[1])) : null; }).filter(Boolean));
         out.spfSenders = spfProv;
-        if (spfProv.length) ctx.findings.push(F('info', 'Authorised third-party senders', spfProv.join(', ') + '. Each is a platform that can send mail as the organisation; account compromise at any of them enables convincing phishing.', ''));
+        if (spfProv.length) ctx.findings.push(F('info', 'Authorised third-party senders', spfProv.join(', ') + '. Each is a platform that can send mail as the organisation. A compromised account at any of them can send convincing phishing.', ''));
         spfP = spfLookups(d, 0, {}, null).then(function (acc) {
           out.spfLookups = acc.count; out.spfVoids = acc.voids;
           if (acc.count > 10) ctx.findings.push(F('high', 'SPF exceeds the 10 DNS-lookup limit (' + acc.count + ')', 'Receivers must return permerror once the limit is passed, so SPF fails for every message.', 'Flatten includes, remove unused senders, or use a flattening service.'));
@@ -427,7 +417,7 @@
       if (out.dkim.length) {
         ctx.findings.push(F('ok', 'DKIM selectors found: ' + out.dkim.map(function (k) { return k.selector; }).join(', '), out.dkim.map(function (k) { return k.selector + (k.cname ? ' → ' + k.cname : k.bits ? ' (' + k.k + ' ' + k.bits + '-bit)' : ''); }).join(' · '), ''));
         out.dkim.forEach(function (k) {
-          if (k.bits && k.bits <= 1024) ctx.findings.push(F('low', 'Weak ' + k.bits + '-bit DKIM key on selector ' + k.selector, 'RSA keys of 1024 bits or less are considered factorable by well-resourced attackers; RFC 8301 requires at least 1024 and recommends 2048.', 'Rotate to a 2048-bit key.'));
+          if (k.bits && k.bits <= 1024) ctx.findings.push(F('low', 'Weak ' + k.bits + '-bit DKIM key on selector ' + k.selector, 'RSA keys of 1024 bits or less are within reach of well-funded attackers. RFC 8301 requires at least 1024 and recommends 2048.', 'Rotate to a 2048-bit key.'));
           if (k.revoked) ctx.findings.push(F('info', 'Revoked DKIM key on selector ' + k.selector, 'An empty p= tag means the key is retired; mail signed with it will fail.', ''));
         });
       } else ctx.findings.push(F('info', 'No DKIM key found on ' + DKIM_SELECTORS.length + ' common selectors', 'Selectors are provider-specific and can be anything; absence here is not proof that DKIM is unused. Inspect a real message header (DKIM-Signature s= tag) to find the selector.', ''));
@@ -491,12 +481,12 @@
       var live = ((ctx.data.dns || {}).records || {}).NS;
       if (live && live.length && out.nameservers.length) {
         var a = uniq(live.map(function (x) { return norm(x.data); })).sort(), b = uniq(out.nameservers).sort();
-        if (a.join() !== b.join()) ctx.findings.push(F('medium', 'Registry name servers differ from the live NS set', 'Registry: ' + b.join(', ') + ' · Zone: ' + a.join(', ') + '. A mismatch means the delegation and the zone disagree; some resolvers will use one set, some the other, and a stale registry NS can be a hijack vector.', 'Make both sets identical.'));
+        if (a.join() !== b.join()) ctx.findings.push(F('medium', 'Registry name servers differ from the live NS set', 'Registry: ' + b.join(', ') + ' · Zone: ' + a.join(', ') + '. A mismatch means the delegation and the zone disagree. Some resolvers will use one set and some the other, and an attacker can use a stale registry NS to hijack the domain.', 'Make both sets identical.'));
         else ctx.findings.push(F('ok', 'Registry delegation matches the zone', b.join(', '), ''));
       }
       var dns = ctx.data.dns || {};
       if (out.dsSigned && dns.records && !dns.dnskey) ctx.findings.push(F('high', 'DS record at the registry but no DNSKEY in the zone', 'Validating resolvers will treat every answer as bogus and the domain becomes unreachable for them.', 'Either remove the DS at the registrar or re-sign the zone with the matching key.'));
-      if (!out.dsSigned && dns.dnssec) ctx.findings.push(F('info', 'Zone is signed but registry has no DS', 'DNSSEC is not actually active: without the DS at the parent, resolvers cannot build a chain of trust.', 'Publish the DS record at the registrar.'));
+      if (!out.dsSigned && dns.dnssec) ctx.findings.push(F('info', 'Zone is signed but registry has no DS', 'DNSSEC is not active: without the DS at the parent, resolvers cannot build a chain of trust.', 'Publish the DS record at the registrar.'));
       log('RDAP: ' + (out.registrar || 'registrar unknown') + (out.expires ? ', expires ' + fmtDate(out.expires) : ''));
     }).catch(function (e) {
       if (e.status === 404) {
@@ -574,7 +564,7 @@
         var live = res.filter(function (x) { return x.ips.length; }), dead = res.filter(function (x) { return !x.ips.length; });
         out.live = live.length; out.dead = dead.length;
         out.ips = uniq([].concat.apply([], live.map(function (x) { return x.ips; })));
-        ctx.findings.push(F('info', plural(list.length, 'hostname') + ' discovered without touching the target', live.length + ' resolve to an address, ' + dead.length + ' no longer resolve' + (out.capped ? ', ' + out.capped + ' not resolved (cap)' : '') + '. Stale names in certificate logs are a map of past infrastructure.', ''));
+        ctx.findings.push(F('info', plural(list.length, 'hostname') + ' discovered without touching the target', live.length + ' resolve to an address, ' + dead.length + ' no longer resolve' + (out.capped ? ', ' + out.capped + ' not resolved (cap)' : '') + '. Names in certificate logs that no longer resolve show past infrastructure.', ''));
         res.forEach(function (x) {
           if (x.target && !x.ips.length) {
             if (x.service) ctx.findings.push(F('high', 'Possible dangling CNAME: ' + x.name + ' → ' + x.target, 'The record points at ' + x.service + ' but the target does not resolve (' + (x.status === 3 ? 'NXDOMAIN' : 'no address') + '). If the provider lets anyone claim that name, the subdomain can be taken over and used to serve content or read cookies under ' + d + '.', 'Verify with SubdomainTKO (https://tko.marulecha.com/) and remove the record or reclaim the resource.'));
@@ -585,7 +575,7 @@
         if (intr.length) ctx.findings.push(F('info', plural(intr.length, 'sensitive-sounding hostname'), intr.slice(0, 15).map(function (x) { return x.name + (x.ips.length ? '' : ' (stale)'); }).join(', ') + (intr.length > 15 ? ' …' : '') + '. Names suggesting non-production, administrative or infrastructure systems.', 'Make sure these are meant to be reachable from the internet and are covered by the same controls as production.'));
         var wild = list.filter(function (n) { return out.names[n].wildcard; }).concat(out.names[d] && out.names[d].wildcard ? [d] : []);
         if (wild.length) ctx.findings.push(F('info', 'Wildcard certificates issued for ' + uniq(wild).slice(0, 5).map(function (n) { return '*.' + n; }).join(', '), 'One key covers every host under the name; a compromise on any of them exposes all.', 'Prefer per-host certificates where practical.'));
-        if (list.length > 300) ctx.findings.push(F('info', 'Very large hostname footprint', plural(list.length, 'name') + ' under one apex. Large surfaces accumulate forgotten hosts.', 'Run a periodic inventory and decommission stale names.'));
+        if (list.length > 300) ctx.findings.push(F('info', 'Very large hostname footprint', plural(list.length, 'name') + ' under one apex. The more hostnames a domain has, the more of them get forgotten.', 'Run a periodic inventory and decommission stale names.'));
         log('Subdomains: ' + live.length + ' live, ' + dead.length + ' stale');
       });
     });
@@ -624,9 +614,9 @@
         else ctx.findings.push(F('ok', name + ' has a valid certificate for ' + days + ' more days', 'Issued by ' + latest.issuer + ', valid ' + fmtDate(latest.notBefore) + ' → ' + fmtDate(latest.notAfter) + '.', ''));
       });
       var wild = active.filter(function (c) { return c.names.some(function (n) { return n[0] === '*'; }); });
-      if (wild.length) ctx.findings.push(F('info', plural(wild.length, 'active wildcard certificate'), uniq([].concat.apply([], wild.map(function (c) { return c.names.filter(function (n) { return n[0] === '*'; }); }))).join(', '), 'A wildcard private key must be protected as carefully as every host it covers.'));
+      if (wild.length) ctx.findings.push(F('info', plural(wild.length, 'active wildcard certificate'), uniq([].concat.apply([], wild.map(function (c) { return c.names.filter(function (n) { return n[0] === '*'; }); }))).join(', '), 'Protect a wildcard private key as carefully as every host it covers.'));
       var recent = certs.filter(function (c) { return now - new Date(c.notBefore) < 90 * 86400000; });
-      if (recent.length) ctx.findings.push(F('info', plural(recent.length, 'certificate') + ' issued in the last 90 days', 'Issuance velocity reflects automated renewal (ACME) and new hosts appearing.', ''));
+      if (recent.length) ctx.findings.push(F('info', plural(recent.length, 'certificate') + ' issued in the last 90 days', 'The issuance rate reflects automated renewal (ACME) and new hosts.', ''));
       var rev = certs.filter(function (c) { return c.revoked; });
       if (rev.length) ctx.findings.push(F('info', plural(rev.length, 'revoked certificate') + ' in the log', 'Revocations can indicate a key compromise or a decommissioned host.', ''));
       if (issuers.length > 3) ctx.findings.push(F('info', 'Certificates from ' + issuers.length + ' different CAs', 'Several teams or platforms are issuing independently; a CAA record can constrain this.', ''));
@@ -637,11 +627,11 @@
       certs.forEach(function (c) { c.names.forEach(function (n) { var t = new Date(c.notBefore).getTime(); if (!firstSeen[n] || t < firstSeen[n]) firstSeen[n] = t; if (!lastSeen[n] || t > lastSeen[n]) lastSeen[n] = t; }); });
       out.timeline = Object.keys(firstSeen).map(function (n) { return { name: n, first: firstSeen[n], last: lastSeen[n] }; }).sort(function (a, b) { return a.first - b.first; });
       var newHosts = out.timeline.filter(function (t) { return now - t.first < 30 * 86400000 && t.name.indexOf('*') !== 0; });
-      if (newHosts.length) ctx.findings.push(F('info', plural(newHosts.length, 'hostname') + ' first appeared in CT in the last 30 days', newHosts.slice(0, 12).map(function (t) { return t.name; }).join(', ') + (newHosts.length > 12 ? ' …' : '') + '. Newly issued names often mark a launch, migration or a freshly stood-up service worth a look.', ''));
+      if (newHosts.length) ctx.findings.push(F('info', plural(newHosts.length, 'hostname') + ' first appeared in CT in the last 30 days', newHosts.slice(0, 12).map(function (t) { return t.name; }).join(', ') + (newHosts.length > 12 ? ' …' : '') + '. A newly issued name often marks a launch, a migration or a new service.', ''));
       var abandoned = out.timeline.filter(function (t) { return t.name.indexOf('*') !== 0 && (now - t.last) > 400 * 86400000; });
       if (abandoned.length) ctx.findings.push(F('info', plural(abandoned.length, 'hostname') + ' with no certificate in over a year', abandoned.slice(0, 12).map(function (t) { return t.name; }).join(', ') + (abandoned.length > 12 ? ' …' : '') + '. Names that stopped renewing are often decommissioned projects; if any still has a live DNS record it is worth checking for takeover.', ''));
       var span = out.timeline.length ? Math.round((now - out.timeline[0].first) / (365.25 * 86400000) * 10) / 10 : 0;
-      if (span >= 1) ctx.findings.push(F('info', 'Certificate history spans about ' + span + ' years', 'Earliest logged issuance ' + fmtDate(out.timeline[0].first) + '. CT history is a rough age signal for the web presence.', ''));
+      if (span >= 1) ctx.findings.push(F('info', 'Certificate history spans about ' + span + ' years', 'Earliest logged issuance ' + fmtDate(out.timeline[0].first) + '. CT history gives a rough age for the web presence.', ''));
       ctx.log('Certificates: ' + active.length + ' valid of ' + certs.length + ' logged');
     });
   }
@@ -695,7 +685,7 @@
       else if (prim.length) ctx.findings.push(F('info', 'Apex hosted directly at ' + (p0.org || p0.isp) + (p0.asn ? ' (AS' + p0.asn + ', ' + p0.country + ')' : ''), 'No CDN or WAF in front: the origin server is directly exposed to the internet.', 'Consider a CDN/WAF for business-critical sites, and rate-limit at the edge.'));
       if (cdn.length) {
         var leaks = ok.filter(function (i) { return !i.primary && !isCdn(i); });
-        if (leaks.length) ctx.findings.push(F('medium', 'Hostnames resolve outside the CDN (possible origin exposure)', leaks.map(function (i) { return i.hosts.slice(0, 3).join(', ') + ' → ' + i.ip + ' (' + (i.org || i.isp) + ')'; }).join(' · ') + '. If any of these is the origin behind the CDN, the WAF can be bypassed by connecting to it directly.', 'Restrict origin ingress to the CDN\'s address ranges; move direct-access hosts behind the CDN or a VPN.'));
+        if (leaks.length) ctx.findings.push(F('medium', 'Hostnames resolve outside the CDN (possible origin exposure)', leaks.map(function (i) { return i.hosts.slice(0, 3).join(', ') + ' → ' + i.ip + ' (' + (i.org || i.isp) + ')'; }).join(' · ') + '. If any of these is the origin behind the CDN, an attacker can bypass the WAF by connecting to it directly.', 'Restrict origin ingress to the CDN\'s address ranges; move direct-access hosts behind the CDN or a VPN.'));
       }
       var asns = uniq(ok.map(function (i) { return i.asn; }).filter(Boolean)), countries = uniq(ok.map(function (i) { return i.country; }).filter(Boolean));
       var orgs = uniq(ok.map(function (i) { return i.org || i.isp; }).filter(Boolean));
@@ -703,7 +693,7 @@
       var cloud = uniq(ok.map(function (i) { var m = ((i.org || '') + ' ' + (i.isp || '')).match(CLOUD_ORGS); return m ? m[0] : null; }).filter(Boolean));
       if (cloud.length) ctx.findings.push(F('info', 'Cloud and hosting providers in use', cloud.join(', '), ''));
       var euKnown = ok.filter(function (i) { return i.eu !== null && i.eu !== undefined; });
-      if (euKnown.length) { var eu = euKnown.filter(function (i) { return i.eu; }).length; ctx.findings.push(F('info', (eu === euKnown.length ? 'All' : eu + ' of ' + euKnown.length) + ' geolocated addresses are in the EU', 'Relevant to data-residency questions. Anycast (CDN) addresses report one country regardless of where the edge actually serving a user is.', '')); }
+      if (euKnown.length) { var eu = euKnown.filter(function (i) { return i.eu; }).length; ctx.findings.push(F('info', (eu === euKnown.length ? 'All' : eu + ' of ' + euKnown.length) + ' geolocated addresses are in the EU', 'Relevant to data-residency questions. Anycast (CDN) addresses report one country regardless of which edge location serves a given user.', '')); }
       var noPtr = prim.filter(function (i) { return /^\d+\.\d+\.\d+\.\d+$/.test(i.ip) && !i.ptr && !isCdn(i); });
       if (noPtr.length) ctx.findings.push(F('info', 'No reverse DNS for ' + noPtr.map(function (i) { return i.ip; }).join(', '), 'Missing PTR records hurt mail deliverability if these hosts send email.', 'Ask the hosting provider to set PTR records.'));
       ctx.log('Hosting: ' + out.summary);
@@ -779,7 +769,7 @@
         if (live.length) ctx.findings.push(F('medium', plural(live.length, 'lookalike domain') + ' registered and resolving', live.slice(0, 12).map(function (c) { return (c.unicode ? c.unicode + ' [' + c.domain + ']' : c.domain) + ' (' + c.kind + (c.mx ? ', has MX' : '') + ')'; }).join(', ') + (live.length > 12 ? ' …' : '') + '. Some will be defensive registrations by the organisation itself and some are parking pages; the rest are candidates for phishing or typo-traffic capture. Entries with MX can also receive mail.', 'Verify ownership of each (RDAP links below). For hostile ones: brand-monitoring, registrar abuse reports, or UDRP.'));
         var parked = reg.filter(function (c) { return !c.ips || !c.ips.length; });
         if (parked.length) ctx.findings.push(F('low', plural(parked.length, 'lookalike domain') + ' registered but not serving a site', parked.slice(0, 12).map(function (c) { return c.domain + (c.mx ? ' (has MX)' : ''); }).join(', ') + (parked.length > 12 ? ' …' : ''), 'Check whether these are yours; a registered-but-idle lookalike can be activated at any time.'));
-        if (mail.length) ctx.findings.push(F('info', plural(mail.length, 'lookalike') + ' can receive email', mail.map(function (c) { return c.domain; }).join(', ') + '. MX records on a lookalike enable reply-capture and mis-addressed mail harvesting.', ''));
+        if (mail.length) ctx.findings.push(F('info', plural(mail.length, 'lookalike') + ' can receive email', mail.map(function (c) { return c.domain; }).join(', ') + '. A lookalike with MX records can catch replies and mail sent to a mistyped address.', ''));
       }
       ctx.findings.push(F('info', 'Coverage note', cands.length + ' of ' + all.length + ' permutations were tested (TLD swaps, ASCII typos and IDN homographs). Dedicated brand-monitoring tests thousands more.', ''));
       ctx.log('Lookalikes: ' + reg.length + ' registered, ' + live.length + ' live');
@@ -801,7 +791,7 @@
       if (r[0].error && r[1].error) {
         var st = r[0].error.status || r[1].error.status;
         out.error = st || 'unreachable';
-        ctx.findings.push(F('info', st === 429 ? 'Internet Archive rate-limited this browser' : 'Internet Archive unreachable or rate-limited', 'The availability API throttles aggressively. Retry in a minute, or browse the archive manually via the Pivot module.', ''));
+        ctx.findings.push(F('info', st === 429 ? 'Internet Archive rate-limited this browser' : 'Internet Archive unreachable or rate-limited', 'The availability API rate-limits often. Retry in a minute, or browse the archive manually via the Pivot module.', ''));
         return;
       }
       var first = r[0].archived_snapshots && r[0].archived_snapshots.closest, last = r[1].archived_snapshots && r[1].archived_snapshots.closest;
@@ -1092,7 +1082,6 @@
     if (em.dmarcTags) ['rua', 'ruf'].forEach(function (k) { (em.dmarcTags[k] || '').split(',').forEach(function (u) { if (/mailto:/i.test(u)) contact(u.replace(/!.*$/, ''), 'DMARC ' + k); }); });
     (em.tlsRpt || []).forEach(function (t) { (t.match(/mailto:[^;,\s]+/gi) || []).forEach(function (u) { contact(u, 'TLS-RPT'); }); });
     if (rd.abuse) contact(rd.abuse, 'registrar abuse (RDAP)');
-    ((data.http || {}).securityContacts || []).forEach(function (c) { if (/@/.test(c)) contact(c, 'security.txt'); });
     ((dns.records || {}).CAA || []).forEach(function (c) { (c.data.match(/mailto:[^"\s]+/gi) || []).forEach(function (u) { contact(u, 'CAA iodef'); }); });
 
     var hostList = Object.keys(hosts).map(function (k) { return hosts[k]; }).sort(function (a, b) {
@@ -1152,7 +1141,7 @@
       return doh(a.host, 'A', 6000).then(function (r) { return (r.status === 0 && r.answers.length) ? a : null; });
     }).then(function (res) {
       out.hits = res.filter(Boolean);
-      if (out.hits.length) ctx.findings.push(F('low', plural(out.hits.length, 'Azure storage account') + ' exist for this organisation', out.hits.map(function (h) { return h.host; }).join(', ') + '. An Azure blob account resolves in DNS only when it exists. Contents were not requested; a public container is a common leak source.', 'Confirm each account\'s containers block anonymous and public-list access.'));
+      if (out.hits.length) ctx.findings.push(F('low', plural(out.hits.length, 'Azure storage account') + ' exist for this organisation', out.hits.map(function (h) { return h.host; }).join(', ') + '. An Azure blob account resolves in DNS only when it exists. Contents were not requested; public containers are a common cause of data leaks.', 'Confirm each account\'s containers block anonymous and public-list access.'));
       ctx.findings.push(F('info', labels.length + ' cloud-storage bucket names worth checking manually', 'S3, Google Cloud Storage and DigitalOcean Spaces resolve every name in DNS, so they cannot be confirmed passively. The Cloud storage section lists open-in-browser links for each candidate under ' + org + '.', ''));
       ctx.log('Cloud storage: ' + out.hits.length + ' Azure accounts exist, ' + labels.length + ' manual candidates');
     });
@@ -1178,7 +1167,7 @@
         var targetApex = apexOf(t);
         var apexRegistered = r[2].status === 0 && (r[2].answers.some(function (a) { return a.type === T.NS; }) || (r[2].authority || []).some(function (a) { return a.type === T.SOA; }));
         var verdict, sev;
-        if (!apexRegistered && r[2].status === 3) { verdict = 'base domain ' + targetApex + ' is unregistered — anyone can register it and claim ' + x.name; sev = 'high'; }
+        if (!apexRegistered && r[2].status === 3) { verdict = 'base domain ' + targetApex + ' is unregistered. Anyone can register it and claim ' + x.name; sev = 'high'; }
         else if (x.service) { verdict = 'points at ' + x.service + ' but the specific resource is gone (NXDOMAIN); likely claimable on that platform'; sev = 'high'; }
         else { verdict = 'alias target does not resolve, but its base domain ' + targetApex + ' is registered; takeover depends on the provider'; sev = 'medium'; }
         return { name: x.name, target: t, service: x.service || null, verdict: verdict, severity: sev, targetApex: targetApex, apexRegistered: apexRegistered };
@@ -1273,8 +1262,8 @@
   function buildGraph(inv) {
     var groups = [
       { key: 'networks', label: 'Networks', color: 'var(--cyan)', nodes: inv.networks.slice(0, 7).map(function (n) { return { id: n.asn, label: (n.org || n.asn).split(',')[0].slice(0, 16), title: n.asn + ' ' + n.org + ' · ' + plural(n.hosts.length, 'host') }; }) },
-      { key: 'services', label: 'Services & vendors', color: 'var(--green)', nodes: inv.services.filter(function (s) { return !/Certificate authority|Network \(SPF/.test(s.category); }).slice(0, 9).map(function (s) { return { id: s.name, label: s.name.slice(0, 18), title: s.name + ' — ' + s.category }; }) },
-      { key: 'related', label: 'Related domains', color: 'var(--pink)', nodes: inv.related.slice(0, 10).map(function (r) { return { id: r.domain, label: r.domain.length > 18 ? r.domain.slice(0, 17) + '…' : r.domain, title: r.domain + ' — ' + r.relations.join('; '), href: location.pathname + '?d=' + encodeURIComponent(r.domain) }; }) },
+      { key: 'services', label: 'Services & vendors', color: 'var(--green)', nodes: inv.services.filter(function (s) { return !/Certificate authority|Network \(SPF/.test(s.category); }).slice(0, 9).map(function (s) { return { id: s.name, label: s.name.slice(0, 18), title: s.name + ', ' + s.category }; }) },
+      { key: 'related', label: 'Related domains', color: 'var(--pink)', nodes: inv.related.slice(0, 10).map(function (r) { return { id: r.domain, label: r.domain.length > 18 ? r.domain.slice(0, 17) + '…' : r.domain, title: r.domain + ': ' + r.relations.join('; '), href: location.pathname + '?d=' + encodeURIComponent(r.domain) }; }) },
       { key: 'hosts', label: 'Key hostnames', color: 'var(--amber)', nodes: inv.hosts.filter(function (h) { return h.ips.length && h.name !== state.domain; }).slice(0, 9).map(function (h) { return { id: h.name, label: (h.name.slice(0, -(state.apex.length + 1)) || h.name).slice(0, 16), title: h.name + ' → ' + h.ips.join(', ') }; }) }
     ].filter(function (g) { return g.nodes.length; });
     return groups;
@@ -1311,109 +1300,7 @@
     svg.push('<g class="ds-graph__hub"><circle cx="' + cx + '" cy="' + cy + '" r="36" fill="var(--surface-solid)" stroke="var(--cyan)" stroke-width="1.5"/><text x="' + cx + '" y="' + (cy - 2) + '" text-anchor="middle" class="ds-graph__c">' + esc(state.apex.split('.')[0].slice(0, 12)) + '</text><text x="' + cx + '" y="' + (cy + 13) + '" text-anchor="middle" class="ds-graph__c dim">.' + esc(state.apex.split('.').slice(1).join('.')) + '</text></g>');
     svg.push(nodes.join(''));
     svg.push('</svg>');
-    return '<div class="ds-graph-wrap">' + svg.join('') + '</div><div class="ds-graph__legend">' + legend.join('') + '</div><div class="ds-note">Center is the domain; each coloured wedge is one kind of discovered asset. Hover a node for detail; related-domain nodes open a new run.</div>';
-  }
-
-  /* ------------------------------------------------------------------ */
-  /* Module: HTTP surface (via relay — touches the target, so ACTIVE)    */
-  /* ------------------------------------------------------------------ */
-  var TECH_HDRS = [
-    ['server', 'Web server'], ['x-powered-by', 'Application platform'], ['x-aspnet-version', 'ASP.NET version'],
-    ['x-aspnetmvc-version', 'ASP.NET MVC version'], ['x-generator', 'Generator'], ['x-drupal-cache', 'Drupal'],
-    ['x-wix-request-id', 'Wix'], ['x-shopify-stage', 'Shopify'], ['x-github-request-id', 'GitHub Pages'],
-    ['x-vercel-id', 'Vercel'], ['x-served-by', 'Fastly/Varnish'], ['x-amz-cf-id', 'AWS CloudFront'],
-    ['cf-ray', 'Cloudflare'], ['x-litespeed-cache', 'LiteSpeed'], ['x-nginx', 'nginx'], ['via', 'Proxy/CDN']
-  ];
-  function modHttp(ctx) {
-    var d = ctx.apex, out = ctx.data.http = {};
-    if (!proxyOn()) { out.skipped = 'relay not configured'; ctx.log('HTTP surface skipped: no relay configured'); return Promise.resolve(); }
-    ctx.log('HTTP surface via relay (ACTIVE — this touches ' + d + '): headers, security.txt, robots.txt');
-    return Promise.all([
-      relaySite(d, '/').catch(function (e) { return { ok: false, error: e.message }; }),
-      relaySite(d, '/.well-known/security.txt').catch(function (e) { return { ok: false, error: e.message }; }),
-      relaySite(d, '/robots.txt').catch(function (e) { return { ok: false, error: e.message }; })
-    ]).then(function (r) {
-      var root = r[0], sec = r[1], rob = r[2];
-      if (!root || root.ok === false || !root.headers) {
-        ctx.findings.push(F('info', 'Could not fetch ' + d + ' over HTTPS through the relay', (root && (root.error || ('HTTP ' + root.status))) || 'no response', ''));
-        ctx.log('HTTP: root fetch failed'); return;
-      }
-      var h = root.headers; out.status = root.status; out.finalUrl = root.finalUrl; out.headers = h;
-      function has(n) { return h[n] != null; }
-      /* HSTS */
-      if (has('strict-transport-security')) {
-        var m = /max-age=(\d+)/i.exec(h['strict-transport-security']); var age = m ? +m[1] : 0;
-        if (age < 15552000) ctx.findings.push(F('low', 'HSTS max-age is short (' + age + 's)', 'RFC recommends at least 15552000 (180 days). A short max-age weakens protection against SSL-stripping.', 'Raise max-age; add includeSubDomains and preload once confident.'));
-        else ctx.findings.push(F('ok', 'HSTS enabled', h['strict-transport-security'], ''));
-      } else ctx.findings.push(F('medium', 'No HSTS header', 'Without Strict-Transport-Security, a first-visit or typed-URL request can be downgraded to HTTP and intercepted.', 'Add Strict-Transport-Security: max-age=31536000; includeSubDomains.'));
-      /* CSP */
-      if (!has('content-security-policy')) ctx.findings.push(F('low', 'No Content-Security-Policy', 'CSP is the main defence-in-depth against XSS and data injection. Its absence is common but worth noting.', 'Add a Content-Security-Policy header scoped to the app.'));
-      else ctx.findings.push(F('ok', 'Content-Security-Policy present', String(h['content-security-policy']).slice(0, 160) + (h['content-security-policy'].length > 160 ? '…' : ''), ''));
-      /* clickjacking */
-      var xfo = has('x-frame-options'), fa = /frame-ancestors/i.test(h['content-security-policy'] || '');
-      if (!xfo && !fa) ctx.findings.push(F('low', 'No clickjacking protection', 'Neither X-Frame-Options nor CSP frame-ancestors is set, so the page can be framed by any site.', 'Add X-Frame-Options: DENY or CSP frame-ancestors none.'));
-      /* nosniff / referrer / permissions */
-      if (!has('x-content-type-options')) ctx.findings.push(F('info', 'No X-Content-Type-Options: nosniff', 'Browsers may MIME-sniff responses, occasionally turning uploads into executable content.', 'Add X-Content-Type-Options: nosniff.'));
-      if (!has('referrer-policy')) ctx.findings.push(F('info', 'No Referrer-Policy header', 'Full URLs may leak to third parties via the Referer header.', 'Add Referrer-Policy: strict-origin-when-cross-origin.'));
-      /* banners / fingerprint */
-      var tech = [];
-      TECH_HDRS.forEach(function (t) { if (has(t[0])) tech.push(t[1] + ': ' + h[t[0]]); });
-      out.tech = tech;
-      var versiony = tech.filter(function (t) { return /\d+\.\d+/.test(t) || /aspnet|php\/|apache\/|nginx\/|iis\//i.test(t); });
-      if (versiony.length) ctx.findings.push(F('low', 'Version information disclosed in HTTP headers', versiony.join(' · ') + '. Precise versions let an attacker match known CVEs to the stack.', 'Suppress version banners (server_tokens off, remove X-Powered-By / X-AspNet-Version).'));
-      else if (tech.length) ctx.findings.push(F('info', 'Technology identified from HTTP headers', tech.join(' · '), ''));
-      /* cookies */
-      var sc = h['set-cookie'];
-      if (sc) { var bad = []; if (!/;\s*secure/i.test(sc)) bad.push('missing Secure'); if (!/;\s*httponly/i.test(sc)) bad.push('missing HttpOnly'); if (!/;\s*samesite/i.test(sc)) bad.push('missing SameSite');
-        if (bad.length) ctx.findings.push(F('low', 'Cookie set without hardening flags', bad.join(', ') + ' on a Set-Cookie from the home page.', 'Set Secure, HttpOnly and SameSite on session cookies.')); }
-      /* https redirect */
-      if (out.finalUrl && out.finalUrl.indexOf('https://') !== 0) ctx.findings.push(F('medium', 'Home page did not end on HTTPS', 'Final URL was ' + out.finalUrl + '.', 'Redirect all HTTP to HTTPS and enable HSTS.'));
-      /* security.txt */
-      if (sec && sec.ok !== false && sec.status === 200 && /contact:/i.test(sec.body || '')) {
-        out.securityTxt = sec.body;
-        var contacts = (sec.body.match(/^Contact:\s*(.+)$/gim) || []).map(function (l) { return l.replace(/^Contact:\s*/i, '').trim(); });
-        var exp = (sec.body.match(/^Expires:\s*(.+)$/im) || [])[1];
-        ctx.findings.push(F('ok', 'security.txt published', 'Contacts: ' + contacts.join(', ') + (exp ? ' · expires ' + exp.trim() : ''), ''));
-        out.securityContacts = contacts;
-        if (exp && new Date(exp) < Date.now()) ctx.findings.push(F('low', 'security.txt has expired', 'Expires ' + exp.trim() + '. An expired policy signals it is unmaintained.', 'Update the Expires field.'));
-      } else ctx.findings.push(F('info', 'No security.txt', 'RFC 9116 security.txt gives researchers a disclosure contact. Absent here.', 'Publish /.well-known/security.txt with a Contact and Expires field.'));
-      /* robots.txt */
-      if (rob && rob.ok !== false && rob.status === 200 && /(dis)?allow:/i.test(rob.body || '')) {
-        var dis = (rob.body.match(/^Disallow:\s*(\S+)/gim) || []).map(function (l) { return l.replace(/^Disallow:\s*/i, '').trim(); }).filter(function (x) { return x && x !== '/'; });
-        out.robotsDisallow = uniq(dis);
-        var juicy = out.robotsDisallow.filter(function (p2) { return /admin|login|internal|private|backup|config|api|test|dev|staging|upload|cgi|wp-admin|\.git|secret|token|beta/i.test(p2); });
-        if (juicy.length) ctx.findings.push(F('info', 'robots.txt hides interesting paths', juicy.slice(0, 15).join(', ') + (juicy.length > 15 ? ' …' : '') + '. Disallow entries advertise exactly the paths worth looking at.', ''));
-        else if (out.robotsDisallow.length) ctx.findings.push(F('info', 'robots.txt lists ' + out.robotsDisallow.length + ' disallowed paths', out.robotsDisallow.slice(0, 12).join(', '), ''));
-      }
-      ctx.log('HTTP: status ' + out.status + ', ' + tech.length + ' tech header(s)' + (out.securityTxt ? ', security.txt ✓' : ''));
-    });
-  }
-
-  /* ------------------------------------------------------------------ */
-  /* Module: Archived URLs (via relay — Wayback CDX, passive)            */
-  /* ------------------------------------------------------------------ */
-  function modWaybackUrls(ctx) {
-    var d = ctx.apex, out = ctx.data.wayback = { urls: [], sensitive: [] };
-    if (!proxyOn()) { out.skipped = 'relay not configured'; ctx.log('Archived URLs skipped: no relay configured'); return Promise.resolve(); }
-    ctx.log('Fetching archived URL history from the Wayback CDX index via relay');
-    var cdx = 'https://web.archive.org/cdx/search/cdx?url=' + encodeURIComponent(d) + '/*&output=json&fl=original,timestamp,statuscode,mimetype&collapse=urlkey&limit=1000';
-    return relayData(cdx).then(function (r) {
-      if (!r || r.ok === false || !r.body) { ctx.findings.push(F('info', 'Wayback CDX unavailable via relay', (r && (r.error || ('HTTP ' + r.status))) || 'no response', '')); return; }
-      var rows;
-      try { rows = JSON.parse(r.body); } catch (e) { ctx.findings.push(F('info', 'Wayback returned no parseable URL index', '', '')); return; }
-      if (!Array.isArray(rows) || rows.length < 2) { ctx.findings.push(F('info', 'No archived URLs found', 'The CDX index is empty for ' + d + '.', '')); return; }
-      var body = rows.slice(1).map(function (x) { return { url: x[0], ts: x[1], status: x[2], mime: x[3] }; });
-      out.urls = body; out.total = body.length + (r.truncated ? '+' : '');
-      var SENS = /\.(env|git|sql|bak|old|backup|config|conf|ini|log|zip|tar|gz|json|xml|yml|yaml|pem|key|p12|pfx|sql\.gz)(\?|$)|\/(admin|login|signin|wp-admin|phpmyadmin|api|graphql|actuator|\.git|backup|config|upload|internal|debug|test|staging|dev|swagger|cgi-bin)/i;
-      var sens = uniq(body.filter(function (u) { return SENS.test(u.url); }).map(function (u) { return u.url.replace(/^https?:\/\//, ''); }));
-      out.sensitive = sens;
-      var docs = uniq(body.filter(function (u) { return /\.(pdf|docx?|xlsx?|pptx?|csv)(\?|$)/i.test(u.url); }).map(function (u) { return u.url.replace(/^https?:\/\//, ''); }));
-      out.docs = docs;
-      ctx.findings.push(F('info', out.total + ' archived URLs recovered', body.length + ' unique paths from the Wayback Machine. Historic URLs reveal endpoints, parameters and files that may still exist or hint at structure.', ''));
-      if (sens.length) ctx.findings.push(F('medium', plural(sens.length, 'sensitive archived path'), sens.slice(0, 20).join('\n').slice(0, 600) + (sens.length > 20 ? ' …' : '') + '. These paths were once reachable; confirm they are gone, not just unlinked.', 'Check each still returns 404/401 today and that no backup or config file is served.'));
-      if (docs.length) ctx.findings.push(F('info', plural(docs.length, 'archived document'), docs.slice(0, 12).join(', ') + (docs.length > 12 ? ' …' : '') + '. Old documents can carry metadata (authors, software, internal paths).', ''));
-      ctx.log('Archived URLs: ' + body.length + ' paths, ' + sens.length + ' sensitive');
-    }).catch(function (e) { ctx.findings.push(F('info', 'Wayback CDX failed', e.message, '')); });
+    return '<div class="ds-graph-wrap">' + svg.join('') + '</div><div class="ds-graph__legend">' + legend.join('') + '</div><div class="ds-note">Center is the domain; each colour is one kind of discovered asset. Hover a node for detail; related-domain nodes open a new run.</div>';
   }
 
   /* ------------------------------------------------------------------ */
@@ -1434,17 +1321,15 @@
     { id: 'mailx', label: 'Mail intel', stage: 2, run: modMailx, hint: 'extra DKIM, report auth, SPF ranges' },
     { id: 'takeover', label: 'Takeover check', stage: 2, run: modTakeover, hint: 'dangling aliases + delegated subzones' },
     { id: 'typosquat', label: 'Lookalikes', stage: 2, run: modTyposquat, hint: '~130 permutations incl. IDN homographs' },
-    { id: 'waybackurls', label: 'Archived URLs', stage: 2, run: modWaybackUrls, proxy: true, hint: 'Wayback CDX full URL history (via relay)' },
-    { id: 'http', label: 'HTTP surface', stage: 2, run: modHttp, proxy: true, active: true, def: false, hint: 'headers, security.txt, robots.txt (via relay — ACTIVE)' },
     { id: 'related', label: 'Related domains', stage: 3, run: modRelated, hint: 'co-hosted, shared NS, shared certificates' },
     { id: 'expand', label: 'Expand related', stage: 4, run: modExpand, hint: 'resolve related domains one level deep' },
     { id: 'pivot', label: 'Pivot links', stage: 3, run: modPivot, hint: 'manual follow-ups in other tools' }
-  ].filter(function (m) { return !m.proxy || proxyOn(); });
+  ];
   var SECTIONS = [
     { id: 'overview', label: 'Overview' }, { id: 'graph', label: 'Relationship graph' }, { id: 'hosts', label: 'Hostnames' }, { id: 'ips', label: 'Addresses & networks' }, { id: 'related', label: 'Related domains' },
-    { id: 'services', label: 'Services & vendors' }, { id: 'contacts', label: 'Contact addresses' }, { id: 'certs', label: 'Certificates' }, { id: 'http', label: 'HTTP surface', proxy: true }, { id: 'urls', label: 'Archived URLs', proxy: true }, { id: 'email', label: 'Email setup' },
+    { id: 'services', label: 'Services & vendors' }, { id: 'contacts', label: 'Contact addresses' }, { id: 'certs', label: 'Certificates' }, { id: 'email', label: 'Email setup' },
     { id: 'registration', label: 'Registration' }, { id: 'history', label: 'History' }, { id: 'observations', label: 'Observations' }, { id: 'pivot', label: 'Pivot links' }
-  ].filter(function (x) { return !x.proxy || proxyOn(); });
+  ];
 
   var state = { domain: null, apex: null, running: false, started: 0, results: {}, data: {}, shared: {}, enabled: {}, inventory: null };
   var UI = { stat: function () { var q = $('#stat-queries'); if (q) q.textContent = STATS.queries; } };
@@ -1486,7 +1371,11 @@
       rows.map(function (r) { return '<tr>' + r.map(function (c, i) { return '<td' + (i === 0 ? ' class="k"' : '') + '>' + (c == null || c === '' ? '<span class="dim">—</span>' : c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
   }
   function kv(rows) { return table(['field', 'value'], rows.map(function (r) { return [esc(r[0]), r[1] == null || r[1] === '' ? null : r[1]]; })); }
-  function ext(url, text) { return '<a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">' + esc(text || url) + '</a>'; }
+  // links built from API data: only http(s) and same-site paths become clickable, anything else (javascript:, data:) is shown as text
+  function ext(url, text) {
+    if (!/^(https?:\/\/|\/(?!\/))/i.test(String(url || ''))) return esc(text || url);
+    return '<a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">' + esc(text || url) + '</a>';
+  }
   function okbad(v, okText, badText) { return v ? '<span class="ok">' + esc(okText) + '</span>' : '<span class="bad">' + esc(badText) + '</span>'; }
   function facts(items) { return '<dl class="ds-glance">' + items.filter(function (i) { return i[1] != null && i[1] !== ''; }).map(function (i) { return '<div><dt>' + esc(i[0]) + '</dt><dd>' + i[1] + '</dd></div>'; }).join('') + '</dl>'; }
   function srcChip(s) { return '<span class="ds-src">' + esc(s) + '</span>'; }
@@ -1494,22 +1383,6 @@
   /* ---------------- sections ---------------- */
   var SECTION_RENDER = {
     graph: function (inv) { return renderGraph(inv); },
-    http: function () {
-      var o = state.data.http; if (!o) return '<div class="ds-empty">not run</div>';
-      if (o.skipped) return '<div class="ds-empty">' + esc(o.skipped) + '</div>';
-      if (!o.headers) return '<div class="ds-empty">the home page could not be fetched over the relay</div>';
-      var order = ['strict-transport-security', 'content-security-policy', 'x-frame-options', 'x-content-type-options', 'referrer-policy', 'permissions-policy', 'server', 'x-powered-by', 'set-cookie'];
-      var rows = order.filter(function (k) { return o.headers[k] != null; }).map(function (k) { return [esc(k), esc(String(o.headers[k]).slice(0, 200))]; });
-      var extra = Object.keys(o.headers).filter(function (k) { return order.indexOf(k) === -1; }).sort().map(function (k) { return [esc(k), esc(String(o.headers[k]).slice(0, 200))]; });
-      return facts([['Final URL', o.finalUrl ? ext(o.finalUrl, o.finalUrl) : null], ['Status', esc(String(o.status))], ['Technology', o.tech && o.tech.length ? esc(o.tech.join(' · ')) : null], ['security.txt', o.securityTxt ? '<span class="ok">present</span>' : '<span class="dim">absent</span>'], ['robots Disallow', o.robotsDisallow ? o.robotsDisallow.length : null]]) + table(['security header', 'value'], rows, { empty: 'no security headers set' }) + (extra.length ? '<details class="ds-raw"><summary><span>all response headers</span></summary>' + table(['header', 'value'], extra) + '</details>' : '');
-    },
-    urls: function () {
-      var o = state.data.wayback; if (!o) return '<div class="ds-empty">not run</div>';
-      if (o.skipped) return '<div class="ds-empty">' + esc(o.skipped) + '</div>';
-      if (!o.urls || !o.urls.length) return '<div class="ds-empty">no archived URLs recovered</div>';
-      var rows = o.urls.slice(0, 300).map(function (u) { return [esc(u.url.replace(/^https?:\/\//, '')), esc(u.status), esc(u.mime), esc(fmtTs(u.ts))]; });
-      return facts([['Archived URLs', esc(String(o.total))], ['Sensitive paths', o.sensitive ? o.sensitive.length : 0], ['Documents', o.docs ? o.docs.length : 0]]) + table(['path', 'code', 'type', 'last seen'], rows, { filterable: true }) + (o.urls.length > 300 ? '<div class="ds-note">showing 300 of ' + o.urls.length + '</div>' : '');
-    },
     overview: function (inv) {
       var d = state.data, dns = d.dns || {}, em = d.email || {}, rd = d.rdap || {}, ho = d.hosting || {}, ce = d.certs || {}, ar = d.archive || {};
       return facts([
@@ -1544,7 +1417,7 @@
     related: function (inv) {
       var re = state.data.related || {};
       var note = re.skipped && re.skipped.length ? '<div class="ds-note">' + re.skipped.map(esc).join(' · ') + '</div>' : '';
-      return table(['domain', 'relationship', 'evidence / hosting', 'lookup'], inv.related.map(function (r) { var ev = r.evidence.map(esc); if (r.expanded && r.expanded.org) ev.unshift('<span class="ok">hosted at ' + esc(r.expanded.org) + (r.expanded.sharesInfra ? ' — same network' : '') + '</span>'); return ['<b>' + esc(r.domain) + '</b>', r.relations.map(function (x) { return '<span class="ds-src">' + esc(x) + '</span>'; }).join(''), ev.join('<br>'), ext('https://rdap.org/domain/' + encodeURIComponent(r.domain), 'RDAP') + ' · ' + ext('https://who.is/whois/' + encodeURIComponent(r.domain), 'WHOIS') + ' · ' + ext(location.pathname + '?d=' + encodeURIComponent(r.domain), 'recon')]; }), { filterable: true, empty: 'no related domains found in certificates, DNS or hosting data' }) + note;
+      return table(['domain', 'relationship', 'evidence / hosting', 'lookup'], inv.related.map(function (r) { var ev = r.evidence.map(esc); if (r.expanded && r.expanded.org) ev.unshift('<span class="ok">hosted at ' + esc(r.expanded.org) + (r.expanded.sharesInfra ? ', same network' : '') + '</span>'); return ['<b>' + esc(r.domain) + '</b>', r.relations.map(function (x) { return '<span class="ds-src">' + esc(x) + '</span>'; }).join(''), ev.join('<br>'), ext('https://rdap.org/domain/' + encodeURIComponent(r.domain), 'RDAP') + ' · ' + ext('https://who.is/whois/' + encodeURIComponent(r.domain), 'WHOIS') + ' · ' + ext(location.pathname + '?d=' + encodeURIComponent(r.domain), 'recon')]; }), { filterable: true, empty: 'no related domains found in certificates, DNS or hosting data' }) + note;
     },
     services: function (inv) {
       return table(['service / vendor', 'role', 'evidence'], inv.services.map(function (s) { return ['<b>' + esc(s.name) + '</b>', esc(s.category), s.evidence.map(esc).join('<br>')]; }), { filterable: true, empty: 'no third-party services identified' });
@@ -1568,7 +1441,7 @@
     },
     registration: function () {
       var r = state.data.rdap; if (!r) return '<div class="ds-empty">waiting for RDAP</div>';
-      if (r.unavailable) return '<div class="ds-empty">no RDAP service for this TLD — use the WHOIS pivot link</div>';
+      if (r.unavailable) return '<div class="ds-empty">no RDAP service for this TLD. Use the WHOIS pivot link.</div>';
       return kv([['Registrar', esc(r.registrar) + (r.registrarId ? ' <span class="dim">(IANA ' + esc(r.registrarId) + ')</span>' : '')], ['Registrant', esc(r.registrant)], ['Registered', esc(fmtDate(r.registered))], ['Expires', esc(fmtDate(r.expires))], ['Last changed', esc(fmtDate(r.changed))],
         ['Status', (r.status || []).map(esc).join('<br>')], ['Registry name servers', (r.nameservers || []).map(esc).join('<br>')], ['DS at registry', okbad(r.dsSigned, 'delegation signed', 'unsigned')], ['Abuse contact', esc(r.abuse)], ['Source', r.source ? ext(r.source, r.source.replace(/^https?:\/\//, '').slice(0, 60)) : null]]);
     },
@@ -1601,7 +1474,7 @@
     }
   }
   function sectionHint(id) {
-    return { overview: 'what the public record says about the domain', graph: 'the domain at the centre of everything discovered', hosts: 'certificate logs · DNS probe · service records · MX/NS', ips: 'where the hostnames live', related: 'domains that share certificates, hosting, name servers, or look alike', services: 'vendors and products inferred from DNS, mail and hosting', contacts: 'role mailboxes published in DNS and RDAP', certs: 'public certificate-transparency logs', email: 'authentication and transport policy records', registration: 'registry data via RDAP', history: 'archive captures and zone age hints', http: 'live headers, security.txt and robots.txt (touches the target, via relay)', urls: 'every path the Wayback Machine has seen, via relay', observations: 'things a tester would note', pivot: 'continue in other tools (opens in your browser)' }[id] || '';
+    return { overview: 'what the public record says about the domain', graph: 'every discovered asset, linked to the domain', hosts: 'certificate logs · DNS probe · service records · MX/NS', ips: 'where the hostnames are hosted', related: 'domains that share certificates, hosting, name servers, or look alike', services: 'vendors and products inferred from DNS, mail and hosting', contacts: 'role mailboxes published in DNS and RDAP', certs: 'public certificate-transparency logs', email: 'authentication and transport policy records', registration: 'registry data via RDAP', history: 'archive captures and zone age hints', observations: 'things a tester would note', pivot: 'continue in other tools (opens in your browser)' }[id] || '';
   }
 
   function renderSections(inv) {
@@ -1630,7 +1503,7 @@
     el.innerHTML = MODULES.map(function (m) {
       var r = state.results[m.id] || { status: state.enabled[m.id] === false ? 'skipped' : 'pending' };
       var t = r.status === 'done' && r.ms != null ? (r.ms / 1000).toFixed(1) + 's' : r.status === 'failed' ? 'failed' : r.status === 'skipped' ? 'off' : r.status === 'running' ? '…' : 'queued';
-      return '<span class="chip ds-status is-' + r.status + '" title="' + esc(m.hint) + (r.error ? ' — ' + esc(r.error) : '') + '">' + esc(m.label) + ' <span class="dim">' + t + '</span></span>';
+      return '<span class="chip ds-status is-' + r.status + '" title="' + esc(m.hint) + (r.error ? ': ' + esc(r.error) : '') + '">' + esc(m.label) + ' <span class="dim">' + t + '</span></span>';
     }).join('');
   }
   function renderSummary(inv, final) {
@@ -1730,7 +1603,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     var form = $('#scan-form'), input = $('#domain');
     if (!form) return;
-    $('#toggles').innerHTML = MODULES.map(function (m) { return '<label class="ds-toggle' + (m.locked ? ' is-locked' : '') + (m.active ? ' is-active-chk' : '') + '" title="' + esc(m.hint) + '"><input type="checkbox" value="' + m.id + '"' + (m.def === false ? '' : ' checked') + (m.locked ? ' disabled' : '') + '><span class="chip">' + esc(m.label) + (m.active ? ' ⚡' : '') + '</span></label>'; }).join('');
+    $('#toggles').innerHTML = MODULES.map(function (m) { return '<label class="ds-toggle' + (m.locked ? ' is-locked' : '') + '" title="' + esc(m.hint) + '"><input type="checkbox" value="' + m.id + '"' + ' checked' + (m.locked ? ' disabled' : '') + '><span class="chip">' + esc(m.label) + '</span></label>'; }).join('');
     var sm = $('#stat-modules'); if (sm) sm.textContent = MODULES.length;
     form.addEventListener('submit', function (e) { e.preventDefault(); scan(input.value); });
     renderHistory();

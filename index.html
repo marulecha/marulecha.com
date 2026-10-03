@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>marulecha | Offensive Security</title>
-  <meta name="description" content="Agisilaos Maroulis — penetration testing, red teaming and security research. Vulnerability write-ups, a web application testing checklist and free security tools.">
+  <meta name="description" content="Penetration testing, red teaming and security research. Vulnerability write-ups, a web application testing checklist and free security tools.">
   <meta name="keywords" content="marulecha, Cyber Security, Pentesting, Penetration Tester, Red Team, OSCP, CRTO">
   <meta name="theme-color" content="#0a0718">
   <meta property="og:type" content="website">
@@ -14,7 +14,7 @@
   <meta property="og:url" content="https://marulecha.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="static/css/theme.css?v=20260910b">
+  <link rel="stylesheet" href="static/css/theme.css?v=20261003z">
   <link rel="icon" href="static/img/favicon-64.png" type="image/png">
   <link rel="apple-touch-icon" href="static/img/spacelettuceIcon-160.png">
 </head>
@@ -27,19 +27,17 @@
 
   <header class="site-header">
     <div class="container">
-      <a class="brand" href="index.html" aria-label="marulecha — home">
+      <a class="brand" href="index.html" aria-label="marulecha home">
         <img class="brand__mark" src="static/img/spacelettuceIcon-160.webp" alt="" width="36" height="36">
-        <span>marulecha<span class="brand__cursor" aria-hidden="true"></span></span>
+        <span>marulecha</span>
       </a>
 
       <nav class="nav" id="site-nav" aria-label="Primary">
         <a href="index.html">~/home</a>
         <a href="pages/resume.html">resume</a>
-        <a href="pages/vulndb.html">vulndb</a>
-        <a href="pages/webChecklist.html">checklist</a>
-        <a href="pages/webapptools.html">tools</a>
-        <a href="pages/domainscan.html">osint</a>
         <a href="pages/contact.html">contact</a>
+        <a href="pages/webapptools.html" data-match="webapptools.html vulndb.html webChecklist.html domainscan.html">tools</a>
+        <a href="pages/games.html">games</a>
         <div class="nav__social">
           <a href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>LinkedIn</a>
           <a href="https://github.com/marulecha" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>GitHub</a>
@@ -76,28 +74,22 @@
     <section class="hero">
       <div data-reveal>
         <div class="prompt"><b>root@marulecha</b>:<i>~</i>$ ./whoami.sh</div>
-        <h1 class="hero__title"><span class="tw" id="typewriter">Hello friend.</span><span class="cursor" aria-hidden="true"></span></h1>
-        <div class="hero__chips" aria-label="Focus areas">
-          <span class="chip chip--accent">Penetration Testing</span>
-          <span class="chip chip--violet">Red Team Operations</span>
-          <span class="chip">Security Research</span>
-          <span class="chip">Web &amp; Cloud</span>
-        </div>
+        <h1 class="hero__title"><span class="tw" id="typewriter">Hello friend.</span></h1>
+        <p class="hero__tags">penetration testing · AI red team · security research · web &amp; cloud</p>
         <div class="hero__cta">
-          <a class="btn btn--primary" href="pages/vulndb.html">
+          <a class="btn btn--primary" href="pages/webapptools.html">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2a8 8 0 1 0 4.9 14.3l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></svg>
-            Browse the VulnDB
+            Browse tools
           </a>
-          <a class="btn" href="pages/webChecklist.html">Open the checklist</a>
-          <a class="btn btn--ghost" href="pages/resume.html">Resume</a>
+          <a class="btn btn--ghost" href="pages/games.html">Play games</a>
         </div>
       </div>
 
       <div class="hero__visual" data-reveal="2">
-        <div class="window" role="img" aria-label="Animated terminal showing a reverse shell being caught with netcat">
+        <div class="window window--lit" role="img" aria-label="Animated terminal showing a reverse shell being caught with netcat">
           <div class="window__bar">
             <span class="window__dot"></span><span class="window__dot"></span><span class="window__dot"></span>
-            <span class="window__title">kali@kali — nc -lvnp 1337</span>
+            <span class="window__title">kali@kali: nc -lvnp 1337</span>
           </div>
           <div class="window__body" id="terminal" aria-hidden="true"></div>
         </div>
@@ -105,60 +97,32 @@
     </section>
 
     <!-- Directory -->
-    <section class="section" aria-labelledby="dir-title">
+    <section class="section" aria-labelledby="games-title">
       <div class="section__head">
-        <h2 id="dir-title">ls -la ~/</h2>
-        <span class="dim mono">7 entries</span>
+        <h2 id="games-title">explore</h2>
       </div>
-
-      <div class="grid">
-        <a class="card tile" href="pages/vulndb.html" data-reveal>
-          <div class="tile__icon"><svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.4 3.4 8.2 8 9 4.6-.8 8-4.6 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/></svg></div>
-          <h3>Web Application Vulnerability Database</h3>
-          <p>Report-ready write-ups for common web application findings: description, impact, remediation and references. Search, expand, copy.</p>
-          <div class="tile__meta"><span>vulndb.json · 45 findings</span><span class="arrow">→</span></div>
+      <div class="game-grid">
+        <a class="window game portal" href="pages/webapptools.html" data-reveal="1">
+          <div class="window__bar"><span class="window__dot"></span><span class="window__dot"></span><span class="window__dot"></span><span class="window__title">~/tools</span></div>
+          <div class="window__body portal__body">
+            <svg class="portal__icon" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <div class="portal__text">
+              <div class="game__name">tools</div>
+              <div class="game__meta">vulndb · checklist · osint +2</div>
+            </div>
+            <span class="portal__arrow" aria-hidden="true">→</span>
+          </div>
         </a>
-
-        <a class="card tile" href="pages/webChecklist.html" data-reveal="2">
-          <div class="tile__icon"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 12 2 2 4-4M8 17h8M8 7h8"/></svg></div>
-          <h3>Web Application Penetration Testing Checklist</h3>
-          <p>An OWASP-aligned testing methodology across 11 phases. Progress is saved in your browser and exportable.</p>
-          <div class="tile__meta"><span>93 checks · 11 categories</span><span class="arrow">→</span></div>
-        </a>
-
-        <a class="card tile" href="pages/domainscan.html" data-reveal="3">
-          <div class="tile__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/><circle cx="17.5" cy="17.5" r="3.5"/><path d="m20 20 2 2"/></svg></div>
-          <h3>Passive Domain OSINT</h3>
-          <p>Hostnames, networks, related domains, vendors, certificates, mail setup and history for any domain, assembled from public records in your browser. The target is never touched.</p>
-          <div class="tile__meta"><span>17 sources · client-side</span><span class="arrow">→</span></div>
-        </a>
-
-        <a class="card tile" href="pages/webapptools.html" data-reveal="3">
-          <div class="tile__icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 5 5L14 17l-3-3 5.7-7.7z"/><path d="m3 21 7-7"/><path d="M14 17l3 3 4-4-3-3"/></svg></div>
-          <h3>Web App Tools</h3>
-          <p>Free tools I built for engagements: a targeted password list generator, a subdomain takeover scanner and the passive domain OSINT tool above.</p>
-          <div class="tile__meta"><span>2 hosted · 3 on-site</span><span class="arrow">→</span></div>
-        </a>
-
-        <a class="card tile" href="pages/resume.html" data-reveal="4">
-          <div class="tile__icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13H6z"/><path d="M15 3v5h5M9 13h6M9 17h6"/></svg></div>
-          <h3>Resume</h3>
-          <p>Experience, education and certifications. Offensive Security Technical Manager, OSCP, CRTO, OASP and more.</p>
-          <div class="tile__meta"><span>cat_resume.sh</span><span class="arrow">→</span></div>
-        </a>
-
-        <a class="card tile" href="pages/contact.html" data-reveal="5">
-          <div class="tile__icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
-          <h3>Contact</h3>
-          <p>Engagements, collaboration, a missing entry in the database or just to say hello. LinkedIn or email.</p>
-          <div class="tile__meta"><span>send_message.sh</span><span class="arrow">→</span></div>
-        </a>
-
-        <a class="card tile" href="https://app.hackthebox.com/public/users/1440" target="_blank" rel="noopener" data-reveal="5">
-          <div class="tile__icon"><svg viewBox="0 0 24 24"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div>
-          <h3>Hack The Box</h3>
-          <p>Where the reverse shell on this page comes from. Profile, ranks and retired machine write-ups.</p>
-          <div class="tile__meta"><span>external ↗</span><span class="arrow">→</span></div>
+        <a class="window game portal" href="pages/games.html" data-reveal="2">
+          <div class="window__bar"><span class="window__dot"></span><span class="window__dot"></span><span class="window__dot"></span><span class="window__title">~/games</span></div>
+          <div class="window__body portal__body">
+            <svg class="portal__icon" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M12 8V4H8M6 8h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2zM2 14h2M20 14h2"/><path class="portal__blip" pathLength="1" d="M9 13v2M15 13v2"/></svg>
+            <div class="portal__text">
+              <div class="game__name">games</div>
+              <div class="game__meta">prompting games against an AI · soon</div>
+            </div>
+            <span class="portal__arrow" aria-hidden="true">→</span>
+          </div>
         </a>
       </div>
     </section>
@@ -166,7 +130,7 @@
 
   <footer class="site-footer">
     <div class="container">
-      <span>© <span id="year">2026</span> marulecha · Agisilaos Maroulis</span>
+      <span>© <span id="year">2026</span> marulecha</span>
       <div class="links">
         <a href="https://www.linkedin.com/in/agisilaos-maroulis-a31878b5/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/marulecha" target="_blank" rel="noopener">GitHub</a>
@@ -176,8 +140,8 @@
     </div>
   </footer>
 
-  <script src="static/js/site.js?v=20260910"></script>
-  <script src="static/js/matrix-effect.js?v=20260910"></script>
-  <script src="static/js/terminal.js?v=20260910"></script>
+  <script src="static/js/site.js?v=20261003l"></script>
+  <script src="static/js/matrix-effect.js?v=20261003m"></script>
+  <script src="static/js/terminal.js?v=20261003n"></script>
 </body>
 </html>
